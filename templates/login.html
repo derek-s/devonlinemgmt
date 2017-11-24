@@ -1,6 +1,13 @@
-{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}{% block title %}登录{% endblock %} {% import "bootstrap/wtf.html" as wtf %} {% block content %} {% import "nwtf.html" as nwtf %}
 
-<div class="login">
-    {{wtf.quick_form(form, form_type="horizontal")}}
+<div class="container">
+    <div id="login">
+        <div class="row">
+            <div class="col-md-offset-3 col-md-6">
+                <span class="heading">用户登录</span> {{nwtf.quick_form(form, form_type="horizontal")}}
+            </div>
+        </div>
+    </div>
+
 </div>
-
+{% endblock %}
