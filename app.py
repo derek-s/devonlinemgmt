@@ -27,19 +27,22 @@ login_manager.login_view = "login"
 def hello():
     return "hello world Flask"
 
-@app.route("/login", methods=['GET', 'POSt'])
+@app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         user = User.query.filter_by(username=request.form['username'], password=request.form['password']).first()
         if user:
             login_user(user)
             flash("logged in!")
-            return redirect(url_for('/'))
+            return redirect(url_for('hello'))
         else:
             flash("logged filed")
     form = LoginForm()
     return render_template('login.html', form=form)
 
+@login_manager.user_loader
+def load_user(id):
+    return User.query.filter_by(id=int(id)).first()
 
 if __name__ == '__main__':
     app.run(host='127.0.0.100', port=5000, debug=True)
