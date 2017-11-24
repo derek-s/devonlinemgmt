@@ -1,0 +1,24 @@
+body {
+    width: 1280px;
+    background-color: #fff;
+    margin: 0 auto;
+    font-size: 14px;
+    height: 100%;
+    display: block;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+p {
+    font-family: "Microsoft YaHei", "TIBch", "Classic Grotesque W01", "Helvetica Neue", Arial, "Hiragino Sans GB", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
+}
+
+.clear {
+    clear: both;
+}

@@ -1,5 +1,5 @@
-{% extends "base.html" %}{% block title %}登录{% endblock %} {% import "bootstrap/wtf.html" as wtf %} {% block content %} {% import "nwtf.html" as nwtf %}
-
+{% extends "base.html" %}{% block title %}登录{% endblock %} {% import "bootstrap/wtf.html" as wtf %} {% block content %} {% import "nwtf.html" as nwtf %} {% block head%}
+<link type="text/css" rel="stylesheet" href="../static/css/login.css">{% endblock %}
 <div class="container">
     <div id="login">
         <div class="row">
@@ -10,4 +10,5 @@
     </div>
 
 </div>
+<div class="clear"></div>
 {% endblock %}
