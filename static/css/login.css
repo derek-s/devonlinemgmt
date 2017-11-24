@@ -42,3 +42,8 @@ body {
     margin-right: -15px;
     margin-left: -95px;
 }
+
+.warning {
+    margin-left: 15px;
+    color: red;
+}
