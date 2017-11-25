@@ -27,6 +27,7 @@ login_manager.login_view = "login"
 @app.route("/", methods=['GET', 'POST'])
 @login_required
 def hello():
+    """测试函数"""
     return "hello world Flask"
 
 
