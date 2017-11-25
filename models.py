@@ -20,7 +20,7 @@ class User(UserMixin, db.Model):
 
 
 class Dev_DeviceStatus(db.Model):
-    """总表（设备情况表）数据模型"""
+    """设备情况表数据模型"""
     __tablename__ = "dev_DeviceStatus"
     id = db.Column('ID', db.Integer, primary_key=True)
     Location = db.Column("Location", db.String(190), db.ForeignKey("dev_LVRInfo.LVRNo"))
@@ -29,6 +29,9 @@ class Dev_DeviceStatus(db.Model):
     HigherlinkIP = db.Column("HigherlinkIP", db.String(255))
     HigherlinkPort = db.Column("higherlinkPort", db.String(255))
     DeviceModel = db.Column("DeviceModel", db.String(190), db.ForeignKey("dev_DeviceInfo.DeviceID"))
+
+    def __init__(self):
+        pass
 
 
 class Dev_DeviceInfo(db.Model):
@@ -42,6 +45,10 @@ class Dev_DeviceInfo(db.Model):
     DeviceID = db.Column("DeviceID", db.String(190))
     DeviceIDs = db.relationship("Dev_DeviceStatus", backref="DeviceID", lazy="dynamic")
 
+    def __init__(self):
+        pass
+
+
 
 class Dev_LVRInfo(db.Model):
     """弱电间信息表数据模型"""
@@ -54,3 +61,6 @@ class Dev_LVRInfo(db.Model):
     Cabinet = db.Column("Cabinet", db.String(255))
     LVRNo = db.Column("LVRNo", db.String(190))
     LVRNos = db.relationship("Dev_DevicesStatus", backref="LVRNo", lazy="dynamic")
+
+    def __init__(self):
+        pass
