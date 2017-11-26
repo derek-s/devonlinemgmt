@@ -5,18 +5,31 @@ from ext import db
 from flask_login import UserMixin
 
 
+class Permission:
+    """用户权限常量"""
+    domestic = 0x10
+    administer = 0x80
+
 class User(UserMixin, db.Model):
     """用户信息模型 登录用"""
     __tablename__ = "dev_User"
     id = db.Column("ID", db.Integer, primary_key=True)
     username = db.Column("UserName", db.String(24))
     password = db.Column("PassWord", db.String(24))
-    userlevel = db.Column("UserLevel", db.String(24))
+    permissions = db.Column("Permissions", db.String(24))
 
-    def __init__(self, username, password, userlevel):
+    def __init__(self, username, password, permissions):
         self.username = username
         self.password = password
-        self.userlevel = userlevel
+        self.permissions = permissions
+
+class Role(db.Model):
+    """"""
+    __tablename__ = "dev_User"
+    id = db.Column("ID", db.Integer, primary_key=True)
+    username = db.Column("UserName", db.String(24))
+    password = db.Column("PassWord", db.String(24))
+    permissions = db.Column("Permissions", db.String(24))
 
 
 class Dev_DeviceStatus(db.Model):
@@ -30,8 +43,13 @@ class Dev_DeviceStatus(db.Model):
     HigherlinkPort = db.Column("higherlinkPort", db.String(255))
     DeviceModel = db.Column("DeviceModel", db.String(190), db.ForeignKey("dev_DeviceInfo.DeviceID"))
 
-    def __init__(self):
-        pass
+    def __init__(self, Location, HostName, LAA, HigherlinkIP, HigherlinkPort, DeviceModel):
+        self.Location = Location
+        self.HostName = HostName
+        self.LAA = LAA
+        self.HigherlinkIP = HigherlinkIP
+        self.HigherlinkPort = HigherlinkPort
+        self.DeviceModel = DeviceModel
 
 
 class Dev_DeviceInfo(db.Model):
@@ -42,8 +60,9 @@ class Dev_DeviceInfo(db.Model):
     DeviceCategory = db.Column("DeviceCategory", db.String(255))
     DeviceSN = db.Column("DeviceSN", db.String(255))
     DeviceCondition = db.Column("DeviceCondition", db.String(255))
-    DeviceID = db.Column("DeviceID", db.String(190))
-    DeviceIDs = db.relationship("Dev_DeviceStatus", backref="DeviceID", lazy="dynamic")
+    DeviceID = db.Column("DeviceID", db.String(190), index=True)
+    DeviceIDs = db.relationship('Dev_DeviceStatus', backref='DeviceID')
+
 
     def __init__(self):
         pass
@@ -59,8 +78,9 @@ class Dev_LVRInfo(db.Model):
     FloorNo = db.Column("FloorNo", db.String(255))
     RoomNo = db.Column("RoomNo", db.String(255))
     Cabinet = db.Column("Cabinet", db.String(255))
-    LVRNo = db.Column("LVRNo", db.String(190))
-    LVRNos = db.relationship("Dev_DevicesStatus", backref="LVRNo", lazy="dynamic")
+    LVRNo = db.Column("LVRNo", db.String(190), index=True)
+    LVRNos = db.relationship('Dev_DeviceStatus', backref='LVRNo')
+
 
     def __init__(self):
         pass
