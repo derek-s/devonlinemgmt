@@ -8,6 +8,7 @@ from flask_bootstrap import Bootstrap
 from forms import LoginForm
 from ext import db, login_manager
 from models import *
+from decorators import permission_required, admin_required
 
 SECRET_KEY = '12efc6ca97aefb8e1f6a589c6f334a405bca977bc9cec023f193ee975379e153'
 
@@ -22,7 +23,6 @@ bootstrap = Bootstrap(app)
 db.init_app(app)
 login_manager.init_app(app)
 login_manager.login_view = "login"
-ulevelinfo = ''
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -30,8 +30,15 @@ ulevelinfo = ''
 def hello():
     """测试函数"""
     devstatus = Dev_DeviceStatus.query.all()
-    print User.is_admin()
+    current_user.level(current_user.get_id())
     return render_template('index.html', dev_status = devstatus)
+
+@app.route("/admin", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin():
+    return 'admin'
+
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -43,7 +50,6 @@ def login():
         if user:
             login_user(user)
             flash("logged in!")
-            ulevelinfo = str(user.userlevel)
             return redirect(url_for('hello'))
         else:
             flash("logged filed")
