@@ -27,16 +27,17 @@ login_manager.login_view = "login"
 
 @app.route("/", methods=['GET', 'POST'])
 @login_required
-def hello():
+def index():
     """测试函数"""
     devstatus = Dev_DeviceStatus.query.all()
-    current_user.level(current_user.get_id())
+    print current_user.is_administrator()
     return render_template('index.html', dev_status = devstatus)
 
 @app.route("/admin", methods=['GET', 'POST'])
 @login_required
 @admin_required
 def admin():
+
     return 'admin'
 
 
@@ -50,7 +51,7 @@ def login():
         if user:
             login_user(user)
             flash("logged in!")
-            return redirect(url_for('hello'))
+            return redirect(url_for('index'))
         else:
             flash("logged filed")
     form = LoginForm()
