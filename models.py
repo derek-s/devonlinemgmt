@@ -7,8 +7,8 @@ from flask_login import UserMixin
 
 class Permission:
     """用户权限常量"""
-    domestic = 0x10
-    administer = 0x80
+    domestic = 10
+    administer = 80
 
 class User(UserMixin, db.Model):
     """用户信息模型 登录用"""
@@ -16,20 +16,18 @@ class User(UserMixin, db.Model):
     id = db.Column("ID", db.Integer, primary_key=True)
     username = db.Column("UserName", db.String(24))
     password = db.Column("PassWord", db.String(24))
-    permissions = db.Column("Permissions", db.String(24))
+    permissions = db.Column("Permissions", db.Integer)
 
+    def can(self, permissions):
+        return (self.permissions & Permission.administer) == permissions
+    def level(self, id):
+        return self.can(self.permissions)
     def __init__(self, username, password, permissions):
         self.username = username
         self.password = password
         self.permissions = permissions
 
-class Role(db.Model):
-    """"""
-    __tablename__ = "dev_User"
-    id = db.Column("ID", db.Integer, primary_key=True)
-    username = db.Column("UserName", db.String(24))
-    password = db.Column("PassWord", db.String(24))
-    permissions = db.Column("Permissions", db.String(24))
+
 
 
 class Dev_DeviceStatus(db.Model):
