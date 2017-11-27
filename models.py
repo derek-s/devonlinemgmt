@@ -20,7 +20,7 @@ class User(UserMixin, db.Model):
 
     def can(self, permissions):
         return (self.permissions & Permission.administer) == permissions
-    def level(self, id):
+    def is_administrator(self):
         return self.can(self.permissions)
     def __init__(self, username, password, permissions):
         self.username = username
