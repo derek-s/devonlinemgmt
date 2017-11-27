@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block title %}设备信息管理系统{% endblock %} {% block content %}
+<div id="nav">
+    <div class="navblock">
+        <div class="navlogo">设备信息管理系统</div>
+        <div class="navlist">
+            <ul class="menu">
+                <li class="nav-child"><span class="uname">{{ current_user.username }}</span></li>
+                {% if current_user.is_administrator() %}
+                <li class="nav-child"><a href="../admin">管理后台</a></li>
+                {% endif %}
+                <li class="nav-child"><a href="../logout">登出</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="content">
+    {% for a in dev_status%} {{ a.Location }} {{ a.HostName }} {{ a.LAA }} {{ a.HigherlinkIP }} {{ a.HigherlinkPort }} {{ a.DeviceModel }}{% endfor %}
+</div>
+
+
+{% endblock %}
