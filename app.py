@@ -31,14 +31,14 @@ def index():
     """测试函数"""
     devstatus = Dev_DeviceStatus.query.all()
     print current_user.is_administrator()
-    return render_template('index.html', dev_status = devstatus)
+    return render_template('index.html', dev_status=devstatus)
 
 @app.route("/admin", methods=['GET', 'POST'])
 @login_required
 @admin_required
 def admin():
-
-    return 'admin'
+    """管理后台"""
+    return render_template('admin.html')
 
 
 
