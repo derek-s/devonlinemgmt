@@ -14,7 +14,18 @@
     </div>
 </div>
 <div id="content">
-    {% for a in dev_status%} {{ a.Location }} {{ a.HostName }} {{ a.LAA }} {{ a.HigherlinkIP }} {{ a.HigherlinkPort }} {{ a.DeviceModel }}{% endfor %}
+    <label>查询关键字</label><input type="text" name="aaa" value=""> {% for a in dev_status%} {{ a.Location }} {{ a.HostName }} {{ a.LAA }} {{ a.HigherlinkIP }} {{ a.HigherlinkPort }} {{ a.DeviceModel }}{% endfor %}
+    <div>
+        <label>合计</label>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
 </div>
 
 
