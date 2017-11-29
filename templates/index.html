@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block title %}设备信息管理系统{% endblock %} {% block content %}
+{% extends "base.html" %} {% block title %}设备信息管理系统{% endblock %} {% block content %} {% block head%}
+<script src="{{ url_for('static', filename='js/list.js') }}"></script>{% endblock %}
 <div id="nav">
     <div class="navblock">
         <div class="navlogo">设备信息管理系统</div>
@@ -14,7 +15,19 @@
     </div>
 </div>
 <div id="content">
-    <label>查询关键字</label><input type="text" name="aaa" value=""> {% for a in dev_status%} {{ a.Location }} {{ a.HostName }} {{ a.LAA }} {{ a.HigherlinkIP }} {{ a.HigherlinkPort }} {{ a.DeviceModel }}{% endfor %}
+    <label>查询关键字</label><input type="text" name="aaa" value="">
+    <div id="data">
+        <table id="devinfolits" class="tabledevinfo">
+            <tr>
+                <th>弱电间位置</th>
+                <th>主机名称</th>
+                <th>管理地址</th>
+                <th>上联IP</th>
+                <th>上联端口</th>
+                <th>设备型号</th>
+            </tr>
+        </table>
+    </div>
     <div>
         <label>合计</label>
         <ul>
