@@ -25,14 +25,15 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/")
 @login_required
 def index():
     """首页函数"""
-
+    request.script_root = url_for('index', _external=True)
     return render_template('index.html')
 
-@app.route("/admin", methods=['GET', 'POST'])
+
+@app.route("/admin")
 @login_required
 @admin_required
 def admin():
@@ -43,11 +44,13 @@ def admin():
 @app.route("/list")
 @login_required
 def list():
-    """设备情况查询函数"""
-    devstatus = Dev_DeviceStatus.query.all()
-    print jsonify(
-        json_list=["id": devstatus.id])
-    return jsonify(devstatus)
+    """设备情况全表函数"""
+    
+    devinfo = Dev_DeviceStatus.query.all()
+    devinfotemp = []
+    for devx in devinfo:
+        devinfotemp.append(devx.to_json())
+    return jsonify(devinfotemp)
 
 
 @app.route("/login", methods=['GET', 'POST'])
