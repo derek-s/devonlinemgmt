@@ -34,20 +34,24 @@ class Dev_DeviceStatus(db.Model):
     """设备情况表数据模型"""
     __tablename__ = "dev_DeviceStatus"
     id = db.Column('ID', db.Integer, primary_key=True)
-    Location = db.Column("Location", db.String(190), db.ForeignKey("dev_LVRInfo.LVRNo"))
+    Location = db.Column("Location", db.String(190))
     HostName = db.Column("HostName", db.String(255))
     LAA = db.Column("LAA", db.String(255))
     HigherlinkIP = db.Column("HigherlinkIP", db.String(255))
     HigherlinkPort = db.Column("higherlinkPort", db.String(255))
-    DeviceModel = db.Column("DeviceModel", db.String(190), db.ForeignKey("dev_DeviceInfo.DeviceID"))
+    DeviceModel = db.Column("DeviceModel", db.String(190))
 
-    def __init__(self, Location, HostName, LAA, HigherlinkIP, HigherlinkPort, DeviceModel):
-        self.Location = Location
-        self.HostName = HostName
-        self.LAA = LAA
-        self.HigherlinkIP = HigherlinkIP
-        self.HigherlinkPort = HigherlinkPort
-        self.DeviceModel = DeviceModel
+    def to_json(self):
+        """将查询数据转为json"""
+        return {
+            'id': self.id,
+            'Location': self.Location,
+            'HostName': self.HostName,
+            'LAA': self.LAA,
+            'HigherlinkIP': self.HigherlinkIP,
+            'HigherlinkPort': self.HigherlinkPort,
+            'DeviceModel': self.DeviceModel
+        }
 
 
 class Dev_DeviceInfo(db.Model):
@@ -59,7 +63,6 @@ class Dev_DeviceInfo(db.Model):
     DeviceSN = db.Column("DeviceSN", db.String(255))
     DeviceCondition = db.Column("DeviceCondition", db.String(255))
     DeviceID = db.Column("DeviceID", db.String(190), index=True)
-    DeviceIDs = db.relationship('Dev_DeviceStatus', backref='DeviceID')
 
 
     def __init__(self):
@@ -77,7 +80,6 @@ class Dev_LVRInfo(db.Model):
     RoomNo = db.Column("RoomNo", db.String(255))
     Cabinet = db.Column("Cabinet", db.String(255))
     LVRNo = db.Column("LVRNo", db.String(190), index=True)
-    LVRNos = db.relationship('Dev_DeviceStatus', backref='LVRNo')
 
 
     def __init__(self):
