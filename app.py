@@ -1,7 +1,7 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from flask import (Flask, render_template, redirect, url_for, request, flash)
+from flask import (Flask, render_template, redirect, url_for, request, flash, jsonify)
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_bootstrap import Bootstrap
 
@@ -28,10 +28,9 @@ login_manager.login_view = "login"
 @app.route("/", methods=['GET', 'POST'])
 @login_required
 def index():
-    """测试函数"""
-    devstatus = Dev_DeviceStatus.query.all()
-    print current_user.is_administrator()
-    return render_template('index.html', dev_status=devstatus)
+    """首页函数"""
+
+    return render_template('index.html')
 
 @app.route("/admin", methods=['GET', 'POST'])
 @login_required
@@ -40,6 +39,15 @@ def admin():
     """管理后台"""
     return render_template('admin.html')
 
+
+@app.route("/list")
+@login_required
+def list():
+    """设备情况查询函数"""
+    devstatus = Dev_DeviceStatus.query.all()
+    print jsonify(
+        json_list=["id": devstatus.id])
+    return jsonify(devstatus)
 
 
 @app.route("/login", methods=['GET', 'POST'])
