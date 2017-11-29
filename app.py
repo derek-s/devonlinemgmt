@@ -4,6 +4,7 @@
 from flask import (Flask, render_template, redirect, url_for, request, flash, jsonify)
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_bootstrap import Bootstrap
+from urllib import unquote
 
 from forms import LoginForm
 from ext import db, login_manager
@@ -45,12 +46,32 @@ def admin():
 @login_required
 def list():
     """设备情况全表函数"""
-    
     devinfo = Dev_DeviceStatus.query.all()
     devinfotemp = []
     for devx in devinfo:
         devinfotemp.append(devx.to_json())
     return jsonify(devinfotemp)
+
+
+@app.route("/_querydevinfo")
+@login_required
+def qudevinfo():
+    """设备情况信息表查询函数"""
+    word = request.args.get('keyword', None, type=str)
+    serach = unquote(word).decode('utf-8')
+    serptemp = []
+    serp = Dev_DeviceStatus.query.filter(
+        (Dev_DeviceStatus.Location.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.HostName.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.LAA.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.HigherlinkIP.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.HigherlinkPort.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.DeviceModel.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.DeviceModel.like("%" + serach + "%"), "")[serach is None]
+    ).all()
+    for serpx in serp:
+        serptemp.append(serpx.to_json())
+    return jsonify(serptemp)
 
 
 @app.route("/login", methods=['GET', 'POST'])
