@@ -33,7 +33,7 @@ class User(UserMixin, db.Model):
 class Dev_DeviceStatus(db.Model):
     """设备情况表数据模型"""
     __tablename__ = "dev_DeviceStatus"
-    id = db.Column('ID', db.Integer, primary_key=True)
+    ID = db.Column('ID', db.Integer, primary_key=True)
     Location = db.Column("Location", db.String(190))
     HostName = db.Column("HostName", db.String(255))
     LAA = db.Column("LAA", db.String(255))
@@ -44,7 +44,7 @@ class Dev_DeviceStatus(db.Model):
     def to_json(self):
         """将查询数据转为json"""
         return {
-            'id': self.id,
+            'ID': self.ID,
             'Location': self.Location,
             'HostName': self.HostName,
             'LAA': self.LAA,
