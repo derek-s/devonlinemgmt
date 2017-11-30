@@ -95,11 +95,13 @@ p {
     margin-bottom: 5px;
 }
 
+.model,
 .location {
     cursor: pointer
 }
 
+.model:hover,
 .location:hover {
-    color: blue;
-    text-decoration: 1px;
+    color: #2573e9;
+    text-decoration: underline;
 }
