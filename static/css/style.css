@@ -75,3 +75,31 @@ p {
     color: #fff;
     font-size: 16px;
 }
+
+#toolbar {
+    float: right;
+    margin: 5px;
+    padding: 5px;
+}
+
+#indexserach {
+    width: 260px;
+    padding: 5px;
+    margin: 5px 10px 0 10px;
+    display: inline-block;
+    font-size: 16px;
+}
+
+#indexsbutton {
+    padding: 10px 25px;
+    margin-bottom: 5px;
+}
+
+.location {
+    cursor: pointer
+}
+
+.location:hover {
+    color: blue;
+    text-decoration: 1px;
+}
