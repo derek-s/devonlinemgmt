@@ -91,6 +91,26 @@ def querylvr():
         serptemp.append(serpx.to_json())
     return jsonify(serptemp)
 
+
+@app.route("/_querydev")
+@login_required
+def querydev():
+    """弱电间信息表查询函数"""
+    word = request.args.get('keyword', None, type=str)
+    serach = unquote(word).decode('utf-8')
+    serptemp = []
+    serp = Dev_DeviceInfo.query.filter(
+        (Dev_DeviceInfo.DeviceName.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceInfo.DeviceCategory.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceInfo.DeviceSN.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceInfo.DeviceCondition.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceInfo.DeviceID.like("%" + serach + "%"), "")[serach is None]
+    ).all()
+    for serpx in serp:
+        serptemp.append(serpx.to_json())
+    return jsonify(serptemp)
+
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     """登录函数，处理登录页面，使用login.html模板"""

@@ -57,7 +57,7 @@ class Dev_DeviceStatus(db.Model):
 class Dev_DeviceInfo(db.Model):
     """设备信息表数据模型"""
     __tablename__ = "dev_DeviceInfo"
-    id = db.Column("ID", db.Integer, primary_key=True)
+    ID = db.Column("ID", db.Integer, primary_key=True)
     DeviceName = db.Column("DeviceName", db.String(255))
     DeviceCategory = db.Column("DeviceCategory", db.String(255))
     DeviceSN = db.Column("DeviceSN", db.String(255))
@@ -65,8 +65,16 @@ class Dev_DeviceInfo(db.Model):
     DeviceID = db.Column("DeviceID", db.String(190), index=True)
 
 
-    def __init__(self):
-        pass
+    def to_json(self):
+        """将查询数据转为json"""
+        return {
+            'ID':self.ID,
+            'DeviceName': self.DeviceName,
+            'DeviceCategory': self.DeviceCategory,
+            'DeviceSN': self.DeviceSN,
+            'DeviceCondition': self.DeviceCondition,
+            'DeviceID': self.DeviceID
+        }
 
 
 
