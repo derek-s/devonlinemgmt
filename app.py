@@ -74,6 +74,23 @@ def qudevinfo():
     return jsonify(serptemp)
 
 
+@app.route("/_querylvr")
+@login_required
+def querylvr():
+    """弱电间信息表查询函数"""
+    word = request.args.get('keyword', None, type=str)
+    serach = unquote(word).decode('utf-8')
+    serptemp = []
+    serp = Dev_LVRInfo.query.filter(
+        (Dev_LVRInfo.BuildName.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_LVRInfo.BuildNo.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_LVRInfo.FloorNo.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_LVRInfo.RoomNo.like("%" + serach + "%"), "")[serach is None]
+    ).all()
+    for serpx in serp:
+        serptemp.append(serpx.to_json())
+    return jsonify(serptemp)
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     """登录函数，处理登录页面，使用login.html模板"""

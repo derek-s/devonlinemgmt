@@ -73,14 +73,22 @@ class Dev_DeviceInfo(db.Model):
 class Dev_LVRInfo(db.Model):
     """弱电间信息表数据模型"""
     __tablename__ = "dev_LVRInfo"
-    id = db.Column("ID", db.Integer, primary_key=True)
-    BulidName = db.Column("BulidName", db.String(255))
-    BulidNo = db.Column("BulidNo", db.String(255))
+    ID = db.Column("ID", db.Integer, primary_key=True)
+    BuildName = db.Column("BuildName", db.String(255))
+    BuildNo = db.Column("BuildNo", db.String(255))
     FloorNo = db.Column("FloorNo", db.String(255))
     RoomNo = db.Column("RoomNo", db.String(255))
     Cabinet = db.Column("Cabinet", db.String(255))
     LVRNo = db.Column("LVRNo", db.String(190), index=True)
 
 
-    def __init__(self):
-        pass
+    def to_json(self):
+        """将查询数据转为json"""
+        return {
+            'ID': self.ID,
+            'BuildName': self.BuildName,
+            'BuildNo': self.BuildNo,
+            'FloorNo': self.FloorNo,
+            'RoomNo':self.RoomNo,
+            'Cabinet': self.Cabinet
+        }
