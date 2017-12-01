@@ -48,18 +48,24 @@ def admin():
     return render_template('admin.html')
 
 
-@app.route("/list")
+@app.route("/list", methods=['GET', 'POST'])
 @login_required
 def list():
-    """设备情况全表函数"""
+    """ajax加载函数"""
     count = request.args.get('count', None, type=int)
+    pagenum = request.args.get('pagenum', None, type=int)
     devinfo = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.ID).paginate(
-        count, per_page=Setting.pagination
+        (count/Setting.pagination+pagenum), per_page=Setting.pagination
     )
     devinfotemp = []
+    hasnext = {
+        'next': devinfo.has_next
+    }
 
     for devx in devinfo.items:
-        devinfotemp.append(devx.to_json())
+        jsonlist = devx.to_json()
+        jsonlist.update(hasnext)
+        devinfotemp.append(jsonlist)
     return jsonify(devinfotemp)
 
 
