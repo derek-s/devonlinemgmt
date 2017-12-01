@@ -5,10 +5,16 @@ from ext import db
 from flask_login import UserMixin
 
 
+class Setting:
+    """设置信息"""
+    pagination = 2
+
+
 class Permission:
     """用户权限常量"""
     domestic = 10
     administer = 80
+
 
 class User(UserMixin, db.Model):
     """用户信息模型 登录用"""
@@ -20,14 +26,14 @@ class User(UserMixin, db.Model):
 
     def can(self, permissions):
         return (self.permissions & Permission.administer) == permissions
+
     def is_administrator(self):
         return self.can(self.permissions)
+
     def __init__(self, username, password, permissions):
         self.username = username
         self.password = password
         self.permissions = permissions
-
-
 
 
 class Dev_DeviceStatus(db.Model):
@@ -64,18 +70,16 @@ class Dev_DeviceInfo(db.Model):
     DeviceCondition = db.Column("DeviceCondition", db.String(255))
     DeviceID = db.Column("DeviceID", db.String(190), index=True)
 
-
     def to_json(self):
         """将查询数据转为json"""
         return {
-            'ID':self.ID,
+            'ID': self.ID,
             'DeviceName': self.DeviceName,
             'DeviceCategory': self.DeviceCategory,
             'DeviceSN': self.DeviceSN,
             'DeviceCondition': self.DeviceCondition,
             'DeviceID': self.DeviceID
         }
-
 
 
 class Dev_LVRInfo(db.Model):
@@ -89,7 +93,6 @@ class Dev_LVRInfo(db.Model):
     Cabinet = db.Column("Cabinet", db.String(255))
     LVRNo = db.Column("LVRNo", db.String(190), index=True)
 
-
     def to_json(self):
         """将查询数据转为json"""
         return {
@@ -97,6 +100,6 @@ class Dev_LVRInfo(db.Model):
             'BuildName': self.BuildName,
             'BuildNo': self.BuildNo,
             'FloorNo': self.FloorNo,
-            'RoomNo':self.RoomNo,
+            'RoomNo': self.RoomNo,
             'Cabinet': self.Cabinet
         }

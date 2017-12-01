@@ -26,12 +26,18 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 @login_required
 def index():
     """首页函数"""
+    page = request.args.get('page', 1, type=int)
     request.script_root = url_for('index', _external=True)
-    return render_template('index.html')
+    count = Dev_DeviceStatus.query.count()
+    pagination = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.ID).paginate(
+        page, per_page=Setting.pagination
+    )
+    posts = pagination.items
+    return render_template('index.html', posts=posts, count=count, pagination=pagination)
 
 
 @app.route("/admin")
@@ -46,9 +52,13 @@ def admin():
 @login_required
 def list():
     """设备情况全表函数"""
-    devinfo = Dev_DeviceStatus.query.all()
+    count = request.args.get('count', None, type=int)
+    devinfo = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.ID).paginate(
+        count, per_page=Setting.pagination
+    )
     devinfotemp = []
-    for devx in devinfo:
+
+    for devx in devinfo.items:
         devinfotemp.append(devx.to_json())
     return jsonify(devinfotemp)
 
@@ -139,7 +149,6 @@ def logout():
 def load_user(id):
     """登录user_loader回调"""
     return User.query.filter_by(id=int(id)).first()
-
 
 
 if __name__ == '__main__':
