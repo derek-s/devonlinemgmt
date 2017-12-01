@@ -105,3 +105,25 @@ p {
     color: #2573e9;
     text-decoration: underline;
 }
+
+#ajaxnext {
+    width: 100%;
+    padding: 10px 0 10px 0;
+}
+
+.pagecount {
+    float: left;
+}
+
+.incotp {
+    line-height: 30px;
+    margin-right: 35px;
+}
+
+.pagination {
+    float: right
+}
+
+.pull-right {
+    margin-left: 20px;
+}
