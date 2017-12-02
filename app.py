@@ -33,11 +33,12 @@ def index():
     page = request.args.get('page', 1, type=int)
     request.script_root = url_for('index', _external=True)
     count = Dev_DeviceStatus.query.count()
-    pagination = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.ID).paginate(
+    pagination = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus).paginate(
         page, per_page=Setting.pagination
     )
     posts = pagination.items
-    return render_template('index.html', posts=posts, count=count, pagination=pagination)
+    campus = Dev_Campus.query.all()
+    return render_template('index.html', posts=posts, count=count, pagination=pagination, campus=campus)
 
 
 @app.route("/admin")
@@ -54,7 +55,7 @@ def list():
     """ajax加载函数"""
     count = request.args.get('count', None, type=int)
     pagenum = request.args.get('pagenum', None, type=int)
-    devinfo = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.ID).paginate(
+    devinfo = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus).paginate(
         (count/Setting.pagination+pagenum), per_page=Setting.pagination
     )
     devinfotemp = []
@@ -67,6 +68,28 @@ def list():
         jsonlist.update(hasnext)
         devinfotemp.append(jsonlist)
     return jsonify(devinfotemp)
+
+
+@app.route("/list/_querybuild", methods=['GET', 'POST'])
+@login_required
+def listbuild():
+    """ajax加载前台查询下拉列表数据"""
+    campusurl = request.args.get('campusname', None, type=str)
+    campusname = unquote(campusurl).decode('utf-8')
+    bntemp = []
+    settemp = []
+    for bnlist in Dev_DeviceStatus.query.filter(
+            (Dev_DeviceStatus.Campus.like("%" + campusname + "%"), "")[campusname is None]
+    ).with_entities(Dev_DeviceStatus.Location):
+        for bname in bnlist:
+            settemp.append(bname)
+    setlist = set(settemp)
+    for bsname in setlist:
+        name = {
+            'BuildName': bsname
+        }
+        bntemp.append(name)
+    return jsonify(bntemp)
 
 
 @app.route("/_querydevinfo")
