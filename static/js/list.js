@@ -1,6 +1,6 @@
 $(document).ready(
     function() {
-        $.getJSON($SCRIPT_ROOT + 'list/_querybuild', {
+        $.getJSON($SCRIPT_ROOT + '_querybuild', {
             campusname: ''
         }, function(data) {
             $.each(data, function(one) {
@@ -14,8 +14,11 @@ $(document).ready(
             $('button#dropdownMenu2').html('全部' + '<span class="caret"></span>')
             var $target = $(e.target)
             $target.is('a') && $('button#dropdownMenu1').html($target.text() + '<span class="caret"></span>')
-            strbuild = encodeURI($target.text(), "utf-8")
-            $.getJSON($SCRIPT_ROOT + 'list/_querybuild', {
+            var strbuild = encodeURI($target.text(), "utf-8")
+            if ($target.text() == '全部') {
+                strbuild = ""
+            }
+            $.getJSON($SCRIPT_ROOT + '_querybuild', {
                 campusname: strbuild
             }, function(data) {
                 $.each(data, function(one) {
@@ -33,7 +36,7 @@ $(document).ready(
             $(this).text("正在加载，请稍后……")
             pagenum = $("li.active>a").text()
             datacount = $("tr.jsondata").length
-            textabc = $.getJSON($SCRIPT_ROOT + 'list', {
+            textabc = $.getJSON($SCRIPT_ROOT + '_queryipage', {
                 count: datacount,
                 pagenum: pagenum
             }, function(data) {
@@ -60,7 +63,7 @@ $(document).ready(
         })
         $("table#devinfolist>tbody").on('click', '.location', function() {
             var str2;
-            var tablehead = '<table class="tabledevinfo table table-striped table-hover"><tbody><tr><th>序号</th><th>楼宇名称</th><th>楼栋号码</th><th>楼层</th><th>房间号</th><th>机柜数量</th></tr>'
+            var tablehead = '<table class="tabledevinfo table table-striped table-hover"><tbody><tr><th>ID</th><th>校区</th><th>楼宇名称</th><th>楼栋号码</th><th>楼层</th><th>房间号</th><th>机柜数量</th></tr>'
             var tableend = "</tbody></table>"
             var campus = encodeURI($(this).prev().prev().text(), "utf-8")
             var location = encodeURI($(this).prev().text(), "utf-8")

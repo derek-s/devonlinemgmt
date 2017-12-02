@@ -49,15 +49,18 @@ def admin():
     return render_template('admin.html')
 
 
-@app.route("/list", methods=['GET', 'POST'])
+@app.route("/_queryipage", methods=['GET', 'POST'])
 @login_required
 def list():
-    """ajax加载函数"""
+    """ajax下一页加载"""
     count = request.args.get('count', None, type=int)
     pagenum = request.args.get('pagenum', None, type=int)
     devinfo = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus).paginate(
-        (count/Setting.pagination+pagenum), per_page=Setting.pagination
+        (
+            ((count/Setting.pagination+pagenum), 0)[count/Setting.pagination == 0]
+        ), per_page=Setting.pagination
     )
+    print count/Setting.pagination
     devinfotemp = []
     hasnext = {
         'next': devinfo.has_next
@@ -70,7 +73,7 @@ def list():
     return jsonify(devinfotemp)
 
 
-@app.route("/list/_querybuild", methods=['GET', 'POST'])
+@app.route("/_querybuild", methods=['GET', 'POST'])
 @login_required
 def listbuild():
     """ajax加载前台查询下拉列表数据"""
@@ -95,7 +98,7 @@ def listbuild():
 @app.route("/_querydevinfo")
 @login_required
 def qudevinfo():
-    """设备情况信息表查询函数"""
+    """设备情况信息表查询"""
     word = request.args.get('keyword', None, type=str)
     serach = unquote(word).decode('utf-8')
     serptemp = []
@@ -116,15 +119,17 @@ def qudevinfo():
 @app.route("/_querylvr")
 @login_required
 def querylvr():
-    """弱电间信息表查询函数"""
-    word = request.args.get('keyword', None, type=str)
-    serach = unquote(word).decode('utf-8')
+    """弱电间信息表查询"""
+    recampus = request.args.get('campus', None, type=str)
+    campus = unquote(recampus).decode('utf-8')
+    relocation = request.args.get('location', None, type=str)
+    location = unquote(relocation).decode('utf-8')
+    reroomno = request.args.get('roomno',None,type=str)
+    roomno = unquote(reroomno).decode('utf-8')
     serptemp = []
-    serp = Dev_LVRInfo.query.filter(
-        (Dev_LVRInfo.BuildName.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_LVRInfo.BuildNo.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_LVRInfo.FloorNo.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_LVRInfo.RoomNo.like("%" + serach + "%"), "")[serach is None]
+    print campus, location, roomno
+    serp = Dev_LVRInfo.query.filter_by(
+        Campus=campus, BuildName=location, RoomNo=roomno
     ).all()
     for serpx in serp:
         serptemp.append(serpx.to_json())
@@ -134,7 +139,7 @@ def querylvr():
 @app.route("/_querydev")
 @login_required
 def querydev():
-    """弱电间信息表查询函数"""
+    """弱电间信息表查询"""
     word = request.args.get('keyword', None, type=str)
     serach = unquote(word).decode('utf-8')
     serptemp = []
