@@ -58,23 +58,6 @@ $(document).ready(
                 }
             })
         })
-        $("button#indexsbutton").bind('click', function() {
-            strkey = encodeURI($('input[name="devinfoserp"]').val(), "utf-8")
-            $.getJSON($SCRIPT_ROOT + '_querydevinfo', {
-                keyword: strkey
-            }, function(data) {
-                $("tr.jsondata").empty()
-                trc = ""
-                var tra = '<tr class="jsondata">'
-                var trb = '</tr>'
-                $.each(data, function(one) {
-                    eachone = data[one]
-                    trc += tra + "<td>" + eachone.ID + '</td><td class="location">' + eachone.Location + "</td><td>" + eachone.HostName + "</td><td>" + eachone.LAA + "</td><td>" + eachone.HigherlinkIP + "</td><td>" + eachone.HigherlinkPort + '</td><td class="model">' + eachone.DeviceModel + "</td>" + trb
-                })
-                $("table#devinfolist>tbody tr:last-child").after(trc)
-            });
-            return false;
-        })
         $("table#devinfolist>tbody").on('click', '.location', function() {
             var str2;
             var tablehead = '<table class="tabledevinfo table table-striped table-hover"><tbody><tr><th>序号</th><th>楼宇名称</th><th>楼栋号码</th><th>楼层</th><th>房间号</th><th>机柜数量</th></tr>'
