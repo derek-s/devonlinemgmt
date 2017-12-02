@@ -1,5 +1,34 @@
 $(document).ready(
     function() {
+        $.getJSON($SCRIPT_ROOT + 'list/_querybuild', {
+            campusname: ''
+        }, function(data) {
+            $.each(data, function(one) {
+                $('#ddm-buildname').append(
+                    '<li class="ajaxbname"><a href="javascript:void(0);">' + data[one].BuildName + '</a></li>'
+                )
+            })
+        })
+        $('#ddm-campus').on('click', function(e) {
+            $('li.ajaxbname').remove()
+            $('button#dropdownMenu2').html('全部' + '<span class="caret"></span>')
+            var $target = $(e.target)
+            $target.is('a') && $('button#dropdownMenu1').html($target.text() + '<span class="caret"></span>')
+            strbuild = encodeURI($target.text(), "utf-8")
+            $.getJSON($SCRIPT_ROOT + 'list/_querybuild', {
+                campusname: strbuild
+            }, function(data) {
+                $.each(data, function(one) {
+                    $('#ddm-buildname').append(
+                        '<li class="ajaxbname"><a href="javascript:void(0);">' + data[one].BuildName + '</a></li>'
+                    )
+                })
+            })
+        })
+        $("#ddm-buildname").on('click', function(e) {
+            var $target = $(e.target)
+            $target.is('a') && $('button#dropdownMenu2').html($target.text() + '<span class="caret"></span>')
+        })
         $("a#ajaxnext").bind('click', function() {
             $(this).text("正在加载，请稍后……")
             pagenum = $("li.active>a").text()
@@ -14,12 +43,14 @@ $(document).ready(
                 var trb = '</tr>'
                 $.each(data, function(one) {
                     eachone = data[one]
-                    trc += tra + "<td>" + eachone.ID + "</td><td class='location'>" + eachone.Location + "</td><td>" + eachone.HostName + "</td><td>" + eachone.LAA + "</td><td>" + eachone.HigherlinkIP + "</td><td>" + eachone.HigherlinkPort + "</td><td class='model'>" + eachone.DeviceModel + "</td>" + trb
+                    trc += tra + "<td>" + eachone.ID + "</td><td>" + eachone.Campus + "</td><td>" + eachone.Location + "</td><td class='location'>" + eachone.RoomNo + "</td><td>" + eachone.HostName + "</td><td>" + eachone.LAA + "</td><td>" + eachone.HigherlinkIP + "</td><td>" + eachone.HigherlinkPort + "</td><td class='model'>" + eachone.DeviceModel + "</td>" + trb
                     hasnext = eachone.next
                 })
                 $("table#devinfolist>tbody tr:last-child").after(trc)
                 if (!hasnext) {
                     $("a#ajaxnext").remove()
+                } else {
+                    $("a#ajaxnext").text('下一页')
                 }
             }).fail(function(status) {
                 if (status.status == '404') {
@@ -48,13 +79,18 @@ $(document).ready(
             var str2;
             var tablehead = '<table class="tabledevinfo table table-striped table-hover"><tbody><tr><th>序号</th><th>楼宇名称</th><th>楼栋号码</th><th>楼层</th><th>房间号</th><th>机柜数量</th></tr>'
             var tableend = "</tbody></table>"
-            strkey1 = encodeURI($(this).html(), "utf-8")
+            var campus = encodeURI($(this).prev().prev().text(), "utf-8")
+            var location = encodeURI($(this).prev().text(), "utf-8")
+            var roomno = encodeURI($(this).text(), "utf-8")
+            console.log(campus, location, roomno)
             $.getJSON($SCRIPT_ROOT + '_querylvr', {
-                keyword: strkey1
+                campus: campus,
+                location: location,
+                roomno: roomno
             }, function(data) {
                 $.each(data, function(one) {
                     lvrinfo = data[one]
-                    str2 = "<tr><td>" + lvrinfo.ID + "</td><td>" + lvrinfo.BuildName + "</td><td>" + lvrinfo.BuildNo + "</td><td>" + lvrinfo.FloorNo + "</td><td>" + lvrinfo.RoomNo + "</td><td>" + lvrinfo.Cabinet + "</td></tr>"
+                    str2 = "<tr><td>" + lvrinfo.ID + "</td><td>" + lvrinfo.Campus + "</td><td>" + lvrinfo.BuildName + "</td><td>" + lvrinfo.BuildNo + "</td><td>" + lvrinfo.FloorNo + "</td><td>" + lvrinfo.RoomNo + "</td><td>" + lvrinfo.Cabinet + "</td></tr>"
                 })
 
                 layer.open({
@@ -87,8 +123,6 @@ $(document).ready(
                     content: tablehead + str2 + tableend
                 });
             })
-
-
         })
     }
 )
