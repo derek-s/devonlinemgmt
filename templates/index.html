@@ -16,13 +16,43 @@
 </div>
 <div id="content">
     <div id="toolbar">
-        <input id="indexserach" class="form-control input-lg" type="text" name="devinfoserp" placeholder="请输入搜索关键词（支持模糊搜索）"><button id="indexsbutton" class="btn btn-primary">搜 索</button>
+        <div id="adquery">
+            <label>校区</label>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          全部
+                          <span class="caret"></span>
+                        </button>
+                <ul id="ddm-campus" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="javascript:void(0);" rel="all">全部</a></li>
+                    {% for campusone in campus %}
+                    <li><a href="javascript:void(0);" rel="campus">{{ campusone.Campus }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <label>楼宇</label>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          全部
+                          <span class="caret"></span>
+                        </button>
+                <ul id="ddm-buildname" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="javascript:void(0);" rel="all">全部</a></li>
+                </ul>
+            </div>
+            <button id="adqbutton" class="btn btn-primary">查询</button>
+        </div>
+        <div id="serachbar">
+            <input id="indexserach" class="form-control input-lg" type="text" name="devinfoserp" placeholder="请输入搜索关键词（支持模糊搜索）"><button id="indexsbutton" class="btn btn-primary">搜 索</button>
+        </div>
     </div>
     <div id="data">
         <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
             <tr>
-                <th>序号</th>
-                <th>弱电间位置</th>
+                <th>ID</th>
+                <th>校区</th>
+                <th>楼宇</th>
+                <th>弱电间房间号</th>
                 <th>主机名称</th>
                 <th>管理地址</th>
                 <th>上联IP</th>
@@ -32,9 +62,9 @@
             {% for data in posts%}
             <tr class="jsondata">
                 <td> {{ data.ID }}</td>
-                <td class="location">
-                    {{ data.Location }}
-                </td>
+                <td> {{ data.Campus }}</td>
+                <td> {{ data.Location }}</td>
+                <td class="location">{{ data.RoomNo }}</td>
                 <td>{{ data.HostName }}</td>
                 <td>{{ data.LAA }}</td>
                 <td>{{ data.HigherlinkIP }}</td>
@@ -49,13 +79,13 @@
         {%if pagination%} {{macros.pagination_widget(pagination,'index')}} {%endif%}
     </div>
     <script type="text/javascript">
-    $(function() {
-        $('#transfer').click(function() {
-            var page = $('#transfer_page').val();
-            window.location.href = "{{url_for('index')}}" + "?page=" + page;
+        $(function() {
+            $('#transfer').click(function() {
+                var page = $('#transfer_page').val();
+                window.location.href = "{{url_for('index')}}" + "?page=" + page;
+            })
         })
-    })
-</script>
+    </script>
 
 </div>
 

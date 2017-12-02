@@ -1,0 +1,40 @@
+{%import '_macros.html' as macros%}
+<div id="data">
+    <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
+        <tr>
+            <th>序号</th>
+            <th>弱电间位置</th>
+            <th>主机名称</th>
+            <th>管理地址</th>
+            <th>上联IP</th>
+            <th>上联端口</th>
+            <th>设备型号</th>
+        </tr>
+        {% for data in posts%}
+        <tr class="jsondata">
+            <td> {{ data.ID }}</td>
+            <td class="location">
+                {{ data.Location }}
+            </td>
+            <td>{{ data.HostName }}</td>
+            <td>{{ data.LAA }}</td>
+            <td>{{ data.HigherlinkIP }}</td>
+            <td>{{ data.HigherlinkPort }}</td>
+            <td class="model'">{{ data.DeviceModel }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<div class="ajaxnetpage"><a id="ajaxnext" class="btn btn-info" href="javascript:;">下一页</a></div>
+<div>
+    {%if pagination%} {{macros.pagination_widget(pagination,'list')}} {%endif%}
+</div>
+<script type="text/javascript">
+    $(function() {
+        $('#transfer').click(function() {
+            var page = $('#transfer_page').val();
+            window.location.href = "{{url_for('list')}}" + "?page=" + page;
+        })
+    })
+</script>
+</script>

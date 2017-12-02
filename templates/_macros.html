@@ -1,6 +1,6 @@
 {% macro pagination_widget(pagination, endpoint, fragment='') %}
 <div class="pagenum">
-        <label class="incotp">合计 {{ pagination.total }} 条</label>
+    <label class="incotp">合计 {{ pagination.total }} 条</label>
     <ul class="pagination">
         <li{% if not pagination.has_prev %} class="disabled" {% endif %}>
             <a href="{% if pagination.has_prev %}{{ url_for(endpoint, page=pagination.prev_num, **kwargs) }}{{ fragment }}{% else %}#{% endif %}">
