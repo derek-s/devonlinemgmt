@@ -40,7 +40,9 @@ class Dev_DeviceStatus(db.Model):
     """设备情况表数据模型"""
     __tablename__ = "dev_DeviceStatus"
     ID = db.Column('ID', db.Integer, primary_key=True)
+    Campus = db.Column('Campus', db.String(255))
     Location = db.Column("Location", db.String(190))
+    RoomNo = db.Column("RoomNo", db.String(255))
     HostName = db.Column("HostName", db.String(255))
     LAA = db.Column("LAA", db.String(255))
     HigherlinkIP = db.Column("HigherlinkIP", db.String(255))
@@ -51,7 +53,9 @@ class Dev_DeviceStatus(db.Model):
         """将查询数据转为json"""
         return {
             'ID': self.ID,
+            'Campus': self.Campus,
             'Location': self.Location,
+            'RoomNo': self.RoomNo,
             'HostName': self.HostName,
             'LAA': self.LAA,
             'HigherlinkIP': self.HigherlinkIP,
@@ -86,6 +90,7 @@ class Dev_LVRInfo(db.Model):
     """弱电间信息表数据模型"""
     __tablename__ = "dev_LVRInfo"
     ID = db.Column("ID", db.Integer, primary_key=True)
+    Campus= db.Column("Campus", db.String(255))
     BuildName = db.Column("BuildName", db.String(255))
     BuildNo = db.Column("BuildNo", db.String(255))
     FloorNo = db.Column("FloorNo", db.String(255))
@@ -97,9 +102,22 @@ class Dev_LVRInfo(db.Model):
         """将查询数据转为json"""
         return {
             'ID': self.ID,
+            'Campus': self.Campus,
             'BuildName': self.BuildName,
             'BuildNo': self.BuildNo,
             'FloorNo': self.FloorNo,
             'RoomNo': self.RoomNo,
             'Cabinet': self.Cabinet
         }
+
+    def bn_to_json(self):
+        return {
+            'BuildName': self.BuildName
+        }
+
+
+class Dev_Campus(db.Model):
+    """校区信息表模型"""
+    __tablename__ = "dev_Campus"
+    ID = db.Column("ID", db.Integer, primary_key=True)
+    Campus = db.Column("Campus", db.String(255))
