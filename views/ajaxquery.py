@@ -19,7 +19,6 @@ def _queryipage():
             ((count/Setting.pagination+pagenum), 0)[count/Setting.pagination == 0]
         ), per_page=Setting.pagination
     )
-    print count/Setting.pagination
     devinfotemp = []
     hasnext = {
         'next': devinfo.has_next
