@@ -8,12 +8,12 @@ from urllib import unquote
 ajaxquery = Blueprint("ajaxquery", __name__)
 
 
-@ajaxquery.route("/_queryipage", methods=['GET', 'POST'])
+@ajaxquery.route("/_queryipage", methods=['POST'])
 @login_required
 def _queryipage():
     """ajax下一页加载"""
-    count = request.args.get('count', None, type=int)
-    pagenum = request.args.get('pagenum', None, type=int)
+    count = request.values.get('count', None, type=int)
+    pagenum = request.values.get('pagenum', None, type=int)
     devinfo = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus.desc()).paginate(
         (
             ((count/Setting.pagination+pagenum), 0)[count/Setting.pagination == 0]
@@ -31,11 +31,11 @@ def _queryipage():
     return jsonify(devinfotemp)
 
 
-@ajaxquery.route("/_querybuild", methods=['GET', 'POST'])
+@ajaxquery.route("/_querybuild", methods=['POST'])
 @login_required
 def _querybuild():
     """ajax加载前台查询下拉列表数据"""
-    campusurl = request.args.get('campusname', None, type=str)
+    campusurl = request.values.get('campusname', None, type=str)
     campusname = unquote(campusurl).decode('utf-8')
     bntemp = []
     settemp = []
@@ -53,11 +53,11 @@ def _querybuild():
     return jsonify(bntemp)
 
 
-@ajaxquery.route("/_querydevinfo")
+@ajaxquery.route("/_querydevinfo", methods=['POST'])
 @login_required
 def qudevinfo():
     """设备情况信息表查询"""
-    word = request.args.get('keyword', None, type=str)
+    word = request.values.get('keyword', None, type=str)
     serach = unquote(word).decode('utf-8')
     serptemp = []
     serp = Dev_DeviceStatus.query.filter(
@@ -74,18 +74,17 @@ def qudevinfo():
     return jsonify(serptemp)
 
 
-@ajaxquery.route("/_querylvr")
+@ajaxquery.route("/_querylvr", methods=['POST'])
 @login_required
 def querylvr():
     """弱电间信息表查询"""
-    recampus = request.args.get('campus', None, type=str)
+    recampus = request.values.get('campus', None, type=str)
     campus = unquote(recampus).decode('utf-8')
-    relocation = request.args.get('location', None, type=str)
+    relocation = request.values.get('location', None, type=str)
     location = unquote(relocation).decode('utf-8')
-    reroomno = request.args.get('roomno',None,type=str)
+    reroomno = request.values.get('roomno',None,type=str)
     roomno = unquote(reroomno).decode('utf-8')
     serptemp = []
-    print campus, location, roomno
     serp = Dev_LVRInfo.query.filter_by(
         Campus=campus, BuildName=location, RoomNo=roomno
     ).all()
@@ -94,11 +93,11 @@ def querylvr():
     return jsonify(serptemp)
 
 
-@ajaxquery.route("/_querydev")
+@ajaxquery.route("/_querydev", methods=['POST'])
 @login_required
 def querydev():
     """弱电间信息表查询"""
-    word = request.args.get('keyword', None, type=str)
+    word = request.values.get('keyword', None, type=str)
     serach = unquote(word).decode('utf-8')
     serptemp = []
     serp = Dev_DeviceInfo.query.filter(
