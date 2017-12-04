@@ -57,11 +57,14 @@ def indexlist():
     devinfo = Dev_DeviceStatus.query.filter(
         (Dev_DeviceStatus.Campus.like("%" + campusname + "%"), "")[campusname is None],
         (Dev_DeviceStatus.Location.like("%" + buildname + "%"), "")[buildname is None]
-    ).order_by(Dev_DeviceStatus.Campus.desc()).paginate(
+    ).order_by(Dev_DeviceStatus.Campus.desc())
+    paginateion = devinfo.paginate(
         page, per_page=Setting.pagination
     )
-    posts = devinfo.items
-    return render_template("list.html", posts=posts, count='11', pagination=devinfo)
+    count = devinfo.count()
+    posts = paginateion.items
+    campus = Dev_Campus.query.all()
+    return render_template("list.html", posts=posts, count=count, pagination=paginateion, campus=campus)
 
 
 if __name__ == '__main__':
