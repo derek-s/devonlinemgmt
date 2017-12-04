@@ -14,7 +14,7 @@ def _queryipage():
     """ajax下一页加载"""
     count = request.args.get('count', None, type=int)
     pagenum = request.args.get('pagenum', None, type=int)
-    devinfo = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus).paginate(
+    devinfo = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus.desc()).paginate(
         (
             ((count/Setting.pagination+pagenum), 0)[count/Setting.pagination == 0]
         ), per_page=Setting.pagination
