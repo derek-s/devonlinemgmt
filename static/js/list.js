@@ -2,7 +2,7 @@ $(document).ready(
     function() {
         $.base64.utf8encode = true;
         $.base64.utf8decode = true;
-        $.getJSON($SCRIPT_ROOT + '_querybuild', {
+        $.post($SCRIPT_ROOT + '_querybuild', {
             campusname: ''
         }, function(data) {
             $.each(data, function(one) {
@@ -20,7 +20,7 @@ $(document).ready(
             if ($target.text() == '全部') {
                 strbuild = ""
             }
-            $.getJSON($SCRIPT_ROOT + '_querybuild', {
+            $.post($SCRIPT_ROOT + '_querybuild', {
                 campusname: strbuild
             }, function(data) {
                 $.each(data, function(one) {
@@ -38,7 +38,7 @@ $(document).ready(
             $(this).text("正在加载，请稍后……")
             pagenum = $("li.active>a").text()
             datacount = $("tr.jsondata").length
-            textabc = $.getJSON($SCRIPT_ROOT + '_queryipage', {
+            textabc = $.post($SCRIPT_ROOT + '_queryipage', {
                 count: datacount,
                 pagenum: pagenum
             }, function(data) {
@@ -70,8 +70,7 @@ $(document).ready(
             var campus = encodeURI($(this).prev().prev().text(), "utf-8")
             var location = encodeURI($(this).prev().text(), "utf-8")
             var roomno = encodeURI($(this).text(), "utf-8")
-            console.log(campus, location, roomno)
-            $.getJSON($SCRIPT_ROOT + '_querylvr', {
+            $.post($SCRIPT_ROOT + '_querylvr', {
                 campus: campus,
                 location: location,
                 roomno: roomno
@@ -95,7 +94,7 @@ $(document).ready(
             var tablehead = '<table class="tabledevinfo table table-striped table-hover"><tbody><tr><th>序号</th><th>设备名称</th><th>设备分类</th><th>设备序列号</th><th>使用情况</th><th>唯一ID</th></tr>'
             var tableend = "</tbody></table>"
             strkey1 = encodeURI($(this).html(), "utf-8")
-            $.getJSON($SCRIPT_ROOT + '_querydev', {
+            $.post($SCRIPT_ROOT + '_querydev', {
                 keyword: strkey1
             }, function(data) {
                 $.each(data, function(one) {
