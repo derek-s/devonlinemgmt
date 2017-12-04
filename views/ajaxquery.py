@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import login_required
 from models import Dev_DeviceStatus, Dev_LVRInfo, Dev_Campus, Dev_DeviceInfo, Setting
 from urllib import unquote
+from base64 import b64decode, b64encode
 
 ajaxquery = Blueprint("ajaxquery", __name__)
 
@@ -11,7 +12,10 @@ ajaxquery = Blueprint("ajaxquery", __name__)
 @ajaxquery.route("/_queryipage", methods=['POST'])
 @login_required
 def _queryipage():
-    """ajax下一页加载"""
+    """
+    ajax下一页加载
+    :return: json
+    """
     count = request.values.get('count', None, type=int)
     pagenum = request.values.get('pagenum', None, type=int)
     devinfo = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus.desc()).paginate(
@@ -34,7 +38,10 @@ def _queryipage():
 @ajaxquery.route("/_querybuild", methods=['POST'])
 @login_required
 def _querybuild():
-    """ajax加载前台查询下拉列表数据"""
+    """
+    ajax加载前台查询下拉列表数据
+    :return: json
+    """
     campusurl = request.values.get('campusname', None, type=str)
     campusname = unquote(campusurl).decode('utf-8')
     bntemp = []
@@ -56,7 +63,10 @@ def _querybuild():
 @ajaxquery.route("/_querydevinfo", methods=['POST'])
 @login_required
 def qudevinfo():
-    """设备情况信息表查询"""
+    """
+    设备情况信息表查询
+    :return: json
+    """
     word = request.values.get('keyword', None, type=str)
     serach = unquote(word).decode('utf-8')
     serptemp = []
@@ -77,7 +87,10 @@ def qudevinfo():
 @ajaxquery.route("/_querylvr", methods=['POST'])
 @login_required
 def querylvr():
-    """弱电间信息表查询"""
+    """
+    弱电间信息表查询
+    :return: json
+    """
     recampus = request.values.get('campus', None, type=str)
     campus = unquote(recampus).decode('utf-8')
     relocation = request.values.get('location', None, type=str)
@@ -96,7 +109,10 @@ def querylvr():
 @ajaxquery.route("/_querydev", methods=['POST'])
 @login_required
 def querydev():
-    """弱电间信息表查询"""
+    """
+    弱电间信息表查询
+    :return: json
+    """
     word = request.values.get('keyword', None, type=str)
     serach = unquote(word).decode('utf-8')
     serptemp = []
@@ -111,3 +127,33 @@ def querydev():
         serptemp.append(serpx.to_json())
     return jsonify(serptemp)
 
+
+@ajaxquery.route("/_qindexlist", methods=['POST'])
+@login_required
+def queryilist():
+    """
+    按校区查询页面ajax加载
+    :return:
+    """
+    pagenum = request.values.get('pagenum', None, type=int)
+    count = request.values.get('count', None, type=int)
+    campusname = unquote(request.values.get('campusname', "", type=str))
+    buildname = unquote(request.values.get('buildname', "", type=str))
+    devinfo = Dev_DeviceStatus.query.filter(
+        (Dev_DeviceStatus.Campus.like("%" + campusname + "%"), "")[campusname is None],
+        (Dev_DeviceStatus.Location.like("%" + buildname + "%"), "")[buildname is None]
+    ).order_by(Dev_DeviceStatus.Campus.desc())
+    paginateion = devinfo.paginate(
+        ((count / Setting.pagination + pagenum), 0)[count / Setting.pagination == 0], per_page=Setting.pagination
+    )
+    devinfotest = []
+    hasnext = {
+        'next': paginateion.has_next
+    }
+
+    for devx in paginateion.items:
+        jsonlist = devx.to_json()
+        jsonlist.update(hasnext)
+        devinfotest.append(jsonlist)
+
+    return jsonify(devinfotest)

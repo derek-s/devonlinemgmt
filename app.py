@@ -1,7 +1,7 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from flask import (Flask, render_template, redirect, url_for, request, flash)
+from flask import (Flask, render_template, url_for, request)
 from flask_login import login_required
 from flask_bootstrap import Bootstrap
 
@@ -52,8 +52,8 @@ def index():
 def indexlist():
     """根据校区/楼宇进行查询"""
     page = request.args.get('page', 1, type=int)
-    campusname = b64decode(request.args.get('campusname', "", type=str))
-    buildname = b64decode(request.args.get('buildname', "", type=str))
+    campusname = b64decode(unquote(request.args.get('campusname', "", type=str)))
+    buildname = b64decode(unquote(request.args.get('buildname', "", type=str)))
     devinfo = Dev_DeviceStatus.query.filter(
         (Dev_DeviceStatus.Campus.like("%" + campusname + "%"), "")[campusname is None],
         (Dev_DeviceStatus.Location.like("%" + buildname + "%"), "")[buildname is None]
@@ -64,7 +64,10 @@ def indexlist():
     count = devinfo.count()
     posts = paginateion.items
     campus = Dev_Campus.query.all()
-    return render_template("list.html", posts=posts, count=count, pagination=paginateion, campus=campus)
+    return render_template(
+        "list.html", posts=posts, count=count, pagination=paginateion, campus=campus,
+        ctitle=campusname.decode('utf-8'), btitle=buildname.decode('utf-8')
+    )
 
 
 if __name__ == '__main__':
