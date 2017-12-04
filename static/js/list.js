@@ -1,5 +1,7 @@
 $(document).ready(
     function() {
+        $.base64.utf8encode = true;
+        $.base64.utf8decode = true;
         $.getJSON($SCRIPT_ROOT + '_querybuild', {
             campusname: ''
         }, function(data) {
@@ -11,9 +13,9 @@ $(document).ready(
         })
         $('#ddm-campus').on('click', function(e) {
             $('li.ajaxbname').remove()
-            $('button#dropdownMenu2').html('全部' + '<span class="caret"></span>')
+            $('button#dropdownBuild').html('全部' + '<span class="caret"></span>')
             var $target = $(e.target)
-            $target.is('a') && $('button#dropdownMenu1').html($target.text() + '<span class="caret"></span>')
+            $target.is('a') && $('button#dropdownCampus').html($target.text() + '<span class="caret"></span>')
             var strbuild = encodeURI($target.text(), "utf-8")
             if ($target.text() == '全部') {
                 strbuild = ""
@@ -30,7 +32,7 @@ $(document).ready(
         })
         $("#ddm-buildname").on('click', function(e) {
             var $target = $(e.target)
-            $target.is('a') && $('button#dropdownMenu2').html($target.text() + '<span class="caret"></span>')
+            $target.is('a') && $('button#dropdownBuild').html($target.text() + '<span class="caret"></span>')
         })
         $("a#ajaxnext").bind('click', function() {
             $(this).text("正在加载，请稍后……")
@@ -109,6 +111,20 @@ $(document).ready(
                     content: tablehead + str2 + tableend
                 });
             })
+        })
+        $("button#adqbutton").on('click', function() {
+            var teststr = "5YWo6YOo"
+            var campusname = $.base64.encode($("#dropdownCampus").text())
+            var buildname = $.base64.encode($("#dropdownBuild").text())
+            if (campusname == teststr) {
+                campusname = ""
+                if (buildname == teststr) {
+                    buildname = ""
+                }
+            } else if (buildname == teststr) {
+                buildname = ""
+            }
+            window.open($SCRIPT_ROOT + "list?campusname=" + campusname + "&buildname=" + buildname)
         })
     }
 )
