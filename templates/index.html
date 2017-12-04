@@ -1,5 +1,5 @@
 {% extends "base.html" %} {%import '_macros.html' as macros%} {% block title %}设备信息管理系统{% endblock %}{% block head%}
-<script src="{{ url_for('static', filename='js/list.js') }}" type="text/javascript"></script>{% endblock %} {% block content %}
+<script src="{{ url_for('static', filename='js/list.js') }}" type="text/javascript"></script>{% endblock %} {% block content -%}
 <div id="nav">
     <div class="navblock">
         <div class="navlogo">设备信息管理系统</div>
@@ -19,24 +19,18 @@
         <div id="adquery">
             <label>校区</label>
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                          全部
-                          <span class="caret"></span>
-                        </button>
-                <ul id="ddm-campus" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownCampus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">全部<span class="caret"></span></button>
+                <ul id="ddm-campus" class="dropdown-menu" aria-labelledby="dropdownCampus">
                     <li><a href="javascript:void(0);" rel="all">全部</a></li>
-                    {% for campusone in campus %}
+                    {%- for campusone in campus %}
                     <li><a href="javascript:void(0);" rel="campus">{{ campusone.Campus }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
             <label>楼宇</label>
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                          全部
-                          <span class="caret"></span>
-                        </button>
-                <ul id="ddm-buildname" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownBuild" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">全部<span class="caret"></span></button>
+                <ul id="ddm-buildname" class="dropdown-menu" aria-labelledby="dropdownBuild">
                     <li><a href="javascript:void(0);" rel="all">全部</a></li>
                 </ul>
             </div>
@@ -59,7 +53,7 @@
                 <th>上联端口</th>
                 <th>设备型号</th>
             </tr>
-            {% for data in posts%}
+            {% for data in posts %}
             <tr class="jsondata">
                 <td>{{ data.ID }}</td>
                 <td>{{ data.Campus }}</td>
@@ -89,4 +83,4 @@
 
 </div>
 
-{% endblock %}
+{%- endblock -%}
