@@ -8,7 +8,7 @@
         </a>
             </li>
             {% for p in pagination.iter_pages() %} {% if p %} {% if p == pagination.page %}
-            <li class="active">
+            <li id="pnactive" class="active">
                 <a href="{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}">{{ p }}</a>
             </li>
             {% else %}

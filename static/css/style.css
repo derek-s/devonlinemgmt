@@ -106,7 +106,8 @@ p {
     text-decoration: underline;
 }
 
-#ajaxnext {
+#ajaxnindex,
+#ajaxntlist {
     width: 100%;
     padding: 10px 0 10px 0;
 }
@@ -142,4 +143,12 @@ p {
 
 .caret {
     margin-left: 10px !important;
+}
+
+.panel-info {
+    margin-top: 65px;
+    border: none;
+    border-top: 1px solid transparent !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
 }
