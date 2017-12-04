@@ -2,15 +2,30 @@ $(document).ready(
     function() {
         $.base64.utf8encode = true;
         $.base64.utf8decode = true;
-        $.post($SCRIPT_ROOT + '_querybuild', {
-            campusname: ''
-        }, function(data) {
-            $.each(data, function(one) {
-                $('#ddm-buildname').append(
-                    '<li class="ajaxbname"><a href="javascript:void(0);">' + data[one].BuildName + '</a></li>'
-                )
+        //下拉菜单
+        if ($('#dropdownCampus').text() == "全部") {
+            $.post($SCRIPT_ROOT + '_querybuild', {
+                campusname: ''
+            }, function(data) {
+                $.each(data, function(one) {
+                    $('#ddm-buildname').append(
+                        '<li class="ajaxbname"><a href="javascript:void(0);">' + data[one].BuildName + '</a></li>'
+                    )
+                })
             })
-        })
+        } else {
+            var capname = encodeURI($('#dropdownCampus').text())
+            $.post($SCRIPT_ROOT + '_querybuild', {
+                campusname: capname
+            }, function(data) {
+                $('li.ajaxbname').remove()
+                $.each(data, function(one) {
+                    $('#ddm-buildname').append(
+                        '<li class="ajaxbname"><a href="javascript:void(0);">' + data[one].BuildName + '</a></li>'
+                    )
+                })
+            })
+        }
         $('#ddm-campus').on('click', function(e) {
             $('li.ajaxbname').remove()
             $('button#dropdownBuild').html('全部' + '<span class="caret"></span>')
@@ -34,16 +49,17 @@ $(document).ready(
             var $target = $(e.target)
             $target.is('a') && $('button#dropdownBuild').html($target.text() + '<span class="caret"></span>')
         })
-        $("a#ajaxnext").bind('click', function() {
+        $("a#ajaxntindex").bind('click', function() {
+            //index加载下一页
             $(this).text("正在加载，请稍后……")
-            pagenum = $("li.active>a").text()
-            datacount = $("tr.jsondata").length
-            textabc = $.post($SCRIPT_ROOT + '_queryipage', {
+            var pagenum = $("li#pnactive>a").text()
+            var datacount = $("tr.jsondata").length
+            $.post($SCRIPT_ROOT + '_queryipage', {
                 count: datacount,
                 pagenum: pagenum
             }, function(data) {
 
-                trc = ""
+                var trc = ""
                 var tra = '<tr class="jsondata">'
                 var trb = '</tr>'
                 $.each(data, function(one) {
@@ -53,13 +69,47 @@ $(document).ready(
                 })
                 $("table#devinfolist>tbody tr:last-child").after(trc)
                 if (!hasnext) {
-                    $("a#ajaxnext").remove()
+                    $("a#ajaxnindex").remove()
                 } else {
-                    $("a#ajaxnext").text('下一页')
+                    $("a#ajaxnindex").text('下一页')
                 }
             }).fail(function(status) {
                 if (status.status == '404') {
-                    $("a#ajaxnext").remove()
+                    $("a#ajaxnindex").remove()
+                }
+            })
+        })
+        $("a#ajaxntlist").bind('click', function() {
+            //list加载下一页
+            $(this).text("正在加载，请稍后……")
+            var pagenum = $("li#pnactive>a").text()
+            var datacount = $("tr.jsondata").length
+            var ajaxcnameen = encodeURIComponent(ajaxcamname, 'utf-8')
+            var ajaxbnameen = encodeURIComponent(ajaxbilname, 'utf-8')
+            $.post($SCRIPT_ROOT + '_qindexlist', {
+                count: datacount,
+                pagenum: pagenum,
+                campusname: ajaxcnameen,
+                buildname: ajaxbnameen,
+            }, function(data) {
+                console.log(ajaxcamname, ajaxbilname)
+                var trc = ""
+                var tra = '<tr class="jsondata">'
+                var trb = '</tr>'
+                $.each(data, function(one) {
+                    eachone = data[one]
+                    trc += tra + "<td>" + eachone.ID + "</td><td>" + eachone.Campus + "</td><td>" + eachone.Location + "</td><td class='location'>" + eachone.RoomNo + "</td><td>" + eachone.HostName + "</td><td>" + eachone.LAA + "</td><td>" + eachone.HigherlinkIP + "</td><td>" + eachone.HigherlinkPort + "</td><td class='model'>" + eachone.DeviceModel + "</td>" + trb
+                    hasnext = eachone.next
+                })
+                $("table#devinfolist>tbody tr:last-child").after(trc)
+                if (!hasnext) {
+                    $("a#ajaxntlist").remove()
+                } else {
+                    $("a#ajaxntlist").text('下一页')
+                }
+            }).fail(function(status) {
+                if (status.status == '404') {
+                    $("a#ajaxntlist").remove()
                 }
             })
         })
@@ -113,8 +163,8 @@ $(document).ready(
         })
         $("button#adqbutton").on('click', function() {
             var teststr = "5YWo6YOo"
-            var campusname = $.base64.encode($("#dropdownCampus").text())
-            var buildname = $.base64.encode($("#dropdownBuild").text())
+            var campusname = encodeURIComponent(($.base64.encode($("#dropdownCampus").text())), 'utf-8')
+            var buildname = encodeURIComponent(($.base64.encode($("#dropdownBuild").text())), 'utf-8')
             if (campusname == teststr) {
                 campusname = ""
                 if (buildname == teststr) {
