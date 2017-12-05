@@ -42,7 +42,7 @@
             <button id="adqbutton" class="btn btn-primary">查询</button>
         </div>
         <div id="serachbar">
-            <input id="indexserach" class="form-control input-lg" type="text" name="devinfoserp" placeholder="请输入搜索关键词（支持模糊搜索）"><button id="indexsbutton" class="btn btn-primary">搜 索</button>
+            <input id="indexserach" class="form-control input-lg input-serach" type="text" name="devinfoserp" placeholder="请输入搜索关键词（支持模糊搜索）"><button id="indexsbutton" class="btn btn-primary">搜 索</button>
         </div>
     </div>
     <div class="panel panel-info">
@@ -75,7 +75,7 @@
                 {% endfor %}
             </table>
         </div>
-        <div class="ajaxnetpage"><a id="ajaxntindex" class="btn btn-info" href="javascript:;">下一页</a></div>
+        <div class="ajaxnetpage"><a id="ajaxntindex" class="btn btn-primary" href="javascript:void(0);">下一页</a></div>
         <div>
             {%if pagination%} {{macros.pagination_widget(pagination,'index')}} {%endif%}
         </div>
