@@ -80,19 +80,21 @@ p {
     width: 100%;
     margin: 5px;
     padding: 5px;
+    overflow: hidden
 }
 
 #indexserach {
-    width: 260px;
-    padding: 5px;
-    margin: 5px 10px 0 10px;
+    height: 34px;
+    width: 290px;
     display: inline-block;
     font-size: 16px;
+    margin-right: 10px;
 }
 
 #indexsbutton {
-    padding: 10px 25px;
+    padding: 5px 20px;
     margin-bottom: 5px;
+    display: inline-block;
 }
 
 .model,
@@ -106,8 +108,9 @@ p {
     text-decoration: underline;
 }
 
-#ajaxnindex,
-#ajaxntlist {
+#ajaxntindex,
+#ajaxntlist,
+#ajaxntserach {
     width: 100%;
     padding: 10px 0 10px 0;
 }
@@ -135,6 +138,7 @@ p {
 
 #serachbar {
     float: right;
+    width: 390px;
 }
 
 .dropdown {
@@ -146,9 +150,13 @@ p {
 }
 
 .panel-info {
-    margin-top: 65px;
+    margin-top: 15px;
     border: none;
     border-top: 1px solid transparent !important;
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
+}
+
+.notfound {
+    font-size: 18px;
 }

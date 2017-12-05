@@ -60,30 +60,6 @@ def _querybuild():
     return jsonify(bntemp)
 
 
-@ajaxquery.route("/_querydevinfo", methods=['POST'])
-@login_required
-def qudevinfo():
-    """
-    设备情况信息表查询
-    :return: json
-    """
-    word = request.values.get('keyword', None, type=str)
-    serach = unquote(word).decode('utf-8')
-    serptemp = []
-    serp = Dev_DeviceStatus.query.filter(
-        (Dev_DeviceStatus.Location.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.HostName.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.LAA.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.HigherlinkIP.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.HigherlinkPort.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.DeviceModel.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.DeviceModel.like("%" + serach + "%"), "")[serach is None]
-    ).all()
-    for serpx in serp:
-        serptemp.append(serpx.to_json())
-    return jsonify(serptemp)
-
-
 @ajaxquery.route("/_querylvr", methods=['POST'])
 @login_required
 def querylvr():
@@ -157,3 +133,41 @@ def queryilist():
         devinfotest.append(jsonlist)
 
     return jsonify(devinfotest)
+
+
+@ajaxquery.route("/_qserach", methods=['POST'])
+@login_required
+def queryserach():
+    """
+    设备情况信息表查询
+    :return: json
+    """
+    pagenum = request.values.get('pagenum', None, type=int)
+    count = request.values.get('count', None, type=int)
+    word = request.values.get('keyword', '123', type=str)
+    print word
+    serach = unquote(b64decode(word)).decode('utf-8')
+
+    serp = Dev_DeviceStatus.query.filter(
+        (Dev_DeviceStatus.Campus.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.Location.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.RoomNo.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.HostName.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.LAA.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.HigherlinkIP.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.HigherlinkPort.like("%" + serach + "%"), "")[serach is None] |
+        (Dev_DeviceStatus.DeviceModel.like("%" + serach + "%"), "")[serach is None]
+    ).order_by(Dev_DeviceStatus.Campus.desc())
+    paginateion = serp.paginate(
+        ((count / Setting.pagination + pagenum), 0)[count / Setting.pagination == 0], per_page=Setting.pagination
+    )
+    serachresult = []
+    hasnext = {
+        'next': paginateion.has_next
+    }
+    for serachone in paginateion.items:
+        jsonlist = serachone.to_json()
+        jsonlist.update(hasnext)
+        serachresult.append(jsonlist)
+
+    return jsonify(serachresult)
