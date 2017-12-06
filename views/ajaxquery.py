@@ -5,6 +5,7 @@ from flask_login import login_required
 from models import Dev_DeviceStatus, Dev_LVRInfo, Dev_Campus, Dev_DeviceInfo, Setting
 from urllib import unquote
 from base64 import b64decode, b64encode
+from log import eventlog
 
 ajaxquery = Blueprint("ajaxquery", __name__)
 
@@ -18,9 +19,10 @@ def _queryipage():
     """
     count = request.values.get('count', None, type=int)
     pagenum = request.values.get('pagenum', None, type=int)
+    page_num = ((count/Setting.pagination+pagenum), 0)[count/Setting.pagination == 0]
     devinfo = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus.desc()).paginate(
         (
-            ((count/Setting.pagination+pagenum), 0)[count/Setting.pagination == 0]
+            page_num
         ), per_page=Setting.pagination
     )
     devinfotemp = []
@@ -32,6 +34,9 @@ def _queryipage():
         jsonlist = devx.to_json()
         jsonlist.update(hasnext)
         devinfotemp.append(jsonlist)
+    eventlog(
+        "[ajax首页加载下一页]" + " 第" + str(page_num) + "页"
+    )
     return jsonify(devinfotemp)
 
 
@@ -79,6 +84,9 @@ def querylvr():
     ).all()
     for serpx in serp:
         serptemp.append(serpx.to_json())
+    eventlog(
+        "[查看弱电间信息]" + campus.encode('utf-8') + location.encode('utf-8') + str(roomno)
+    )
     return jsonify(serptemp)
 
 
@@ -86,7 +94,7 @@ def querylvr():
 @login_required
 def querydev():
     """
-    弱电间信息表查询
+    设备信息表查询
     :return: json
     """
     word = request.values.get('keyword', None, type=str)
@@ -101,6 +109,9 @@ def querydev():
     ).all()
     for serpx in serp:
         serptemp.append(serpx.to_json())
+    eventlog(
+        "[查看设备信息]" + serach.encode('utf-8')
+    )
     return jsonify(serptemp)
 
 
@@ -119,8 +130,9 @@ def queryilist():
         (Dev_DeviceStatus.Campus.like("%" + campusname + "%"), "")[campusname is None],
         (Dev_DeviceStatus.Location.like("%" + buildname + "%"), "")[buildname is None]
     ).order_by(Dev_DeviceStatus.Campus.desc())
+    page_num = ((count / Setting.pagination + pagenum), 0)[count / Setting.pagination == 0]
     paginateion = devinfo.paginate(
-        ((count / Setting.pagination + pagenum), 0)[count / Setting.pagination == 0], per_page=Setting.pagination
+        page_num, per_page=Setting.pagination
     )
     devinfotest = []
     hasnext = {
@@ -131,7 +143,9 @@ def queryilist():
         jsonlist = devx.to_json()
         jsonlist.update(hasnext)
         devinfotest.append(jsonlist)
-
+    eventlog(
+        "[ajax加载校区查询页面下一页]" + campusname + buildname + " 第" + str(page_num) + "页"
+    )
     return jsonify(devinfotest)
 
 
@@ -139,13 +153,12 @@ def queryilist():
 @login_required
 def queryserach():
     """
-    设备情况信息表查询
+    搜索页面ajax加载
     :return: json
     """
     pagenum = request.values.get('pagenum', None, type=int)
     count = request.values.get('count', None, type=int)
     word = request.values.get('keyword', '123', type=str)
-    print word
     serach = unquote(b64decode(word)).decode('utf-8')
 
     serp = Dev_DeviceStatus.query.filter(
@@ -158,8 +171,9 @@ def queryserach():
         (Dev_DeviceStatus.HigherlinkPort.like("%" + serach + "%"), "")[serach is None] |
         (Dev_DeviceStatus.DeviceModel.like("%" + serach + "%"), "")[serach is None]
     ).order_by(Dev_DeviceStatus.Campus.desc())
+    page_num = ((count / Setting.pagination + pagenum), 0)[count / Setting.pagination == 0]
     paginateion = serp.paginate(
-        ((count / Setting.pagination + pagenum), 0)[count / Setting.pagination == 0], per_page=Setting.pagination
+        page_num , per_page=Setting.pagination
     )
     serachresult = []
     hasnext = {
@@ -169,5 +183,7 @@ def queryserach():
         jsonlist = serachone.to_json()
         jsonlist.update(hasnext)
         serachresult.append(jsonlist)
-
+    eventlog(
+        "[ajax加载搜索页面下一页]" + serach.encode('utf-8') + " 第" + str(page_num) + "页"
+    )
     return jsonify(serachresult)

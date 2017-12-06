@@ -1,13 +1,13 @@
 # !/usr/bin/python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
-from flask import (Flask, render_template, url_for, request)
-from flask_login import login_required
+from flask import (Flask, render_template, url_for, request, )
+from flask_login import login_required, current_user
 from flask_bootstrap import Bootstrap
 
 from ext import login_manager
 from models import *
-
+from log import eventlog
 from views.admin import adminbg
 from views.ajaxquery import ajaxquery
 from views.login import loginview
@@ -29,13 +29,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bootstrap = Bootstrap(app)
 db.init_app(app)
 login_manager.init_app(app)
-login_manager.login_view = "login"
+login_manager.login_view = "loginview.login"
 
 
 @app.route("/", methods=['GET', 'POST'])
 @login_required
 def index():
     """首页函数"""
+    eventlog(
+        "[访问首页]"
+    )
     page = request.args.get('page', 1, type=int)
     request.script_root = url_for('index', _external=True)
     count = Dev_DeviceStatus.query.count()
@@ -64,6 +67,9 @@ def indexlist():
     count = devinfo.count()
     posts = paginateion.items
     campus = Dev_Campus.query.all()
+    eventlog(
+        "[查询校区/楼宇]" + campusname + buildname + " 第" + str(page) + "页"
+    )
     return render_template(
         "list.html", posts=posts, count=count, pagination=paginateion, campus=campus,
         ctitle=campusname.decode('utf-8'), btitle=buildname.decode('utf-8')
@@ -95,9 +101,18 @@ def serach():
     )
     count = serp.count()
     posts = paginateion.items
+    eventlog(
+        "[搜索]" + serach.encode('utf-8') + " 第" + str(page) + "页"
+    )
     return render_template(
         'serach.html', posts=posts, count=count, pagination=paginateion, keyword=serach
     )
+
+
+@app.route("/user/<username>")
+@login_required
+def userinfo(username):
+    pass
 
 
 if __name__ == '__main__':

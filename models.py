@@ -121,3 +121,18 @@ class Dev_Campus(db.Model):
     __tablename__ = "dev_Campus"
     ID = db.Column("ID", db.Integer, primary_key=True)
     Campus = db.Column("Campus", db.String(255))
+
+
+class Dev_Loging(db.Model):
+    __tablename__ = "dev_Loging"
+    ID = db.Column("ID", db.Integer, primary_key=True)
+    Date = db.Column("Date", db.String(255))
+    UserName = db.Column("UserName", db.String(255))
+    IP = db.Column("IP", db.String(255))
+    Log = db.Column("Log", db.Text)
+
+    def __init__(self, date, username, ip, log):
+        self.Date = date
+        self.UserName = username
+        self.Log = log
+        self.IP = ip
