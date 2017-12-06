@@ -12,4 +12,4 @@ adminbg = Blueprint('adminbg', __name__)
 @admin_required
 def admin():
     """管理后台"""
-    return render_template('admin.html')
+    return render_template('/admin/admin.html')

@@ -16,7 +16,7 @@ from urllib import unquote
 
 SECRET_KEY = '12efc6ca97aefb8e1f6a589c6f334a405bca977bc9cec023f193ee975379e153'
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 app.register_blueprint(adminbg)
 app.register_blueprint(ajaxquery)
 app.register_blueprint(loginview)
@@ -30,6 +30,7 @@ bootstrap = Bootstrap(app)
 db.init_app(app)
 login_manager.init_app(app)
 login_manager.login_view = "loginview.login"
+login_manager.login_message = u"需要登录才可以查看页面"
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -109,10 +110,10 @@ def serach():
     )
 
 
-@app.route("/user/<username>")
+@app.route("/profile/<username>")
 @login_required
 def userinfo(username):
-    pass
+    return render_template("/user/userinfo.html")
 
 
 if __name__ == '__main__':

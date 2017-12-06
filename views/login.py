@@ -28,7 +28,7 @@ def login():
             flash(u"登录失败!")
             logonlog(
                 "",
-                "[登录失败] 尝试登录的用户名 " + str(request.form['username']) + " 尝试登录的密码 " + str(request.form['password'])
+                "[登录失败] " + str(request.form['username']) + str(request.form['password'])
             )
     form = LoginForm()
     return render_template('login.html', form=form)
@@ -37,10 +37,10 @@ def login():
 @loginview.route('/logout')
 @login_required
 def logout():
-    print current_user.username
+    username = current_user.username
     logout_user()
     flash(u"您已注销")
-
+    logonlog(username ,"[用户注销]" )
     return redirect(url_for('loginview.login'))
 
 
