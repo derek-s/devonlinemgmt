@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% block title %}{{ keyword }}{{ request.args.get('username') }}-设备信息管理系统{% endblock %}{% block head%}
+<script src="{{ url_for('static', filename='js/list.js') }}" type="text/javascript"></script>{% endblock %} {% block content -%} {% include "nav.html" %}
+<div id="content">
+    <div id="bnavigation">
+        <ol class="breadcrumb">
+            <li>当前位置: <a href="{{url_for('index')}}">首页</a></li>
+            <li class="active">
+                <a href="{{url_for('serach')}}">{{ keyword }} 搜索结果</a>
+            </li>
+        </ol>
+    </div>
+    <div id="toolbar">
+        <div id="serachpage">
+            <input id="indexserach" class="form-control input-lg input-serach" type="text" name="devinfoserp" placeholder="请输入搜索关键词（支持模糊搜索）"><button id="indexsbutton" class="btn btn-primary">搜 索</button>
+        </div>
+    </div>
+
+
+</div>
+
+{%- endblock -%}
