@@ -52,6 +52,7 @@
         </div>
     </div>
     <div class="panel panel-info">
+        {% if count != 0%}
         <div class="panel-heading">{%- if ctitle == "" and btitle == ""%}全部数据{% endif %} {%- if ctitle != "" and btitle == ""%} {{ ctitle }}弱电间信息数据{% endif%} {%- if ctitle == "" and btitle != ""%} {{ btitle }}弱电间信息数据{% endif%} {%- if ctitle != "" and btitle != ""%} {{ ctitle }}
             {{ btitle }}弱电间信息数据{% endif %}</div>
         <div id="data">
@@ -87,6 +88,9 @@
         <div>
             {%if pagination%} {{macros.pagination_widget(pagination,'indexlist',buildname=request.args.get('buildname'),campusname=request.args.get('campusname'))}} {%endif%}
         </div>
+        {% else %}
+        <div><span class="notfound">暂无相关数据</span></div>
+        {% endif %}
     </div>
     <script type="text/javascript">
         ajaxcamname = '{{ ctitle }}'
