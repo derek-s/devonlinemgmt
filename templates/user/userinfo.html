@@ -1,21 +1,46 @@
-{% extends "base.html" %}{% block title %}{{ keyword }}{{ request.args.get('username') }}-设备信息管理系统{% endblock %}{% block head%}
+{% extends "base.html" %}{% import 'bootstrap/wtf.html' as wtf %}{% block title %}{{ keyword }}{{ username }}的个人资料-设备信息管理系统{% endblock %}{% block head%}
 <script src="{{ url_for('static', filename='js/list.js') }}" type="text/javascript"></script>{% endblock %} {% block content -%} {% include "nav.html" %}
 <div id="content">
     <div id="bnavigation">
         <ol class="breadcrumb">
             <li>当前位置: <a href="{{url_for('index')}}">首页</a></li>
             <li class="active">
-                <a href="{{url_for('serach')}}">{{ keyword }} 搜索结果</a>
+                <a href="{{url_for('userinfo',username=username)}}">{{ username }}的个人资料</a>
             </li>
         </ol>
     </div>
-    <div id="toolbar">
-        <div id="serachpage">
-            <input id="indexserach" class="form-control input-lg input-serach" type="text" name="devinfoserp" placeholder="请输入搜索关键词（支持模糊搜索）"><button id="indexsbutton" class="btn btn-primary">搜 索</button>
+    <div class="protitle">{{ username }} 用户资料</div>
+    <div id="profile">
+        <div class="profile-user-info">
+            <div class="profile-info-row">
+                <div class="profile-info-name">用户名</div>
+                <div class="profile-info-value">{{ username }}</div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-info-name">用户权限</div>
+                <div class="profile-info-value">{{ permission }}</div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-info-name">上次登录时间</div>
+                <div class="profile-info-value">{{ date }}</div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-info-name">上次IP</div>
+                <div class="profile-info-value">{{ ip }}</div>
+            </div>
         </div>
     </div>
-
-
+    <div class="protitle">修改密码</div>
+    {% from "_changepwd.html" import render_field %}
+    <form class="form" method="POST">
+        {{ form.hidden_tag() }}
+        <table>
+            {{render_field(form.oldpwd)}} {{render_field(form.newpwd)}} {{render_field(form.confirm)}}
+        </table>
+        {{ form.submit }}
+    </form>
+    {% for message in get_flashed_messages() %}
+    <span class="warning">{{ message }}</span> {% endfor %}
 </div>
 
 {%- endblock -%}
