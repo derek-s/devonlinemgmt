@@ -6,7 +6,7 @@ from flask_login import login_required
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
 
-from ext import login_manager
+from ext import login_manager, md5s
 from models import *
 from log import eventlog
 from views.admin import adminbg
@@ -14,7 +14,8 @@ from views.ajaxquery import ajaxquery
 from views.login import loginview
 from base64 import b64decode, b64encode
 from urllib import unquote
-from forms import ChangePwd, LoginForm
+from forms import ChangePwd
+
 
 SECRET_KEY = '12efc6ca97aefb8e1f6a589c6f334a405bca977bc9cec023f193ee975379e153'
 
@@ -33,7 +34,10 @@ db.init_app(app)
 login_manager.init_app(app)
 login_manager.login_view = "loginview.login"
 login_manager.login_message = u"需要登录才可以查看页面"
-CSRFProtect(app)
+# CSRFProtect(app)
+
+env = app.jinja_env
+env.filters['md5s'] = md5s
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -135,16 +139,21 @@ def userinfo(username):
     if request.method == 'POST':
         if form.validate_on_submit():
             user = User.query.filter_by(
-                username=username, password=form.oldpwd.data
+                username=username, password=md5s(None, form.oldpwd.data)
             ).first()
             if user:
                 newpwd = form.newpwd.data
                 user.password = newpwd
                 db.session.commit()
+                session.pop('_flashes', None)
                 flash(u"密码修改成功，请重新登陆。")
+                eventlog("[修改密码成功] 跳转到登陆页面")
                 return redirect(url_for('loginview.login'))
             else:
+                session.pop('_flashes', None)
                 flash(u"旧密码错误")
+                eventlog("[修改密码失败] 旧密码验证失败")
+    eventlog("[访问个人资料页面]" + username)
     return render_template("/user/userinfo.html", username=username, date=date, ip=ip, permission=per, form=form)
 
 

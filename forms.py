@@ -21,11 +21,11 @@ class LoginForm(FlaskForm):
 class ChangePwd(FlaskForm):
     oldpwd = PasswordField('', validators=[
         DataRequired(message=u'旧密码不能为空'), Length(1, 24)
-    ], render_kw={"placeholder": u"旧密码"}
+    ], render_kw={"placeholder": u"旧密码", "id": "oldpw"}
                            )
     newpwd = PasswordField('', validators=[
         DataRequired(message=u"新密码不能为空"),
         EqualTo('confirm', message=u"两次密码不相同"),
-        Length(1, 24)], render_kw={"placeholder": u"新密码"})
-    confirm = PasswordField('', None, render_kw={"placeholder": u"重复密码"})
+        Length(1, 24)], render_kw={"placeholder": u"新密码", "id": "newpw"})
+    confirm = PasswordField('', None, render_kw={"placeholder": u"重复密码", "id": "confirmpw"})
     submit = SubmitField(u'修改密码', None ,render_kw={"class": "btn btn-danger changpwdb"})
