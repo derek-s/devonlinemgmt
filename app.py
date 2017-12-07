@@ -143,17 +143,17 @@ def userinfo(username):
             ).first()
             if user:
                 newpwd = form.newpwd.data
-                user.password = newpwd
+                user.password = md5s(None, newpwd)
                 db.session.commit()
                 session.pop('_flashes', None)
                 flash(u"密码修改成功，请重新登陆。")
-                eventlog("[修改密码成功] 跳转到登陆页面")
+                eventlog(u"[修改密码成功] 跳转到登陆页面")
                 return redirect(url_for('loginview.login'))
             else:
                 session.pop('_flashes', None)
                 flash(u"旧密码错误")
-                eventlog("[修改密码失败] 旧密码验证失败")
-    eventlog("[访问个人资料页面]" + username)
+                eventlog(u"[修改密码失败] 旧密码验证失败")
+    eventlog(u"[访问个人资料页面]" + username)
     return render_template("/user/userinfo.html", username=username, date=date, ip=ip, permission=per, form=form)
 
 
