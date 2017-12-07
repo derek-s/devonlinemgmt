@@ -1,9 +1,10 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import (Flask, render_template, url_for, request, )
-from flask_login import login_required, current_user
+from flask import (Flask, render_template, url_for, request, flash, redirect, session )
+from flask_login import login_required
 from flask_bootstrap import Bootstrap
+from flask_wtf.csrf import CSRFProtect
 
 from ext import login_manager
 from models import *
@@ -13,6 +14,7 @@ from views.ajaxquery import ajaxquery
 from views.login import loginview
 from base64 import b64decode, b64encode
 from urllib import unquote
+from forms import ChangePwd, LoginForm
 
 SECRET_KEY = '12efc6ca97aefb8e1f6a589c6f334a405bca977bc9cec023f193ee975379e153'
 
@@ -31,6 +33,7 @@ db.init_app(app)
 login_manager.init_app(app)
 login_manager.login_view = "loginview.login"
 login_manager.login_message = u"需要登录才可以查看页面"
+CSRFProtect(app)
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -110,10 +113,39 @@ def serach():
     )
 
 
-@app.route("/profile/<username>")
+@app.route("/profile/<username>", methods=['GET', 'POST'])
 @login_required
 def userinfo(username):
-    return render_template("/user/userinfo.html")
+    lastlogin = Dev_Loging.query.filter(
+        Dev_Loging.UserName == username, Dev_Loging.Log.like("%登录成功%")).order_by(
+        Dev_Loging.Date.desc()).first()
+    date = lastlogin.Date
+    ip = lastlogin.IP
+    userdb = User.query.filter(User.username == username).first()
+    permission = userdb.permissions
+    if permission == 80:
+        per = u"超级管理员"
+    elif permission == 70:
+        per = u"管理员"
+    elif permission == 10:
+        per = u"普通用户"
+    else:
+        per = u"非法用户"
+    form = ChangePwd()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            user = User.query.filter_by(
+                username=username, password=form.oldpwd.data
+            ).first()
+            if user:
+                newpwd = form.newpwd.data
+                user.password = newpwd
+                db.session.commit()
+                flash(u"密码修改成功，请重新登陆。")
+                return redirect(url_for('loginview.login'))
+            else:
+                flash(u"旧密码错误")
+    return render_template("/user/userinfo.html", username=username, date=date, ip=ip, permission=per, form=form)
 
 
 if __name__ == '__main__':
