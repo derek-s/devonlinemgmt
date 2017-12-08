@@ -3,9 +3,9 @@
 <div id="content">
     <div id="bnavigation">
         <ol class="breadcrumb">
-            <li>当前位置: <a href="{{url_for('index')}}">首页</a></li>
+            <li>当前位置: <a href="{{url_for('indexview.index')}}">首页</a></li>
             <li class="active">
-                <a href="{{url_for('serach')}}">{{ keyword }} 搜索结果</a>
+                <a href="{{url_for('serachview.serach')}}">{{ keyword }} 搜索结果</a>
             </li>
         </ol>
     </div>
@@ -50,7 +50,7 @@
         {% endif %}
         <div class="ajaxnetpage"><a id="ajaxntserach" class="btn btn-primary" href="javascript:void(0);">下一页</a></div>
         <div>
-            {%if pagination%} {{macros.pagination_widget(pagination,'serach', keyword=request.args.get('keyword') | safe)}} {%endif%}
+            {%if pagination%} {{macros.pagination_widget(pagination,'serachview.serach', keyword=request.args.get('keyword') | safe)}} {%endif%}
         </div>
 
     </div>
@@ -59,7 +59,7 @@
         $(function() {
             $('#transfer').click(function() {
                 var page = $('#transfer_page').val();
-                window.location.href = "{{url_for('serach', keyword=request.args.get('keyword') | safe)}}" + "&page=" + page;
+                window.location.href = "{{url_for('serachview.serach', keyword=request.args.get('keyword') | safe)}}" + "&page=" + page;
             })
         })
     </script>

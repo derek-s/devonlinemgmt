@@ -4,12 +4,12 @@
 <div id="content">
     <div id="bnavigation">
         <ol class="breadcrumb">
-            <li>当前位置: <a href="{{url_for('index')}}">首页</a></li>
+            <li>当前位置: <a href="{{url_for('indexview.index')}}">首页</a></li>
             {%- if ctitle == "" and btitle == ""%}
-            <li class="active"><a href="{{url_for('indexlist')}}">分类查询</a></li>{% endif%} {%- if ctitle != "" and btitle == ""%}
-            <li class="active"><a href="{{url_for('indexlist',campusname=request.args.get('campusname'),buildname=request.args.get('buildname')) | safe}}">{{ ctitle }}弱电间信息数据</a></li>{% endif%} {%- if ctitle == "" and btitle != ""%}
-            <li class="active"><a href="{{url_for('indexlist',campusname=request.args.get('campusname'),buildname=request.args.get('buildname')) | safe}}">{{ btitle }}弱电间信息数据</a></li>{% endif%} {%- if ctitle != "" and btitle != ""%}
-            <li class="active"><a href="{{url_for('indexlist',campusname=request.args.get('campusname'),buildname=request.args.get('buildname')) | safe}}">{{ ctitle }} {{ btitle }}弱电间信息数据</a></li>{% endif %}
+            <li class="active"><a href="{{url_for('indexview.indexlist')}}">分类查询</a></li>{% endif%} {%- if ctitle != "" and btitle == ""%}
+            <li class="active"><a href="{{url_for('indexview.indexlist',campusname=request.args.get('campusname'),buildname=request.args.get('buildname')) | safe}}">{{ ctitle }}弱电间信息数据</a></li>{% endif%} {%- if ctitle == "" and btitle != ""%}
+            <li class="active"><a href="{{url_for('indexview.indexlist',campusname=request.args.get('campusname'),buildname=request.args.get('buildname')) | safe}}">{{ btitle }}弱电间信息数据</a></li>{% endif%} {%- if ctitle != "" and btitle != ""%}
+            <li class="active"><a href="{{url_for('indexview.indexlist',campusname=request.args.get('campusname'),buildname=request.args.get('buildname')) | safe}}">{{ ctitle }} {{ btitle }}弱电间信息数据</a></li>{% endif %}
         </ol>
     </div>
     <div id="toolbar">
@@ -72,7 +72,7 @@
 
         <div class="ajaxnetpage"><a id="ajaxntlist" class="btn btn-primary" href="javascript:void(0);">下一页</a></div>
         <div>
-            {%if pagination%} {{macros.pagination_widget(pagination,'indexlist',buildname=request.args.get('buildname'),campusname=request.args.get('campusname'))}} {%endif%}
+            {%if pagination%} {{macros.pagination_widget(pagination,'indexview.indexlist',buildname=request.args.get('buildname'),campusname=request.args.get('campusname'))}} {%endif%}
         </div>
         {% else %}
         <div><span class="notfound">暂无相关数据</span></div>
@@ -86,7 +86,7 @@
             $('#transfer').click(function() {
 
                 var page = $('#transfer_page').val();
-                window.location.href = ("{{url_for('indexlist',campusname=request.args.get('campusname'),buildname=request.args.get('buildname')) | safe}}" + "&page=" + page);
+                window.location.href = ("{{url_for('indexview.indexlist',campusname=request.args.get('campusname'),buildname=request.args.get('buildname')) | safe}}" + "&page=" + page);
             })
         })
     </script>
