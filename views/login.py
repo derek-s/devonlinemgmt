@@ -23,7 +23,7 @@ def login():
         if user:
             login_user(user)
             eventlog("[登录成功]")
-            return redirect(url_for('index'))
+            return redirect(url_for('indexview.index'))
         else:
             flash(u"登录失败!")
             logonlog(
