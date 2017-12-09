@@ -35,7 +35,7 @@ db.init_app(app)
 login_manager.init_app(app)
 login_manager.login_view = "loginview.login"
 login_manager.login_message = u"需要登录才可以查看页面"
-# CSRFProtect(app)
+CSRFProtect(app)
 
 env = app.jinja_env
 env.filters['md5s'] = md5s

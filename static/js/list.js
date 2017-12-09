@@ -1,11 +1,19 @@
 $(document).ready(
     function() {
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                }
+            }
+        })
         $.base64.utf8encode = true;
         $.base64.utf8decode = true;
         //下拉菜单
         if ($('#dropdownCampus').text() == "全部") {
             $.post($SCRIPT_ROOT + '_querybuild', {
-                campusname: ''
+                campusname: '',
+
             }, function(data) {
                 $.each(data, function(one) {
                     $('#ddm-buildname').append(
@@ -190,7 +198,6 @@ $(document).ready(
             var datacount = $("tr.jsondata").length
             var word = $.base64.encode(ajaxkeyword)
             var serach = encodeURIComponent(word, 'utf-8')
-            console.log(serach)
             $.post($SCRIPT_ROOT + '_qserach', {
                 count: datacount,
                 pagenum: pagenum,
