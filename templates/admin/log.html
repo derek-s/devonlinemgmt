@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}管理后台 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
+{% extends "base.html" %}{%import '_macros.html' as macros%} {% block title %}管理后台 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
 <div id="admincontent">
     <div id="leftmenu">
         <ul id="sideul" class="nav nav-sidebar">
@@ -19,17 +19,34 @@
             <label>日志类检索</label><select></select>
             <label>日志时间检索</label>
         </div>
-        <div class="logtable">
-            <table>
-                <tr>
-                    <th>日期</th>
-                    <th>用户名</th>
-                    <th>日志内容</th>
-                </tr>
-            </table>
+        <div class="panel panel-info">
+            <div class="panel-heading">操作日志</div>
+            <div id="data">
+                <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
+                    <tr>
+                        <th>ID</th>
+                        <th>日期</th>
+                        <th>用户名</th>
+                        <th>来访IP</th>
+                        <th>日志内容</th>
+                    </tr>
+                    {% for data in posts %}
+                    <tr class="jsondata">
+                        <td>{{ data.ID }}</td>
+                        <td>{{ data.Date }}</td>
+                        <td>{{ data.UserName }}</td>
+                        <td>{{ data.IP }}</td>
+                        <td>{{ data.Log }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="ajaxnetpage"><a id="ajaxntindex" class="btn btn-primary" href="javascript:void(0);">下一页</a></div>
+        <div>
+            {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.logviews')}} {%endif%}
         </div>
     </div>
-</div>
 
 
-{% endblock %}
+    {% endblock %}
