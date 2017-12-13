@@ -4,7 +4,7 @@
 from flask import (Flask, render_template, url_for, request, Blueprint)
 from flask_login import login_required
 
-from models import *
+from models import Dev_DeviceStatus, Dev_DeviceInfo, Dev_Campus, Dev_LVRInfo, Setting
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
