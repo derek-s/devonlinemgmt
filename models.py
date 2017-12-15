@@ -136,3 +136,12 @@ class Dev_Loging(db.Model):
         self.UserName = username
         self.Log = log
         self.IP = ip
+
+    def to_json(self):
+        return{
+            'ID': self.ID,
+            'Date': self.Date,
+            'UserName': self.UserName,
+            'Log': self.Log,
+            'IP': self.IP
+        }
