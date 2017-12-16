@@ -281,3 +281,30 @@ ul.errors {
 .adminmenu:active {
     color: #fff
 }
+
+#logusers {
+    display: inline-block;
+    width: 125px;
+    height: 45px;
+}
+
+#dropdownlogs {
+    width: 100%;
+    display: inline-block;
+    height: 45px;
+}
+
+#logcats {
+    width: 170px;
+    display: inline-block;
+}
+
+#logdatas {
+    width: 272px;
+    display: inline-block;
+}
+
+.adminbar {
+    height: 45px;
+    display: inline-block;
+}

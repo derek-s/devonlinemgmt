@@ -15,9 +15,9 @@
     </div>
     <div id="rightcont">
         <div class="adminbar">
-            <label>用户名检索</label><input class="form-control input-lg input-serach"></input>
+            <label>用户名检索</label><input id="logusers" class="form-control input-lg input-serach"></input>
             <label>日志类检索</label>
-            <div class="dropdown">
+            <div id="logcats" class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownlogs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">全部<span class="caret"></span></button>
                 <ul id="ddm-logs" class="dropdown-menu" aria-labelledby="dropdownlogs">
                     <li><a href="javascript:void(0);" rel="all">全部</a></li>
@@ -64,7 +64,6 @@
                 </table>
             </div>
         </div>
-        <div class="ajaxnetpage"><a id="ajaxntindex" class="btn btn-primary" href="javascript:void(0);">下一页</a></div>
         <div>
             {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.logviews')}} {%endif%}
         </div>
