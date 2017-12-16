@@ -109,22 +109,3 @@ def logviews():
     count = logdata.count()
     eventlog("[查看日志]" + " 第" + str(page) +"页")
     return render_template('/admin/log.html', posts=posts, count=count, pagination=paginateion)
-
-
-@adminbg.route("/admin/logajax", methods=['GET', 'POST'])
-@login_required
-@admin_required
-def logajax():
-    """
-    ajax加载日志区域刷新
-    :return:
-    """
-    page = request.values.get('page', 1, type=int)
-    logdata = Dev_Loging.query.filter()
-    paginateion = logdata.paginate(
-        page, per_page=Setting.pagination
-    )
-    posts = paginateion.items
-    count = logdata.count()
-    eventlog("[查看日志]" + " 第" + str(page) + "页")
-    return render_template('/admin/logajax.html', posts=posts, count=count, pagination=paginateion)
