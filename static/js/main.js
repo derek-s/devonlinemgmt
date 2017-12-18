@@ -17,32 +17,32 @@ $(document).ready(
         $("button#logqbutton").on('click', function() {
             var teststr = "5YWo6YOo"
             var page = 1
-            var uname = encodeURIComponent(($.base64.encode($("input#logusers").text())), "utf-8")
-            var catname = encodeURIComponent(($.base64.encode($("#dropdownlogs").text())), 'utf-8')
-            console.log($("input#logusers").val())
+            var name = $("input#logusers").val()
+            var cat = $("#dropdownlogs").text()
+            var uname = encodeURIComponent(($.base64.encode(name)), "utf-8")
+            var catname = encodeURIComponent(($.base64.encode(cat)), 'utf-8')
+            var datas = $("input#logdatas").val()
             if (catname == teststr) {
                 catname = ""
             }
-            $.post($SCRIPT_ROOT + 'log', {
-                page: page,
-                username: uname,
-                cats: catname
-            }, function(data) {
-                /* $("div#rightcont").empty()
-                 var divmain = ($(data)).filter("div#main")
-                 $("div#rightcont").append(divmain.find("div#rightcont").html()) */
-            })
+            js_ajaxlog(page, uname, catname, datas)
         })
     }
 )
 
-function js_ajaxlog(page) {
+function js_ajaxlog(page, uname, catname, datas) {
+    var loading = layer.load(2, {
+        shade: [0.3, '#fff']
+    });
     $.post($SCRIPT_ROOT + 'log', {
-        page: page
-
+        page: page,
+        username: uname,
+        cats: catname,
+        date: datas
     }, function(data) {
-        $("div#rightcont").empty()
+        $("div#logtable").empty()
         var divmain = ($(data)).filter("div#main")
-        $("div#rightcont").append(divmain.find("div#rightcont").html())
+        $("div#logtable").append(divmain.find("div#logtable").html())
     })
+    layer.close(loading);
 }
