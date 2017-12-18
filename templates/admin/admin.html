@@ -2,18 +2,19 @@
 <div id="admincontent">
     <div id="leftmenu">
         <ul id="sideul" class="nav nav-sidebar">
-            <li class="sideli"><a class="adminmenu sideactive">首页</a></li>
+            <li class="sideli"><a class="adminmenu sideactive" href="{{url_for('adminbg.admin')}}">首页</a></li>
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.query')}}">数据查询</a></li>
-            <li class="sideli">弱电间信息管理</li>
-            <li class="sideli">设备信息管理</li>
-            <li class="sideli">设备情况管理</li>
-            <li class="sideli">基础信息维护</li>
-            <li class="sideli">用户管理</li>
-            <li class="sideli">系统设置</li>
-            <li class="sideli">操作日志</li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.lvrmanager')}}">弱电间信息管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.dvrmanage')}}">设备信息管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.dvrstatus')}}">设备情况管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.basicinfo')}}">基础信息维护</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.usrmanage')}}">用户管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.sysmanage')}}">系统设置</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.logviews')}}">操作日志</a></li>
         </ul>
     </div>
     <div id="rightcont">
+        <h1 class="admintitle">管理后台</h1>
         <div class="welcome">
             <span>hi, {{ current_user.username }} 欢迎使用设备信息管理系统</span>
         </div>

@@ -1,10 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %} {% block title %}系统设置|管理后台 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
+<div id="admincontent">
+    <div id="leftmenu">
+        <ul id="sideul" class="nav nav-sidebar">
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.admin')}}">首页</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.query')}}">数据查询</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.lvrmanager')}}">弱电间信息管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.dvrmanage')}}">设备信息管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.dvrstatus')}}">设备情况管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.basicinfo')}}">基础信息维护</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.usrmanage')}}">用户管理</a></li>
+            <li class="sideli"><a class="adminmenu sideactive" href="{{url_for('adminbg.sysmanage')}}">系统设置</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.logviews')}}">操作日志</a></li>
+        </ul>
+    </div>
+    <div id="rightcont">
+        <h1 class="admintitle">系统设置</h1>
+        <table>
+            <th>序号</th>
+            <th>校区</th>
+            <th>弱电间信息</th>
+            <th>设备信息</th>
+            <th>上联IP</th>
+            <th>上联端口</th>
+            <th>设备型号</th>
+            <th>相关操作</th>
+        </table>
+    </div>
+</div>
 
-</body>
-</html>
+
+{% endblock %}
