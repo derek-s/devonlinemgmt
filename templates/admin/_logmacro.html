@@ -1,25 +1,25 @@
-{% macro pagination_widget(pagination, endpoint, fragment='') %}
+{% macro pagination_widget(pagination, endpoint,username, cats, date,fragment='') %}
 <div class="pagenum">
     <label class="incotp">合计 {{ pagination.total }} 条</label>
     <ul class="pagination">
         <li{% if not pagination.has_prev %} class="disabled" {% endif %}>
-            <a href="javascript:void(0);" onclick="{% if pagination.has_prev %}js_ajaxlog({{pagination.prev_num}}){% else %}#{% endif %}">
+            <a href="javascript:void(0);" onclick="{% if pagination.has_prev %}js_ajaxlog({{pagination.prev_num}},'{{username}}','{{cats}}','{{date}}'){% else %}#{% endif %}">
             &laquo;
         </a>
             </li>
             {% for p in pagination.iter_pages() %} {% if p %} {% if p == pagination.page %}
             <li id="pnactive" class="active">
-                <a href="javascript:void(0);" onclick="js_ajaxlog({{ p }})">{{ p }}</a>
+                <a href="javascript:void(0);" onclick="js_ajaxlog({{p}},'{{username}}','{{cats}}','{{date}}')">{{ p }}</a>
             </li>
             {% else %}
             <li>
-                <a href="javascript:void(0);" onclick="js_ajaxlog({{ p }})">{{ p }}</a>
+                <a href="javascript:void(0);" onclick="js_ajaxlog({{p}},'{{username}}','{{cats}}','{{date}}')">{{ p }}</a>
             </li>
             {% endif %} {% else %}
             <li class="disabled"><a href="#">&hellip;</a></li>
             {% endif %} {% endfor %}
             <li{% if not pagination.has_next %} class="disabled" {% endif %}>
-                <a href="javascript:void(0)" onclick="{% if pagination.has_next %}js_ajaxlog({{pagination.next_num}}){% else %}#{% endif %}">
+                <a href="javascript:void(0)" onclick="{% if pagination.has_next %}js_ajaxlog({{pagination.next_num}},'{{username}}','{{cats}}','{{date}}'){% else %}#{% endif %}">
             &raquo;
         </a>
                 </li>

@@ -1,22 +1,23 @@
-{% extends "base.html" %}{%import 'admin/_logmacro.html' as macros%} {% block title %}操作日志-管理后台 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
+{% extends "base.html" %}{%import 'admin/_logmacro.html' as macros%} {% block title %}操作日志|管理后台 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
 <div id="admincontent">
     <div id="leftmenu">
         <ul id="sideul" class="nav nav-sidebar">
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.admin')}}">首页</a></li>
-            <li class="sideli"><a class="adminmenu sideactive" href="{{url_for('adminbg.query')}}">数据查询</a></li>
-            <li class="sideli">弱电间信息管理</li>
-            <li class="sideli">设备信息管理</li>
-            <li class="sideli">设备情况管理</li>
-            <li class="sideli">基础信息维护</li>
-            <li class="sideli">用户管理</li>
-            <li class="sideli">系统设置</li>
-            <li class="sideli">操作日志</li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.query')}}">数据查询</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.lvrmanager')}}">弱电间信息管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.dvrmanage')}}">设备信息管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.dvrstatus')}}">设备情况管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.basicinfo')}}">基础信息维护</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.usrmanage')}}">用户管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.sysmanage')}}">系统设置</a></li>
+            <li class="sideli"><a class="adminmenu sideactive" href="{{url_for('adminbg.logviews')}}">操作日志</a></li>
         </ul>
     </div>
     <div id="rightcont">
+        <h1 class="admintitle">操作日志</h1>
         <div class="adminbar">
-            <label>用户名检索</label><input id="logusers" class="form-control input-lg input-serach"></input>
-            <label>日志类检索</label>
+            <label class="adminlabel">用户名检索</label><input id="logusers" class="form-control input-lg input-serach"></input>
+            <label class="adminlabel">日志类检索</label>
             <div id="logcats" class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownlogs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">全部<span class="caret"></span></button>
                 <ul id="ddm-logs" class="dropdown-menu" aria-labelledby="dropdownlogs">
@@ -35,13 +36,14 @@
                     <li><a href="javascript:void(0);" rel="all">修改密码失败</a></li>
                 </ul>
             </div>
-            <label>日志时间检索</label>
+            <label class="adminlabel">日志时间检索</label>
             <input id="logdatas" class="form-control input-lg input-serach"></input>
             <button id="logqbutton" class="btn btn-primary">查询</button>
 
         </div>
-        <div class="panel panel-info">
-            <div class="panel-heading">操作日志</div>
+        <div id="logtable" class="panel panel-info">
+
+            <div id="logtableth" class="panel-heading">当前显示：{{thuname}} {{thcats}} {{data}} 操作日志 第{{page}}页</div>
             <div id="data">
                 <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
                     <tr>
@@ -62,9 +64,9 @@
                     {% endfor %}
                 </table>
             </div>
-        </div>
-        <div>
-            {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.logviews')}} {%endif%}
+            <div>
+                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.logviews',username,cats,date)}} {%endif%}
+            </div>
         </div>
     </div>
     <script>
