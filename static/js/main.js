@@ -16,7 +16,7 @@ $(document).ready(
         })
         $("button#logqbutton").on('click', function() {
             var teststr = "5YWo6YOo"
-            var page = 1
+            var page = ""
             var name = $("input#logusers").val()
             var cat = $("#dropdownlogs").text()
             var uname = encodeURIComponent(($.base64.encode(name)), "utf-8")
@@ -29,6 +29,19 @@ $(document).ready(
         })
     }
 )
+$(document).on("click", "button#transferlogs", function() {
+    var teststr = "5YWo6YOo"
+    var page = $("input#transfer_pagelog").val()
+    var name = $("input#logusers").val()
+    var cat = $("#dropdownlogs").text()
+    var uname = encodeURIComponent(($.base64.encode(name)), "utf-8")
+    var catname = encodeURIComponent(($.base64.encode(cat)), 'utf-8')
+    var datas = $("input#logdatas").val()
+    if (catname == teststr) {
+        catname = ""
+    }
+    js_ajaxlog(page, uname, catname, datas)
+});
 
 function js_ajaxlog(page, uname, catname, datas) {
     var loading = layer.load(2, {
