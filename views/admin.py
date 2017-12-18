@@ -103,19 +103,24 @@ def logviews():
     :return: 返回数据查询结果并构建相应页面
     """
     page = request.values.get('page', 1, type=int)
-    username = b64decode(unquote(request.values.get('username', "", type=str)))
-    cats = b64decode(unquote(request.values.get('cats', "", type=str)))
+    uname = request.values.get('username', "", type=str)
+    username = b64decode(unquote(uname))
+    catsname = request.values.get('cats', "", type=str)
+    cats = b64decode(unquote(catsname))
     date = request.values.get('date', "", type=str)
     logdata = Dev_Loging.query.filter(
         (Dev_Loging.UserName.like("%" + username + "%"), "")[username is None],
-        (Dev_Loging.Date == date),
+        (Dev_Loging.Date.like("%" + date + "%"), "")[date is None],
         (Dev_Loging.Log.like("%" + cats + "%"), "")[cats is None]
     )
     paginateion = logdata.paginate(
         page, per_page=Setting.pagination
     )
     posts = paginateion.items
-    print posts
     count = logdata.count()
     eventlog("[查看日志]" + " 第" + str(page) +"页")
-    return render_template('/admin/log.html', posts=posts, count=count, pagination=paginateion)
+    return render_template(
+        '/admin/log.html', posts=posts, count=count, pagination=paginateion,
+        page=page, username=uname, cats=catsname, date=date,
+        thuname=username.decode('utf-8'), thcats=cats.decode('utf-8')
+    )
