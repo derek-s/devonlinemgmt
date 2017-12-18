@@ -21,6 +21,7 @@ h6,
 input,
 p {
     font-family: "Microsoft YaHei", "TIBch", "Classic Grotesque W01", "Helvetica Neue", Arial, "Hiragino Sans GB", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
+    margin: 0;
 }
 
 .clear {
@@ -203,7 +204,7 @@ p {
 }
 
 .sideactive {
-    color: #fff;
+    color: #fff !important;
     background-color: #428bca;
 }
 
@@ -270,41 +271,63 @@ ul.errors {
 .welcome {}
 
 .adminmenu {
+    color: #000;
     padding: 10px !important;
 }
 
 .adminmenu:hover {
-    color: #fff;
+    color: #fff !important;
     background-color: #428bca !important;
 }
 
 .adminmenu:active {
-    color: #fff
+    color: #fff !important;
 }
 
 #logusers {
     display: inline-block;
     width: 125px;
-    height: 45px;
+    height: 35px;
 }
 
 #dropdownlogs {
     width: 100%;
     display: inline-block;
-    height: 45px;
+    height: 35px;
 }
 
 #logcats {
     width: 170px;
     display: inline-block;
+    vertical-align: top;
 }
 
 #logdatas {
     width: 272px;
     display: inline-block;
+    height: 35px;
 }
 
 .adminbar {
-    height: 45px;
+    height: 35px;
     display: inline-block;
+}
+
+label.adminlabel {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+#logtable {
+    margin-top: 30px !important
+}
+
+#logqbutton {
+    margin-left: 10px;
+    vertical-align: top;
+}
+
+h1.admintitle {
+    font-size: 26px;
+    margin-bottom: 45px;
 }
