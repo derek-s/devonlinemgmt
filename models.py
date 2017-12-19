@@ -5,11 +5,6 @@ from ext import db
 from flask_login import UserMixin
 
 
-class Setting:
-    """设置信息"""
-    pagination = 2
-
-
 class Permission:
     """用户权限常量"""
     domestic = 10
@@ -145,3 +140,28 @@ class Dev_Loging(db.Model):
             'Log': self.Log,
             'IP': self.IP
         }
+
+
+class Dev_Options(db.Model):
+    """
+    系统设置模型
+    """
+    __tablename__ = "dev_Options"
+    ID = db.Column("ID", db.Integer, primary_key=True)
+    optinoname = db.Column("option_name", db.String(255))
+    optionvalue = db.Column("option_value", db.String(255))
+
+    def __init__(self, id, optionname, optionvalue):
+        self.id = id
+        self.optionname = optionname
+        self.optionvalue = optionvalue
+
+
+class Setting():
+    """设置信息"""
+    def __init__(self):
+        pagen = Dev_Options.query.filter_by(optinoname='pagination').one()
+        self.pagination = int(pagen.optionvalue)
+    """
+     pagination = 2
+    """

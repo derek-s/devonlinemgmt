@@ -32,7 +32,7 @@ def serach():
         (Dev_DeviceStatus.DeviceModel.like("%" + serach + "%"), "")[serach is None]
     ).order_by(Dev_DeviceStatus.Campus.desc())
     paginateion = serp.paginate(
-        page, per_page=Setting.pagination
+        page, per_page=Setting().pagination
     )
     count = serp.count()
     posts = paginateion.items

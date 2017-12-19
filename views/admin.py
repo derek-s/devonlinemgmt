@@ -91,7 +91,8 @@ def sysmanage():
     """
     :return: 返回数据查询结果并构建相应页面
     """
-    return render_template('/admin/sysmanage.html')
+    syspagn = Setting().pagination
+    return render_template('/admin/sysmanage.html', syspagn=syspagn)
 
 
 @adminbg.route("/admin/log", methods=['GET', 'POST'])
@@ -114,7 +115,7 @@ def logviews():
         (Dev_Loging.Log.like("%" + cats + "%"), "")[cats is None]
     )
     paginateion = logdata.paginate(
-        page, per_page=Setting.pagination
+        page, per_page=Setting().pagination
     )
     posts = paginateion.items
     count = logdata.count()
