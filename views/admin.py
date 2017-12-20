@@ -1,12 +1,13 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
-from flask import Blueprint, render_template, request, url_for
+from flask import Blueprint, render_template, request, url_for, flash, session
 from flask_login import login_required
 from decorators import admin_required
 from models import Dev_Loging, Setting
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
+from sysmanger import optionsupdate
 
 adminbg = Blueprint('adminbg', __name__)
 
@@ -84,13 +85,23 @@ def usrmanage():
     return render_template('/admin/usrmanage.html')
 
 
-@adminbg.route("/admin/sysmanage")
+@adminbg.route("/admin/sysmanage", methods=['GET', 'POST'])
 @login_required
 @admin_required
 def sysmanage():
     """
     :return: 返回数据查询结果并构建相应页面
     """
+    eventlog("[访问系统设置]")
+    default_value = ""
+    if request.method == 'POST':
+        pagesize = request.form.get('syspagen', 1)
+        if pagesize.isdigit():
+            optionsupdate('pagination', int(pagesize))
+            eventlog("[修改系统设置]")
+        else:
+            session.pop('_flashes', None)
+            flash(u"分页条数输入有误，请检查输入。", 'danger')
     syspagn = Setting().pagination
     return render_template('/admin/sysmanage.html', syspagn=syspagn)
 
