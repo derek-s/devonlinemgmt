@@ -15,9 +15,21 @@
     </div>
     <div id="rightcont">
         <h1 class="admintitle">系统设置</h1>
-        <label class="adminlabel">分页条数（前后台均影响）</label>
-        <input id="syspagn" class="form-control input-lg input-serach" value="{{syspagn}}"></input>
-        <button id="syssbutton" class="btn btn-primary">保存设置</button>
+        <div id="warning" class="alert alert-danger disno" role="alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+        {% for message in get_flashed_messages(with_categories=True) %}
+        <div class="alert alert-{{ message[0] }}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message[1] }}
+        </div>
+        {% endfor %}
+        <form id="adminform" method="POST" action="{{url_for('adminbg.sysmanage')}}" onsubmit="return check($('#syspagn').val())">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <label class="adminlabel">分页条数（前后台均影响）</label>
+            <input id="syspagn" class="form-control input-lg input-serach" name="syspagen" value="{{syspagn}}"></input>
+
+            <button type="submit" id="syssbutton" class="btn btn-primary">保存设置</button>
+        </form>
     </div>
 </div>
 

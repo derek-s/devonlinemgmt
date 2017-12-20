@@ -331,3 +331,20 @@ h1.admintitle {
     font-size: 26px;
     margin-bottom: 45px;
 }
+
+.navlogo>a {
+    color: #fff;
+}
+
+.navlogo>a:hover {
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.disno {
+    display: none;
+}
+
+#syspagn {
+    margin-bottom: 30px;
+}
