@@ -136,3 +136,10 @@ def logviews():
         page=page, username=uname, cats=catsname, date=date,
         thuname=username.decode('utf-8'), thcats=cats.decode('utf-8')
     )
+
+
+@adminbg.route("/admin/notecreate")
+@login_required
+@admin_required
+def notecreate():
+    return render_template('/admin/notecreate.html')
