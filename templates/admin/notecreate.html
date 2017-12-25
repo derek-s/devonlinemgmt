@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}通知公告|管理后台 - 设备信息管理系统{% endblock %} {% block head %}
+{% extends "base.html" %} {% block title %}{{ operation }}|管理后台 - 设备信息管理系统{% endblock %} {% block head %}
 <!-- 注意， 只需要引用 JS，无需引用任何 CSS ！！！-->
 <script type="text/javascript" src="{{ url_for('static', filename='weditor/wangEditor.min.js') }}"></script>
 {% endblock %} {% block content %} {% include "nav.html" %}
@@ -12,12 +12,12 @@
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.dvrstatus')}}">设备情况管理</a></li>
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.basicinfo')}}">基础信息维护</a></li>
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.usrmanage')}}">用户管理</a></li>
-            <li class="sideli"><a class="adminmenu sideactive" href="{{url_for('adminbg.sysmanage')}}">系统设置</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.sysmanage')}}">系统设置</a></li>
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.logviews')}}">操作日志</a></li>
         </ul>
     </div>
     <div id="rightcont">
-        <h1 class="admintitle">通知公告</h1>
+        <h1 class="admintitle">{{ operation }}</h1>
         <div id="warning" class="alert alert-danger disno" role="alert">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
@@ -26,17 +26,43 @@
             <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message[1] }}
         </div>
         {% endfor %}
-        <div id="editor">
-            <p>text</p>
-        </div>
+        <form id="notecpage" method="POST" action="">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input id="notename" class="form-control input-lg input-serach" name="notename" placeholder="在这里输入标题" value="{{ name }}"></input>
+            <textarea type="hidden" name="note" id="notectexta" cols="30" rows="10" style="display: none;"></textarea>
+            <div id="editor">
+                {% autoescape false %} {{ editorcontent }} {% endautoescape %}
+            </div>
+            <button type="submit" id="syssbutton" class="btn btn-primary" style="margin-top: 20px;">发布</button>
+        </form>
+
 
     </div>
 </div>
 <script type="text/javascript">
     var E = window.wangEditor
     var editor = new E('#editor')
-        // 或者 var editor = new E( document.getElementById('editor') )
+    var $texta = $('#notectexta')
+    editor.customConfig.onchange = function(html) {
+        $texta.val(html)
+    }
+    editor.customConfig.menus = [
+        'head',
+        'bold',
+        'italic',
+        'underline',
+        'strikeThrough',
+        'foreColor',
+        'backColor',
+        'link',
+        'list',
+        'justify',
+        'table',
+        'undo',
+        'redo'
+    ]
     editor.create()
+    $texta.val(editor.txt.html())
 </script>
 
 
