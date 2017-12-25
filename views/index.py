@@ -4,7 +4,7 @@
 from flask import (Flask, render_template, url_for, request, Blueprint)
 from flask_login import login_required
 
-from models import Dev_DeviceStatus, Dev_DeviceInfo, Dev_Campus, Dev_LVRInfo, Setting
+from models import Dev_DeviceStatus, Dev_DeviceInfo, Dev_Campus, Dev_LVRInfo, Setting, Dev_Note
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
@@ -54,3 +54,15 @@ def indexlist():
         "list.html", posts=posts, count=count, pagination=paginateion, campus=campus,
         ctitle=campusname.decode('utf-8'), btitle=buildname.decode('utf-8')
     )
+
+
+@indexview.route("/notice/<id>")
+@login_required
+def indexnotice(id):
+    """
+    前台通知公告显示页
+    :param id:
+    :return:
+    """
+    note = Dev_Note.query.filter(Dev_Note.id == id).all()
+    return render_template("notice.html")

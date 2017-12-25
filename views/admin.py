@@ -22,7 +22,9 @@ def admin():
     管理后台视图
     :return: 返回管理页面
     """
-    return render_template('/admin/admin.html')
+    note = Dev_Note.query.order_by(Dev_Note.id.desc()).paginate(1, 10)
+    notice = note.items
+    return render_template('/admin/admin.html', data=notice)
 
 
 @adminbg.route("/admin/query")
@@ -196,3 +198,15 @@ def notecreate_id(id):
         db.session.commit()
         flash(u"修改成功", 'success')
         return redirect(url_for('adminbg.notecreate_id', id=note.id))
+
+
+@adminbg.route("/admin/notelist", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def notelist():
+    """
+    通知公告列表页
+    :return:
+    """
+    pass
+
