@@ -165,3 +165,22 @@ class Setting():
     """
      pagination = 2
     """
+
+
+class Dev_Note(db.Model):
+    """
+    通知公告模型
+    """
+    __tablename__ = "dev_Notice"
+    id = db.Column("ID", db.Integer, primary_key=True)
+    articlename = db.Column("ArticleName", db.Text)
+    article = db.Column("Article", db.Text)
+    createdate = db.Column("CreateDate", db.String(255))
+    createuser = db.Column("CreateUser", db.String(255))
+
+    def __init__(self, articlename, article, createdate, createuser):
+        self.article = article
+        self.articlename = articlename
+        self.createdate = createdate
+        self.createuser = createuser
+

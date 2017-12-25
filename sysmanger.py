@@ -16,10 +16,10 @@ def optionsupdate(name, value):
     options = Dev_Options.query.filter_by(
         optinoname=name
     ).one()
-    print options.optionvalue
     options.optionvalue = value
     try:
         db.session.commit()
         flash(u"更新完成", 'success')
     except Exception as e:
         print e
+        pass

@@ -1,13 +1,15 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
-from flask import Blueprint, render_template, request, url_for, flash, session
-from flask_login import login_required
+from flask import Blueprint, render_template, request, url_for, flash, session, redirect
+from flask_login import login_required, current_user
 from decorators import admin_required
-from models import Dev_Loging, Setting
+from models import Dev_Loging, Setting, Dev_Note
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
 from sysmanger import optionsupdate
+import arrow
+from ext import db
 
 adminbg = Blueprint('adminbg', __name__)
 
@@ -98,6 +100,7 @@ def sysmanage():
         pagesize = request.form.get('syspagen', 1)
         if pagesize.isdigit():
             optionsupdate('pagination', int(pagesize))
+            flash(u"修改完成。", 'success')
             eventlog("[修改系统设置]")
         else:
             session.pop('_flashes', None)
@@ -138,8 +141,58 @@ def logviews():
     )
 
 
-@adminbg.route("/admin/notecreate")
+@adminbg.route("/admin/notecreate", methods=['GET', 'POST'])
 @login_required
 @admin_required
 def notecreate():
-    return render_template('/admin/notecreate.html')
+    """
+    通知公告创建页面
+    :return:
+    """
+    eventlog("[访问创建公告页面]")
+    notename = ""
+    notecontent = ""
+    if request.method == 'POST':
+        notename = request.form.get('notename', "默认标题")
+        notecontent = request.form.get('note', None)
+        createdate = arrow.now().format("YYYY-MM-DD HH:mm")
+        createname = current_user.username
+        note = Dev_Note(notename, notecontent, createdate, createname)
+        db.session.add(note)
+        db.session.commit()
+        flash(u"发布成功", 'success')
+        return redirect(url_for('adminbg.notecreate_id', id=note.id))
+    return render_template(
+        '/admin/notecreate.html', name=notename, editorcontent=notecontent, operation=u"创建公告")
+
+
+@adminbg.route("/admin/notecreate/<id>", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def notecreate_id(id):
+    """
+    通知公告创建页面
+    :return:
+    """
+    eventlog("[访问修改公告页面 公告id: " + str(id) + "]")
+    notename = ""
+    notecontent = ""
+    if request.method == 'GET':
+        note = Dev_Note.query.filter(Dev_Note.id == id).one()
+        notename = note.articlename
+        notecontent = note.article
+        return render_template(
+            '/admin/notecreate.html', name=notename, editorcontent=notecontent, operation=u"编辑公告")
+    if request.method == 'POST':
+        notename = request.form.get('notename', "默认标题")
+        notecontent = request.form.get('note', None)
+        createdate = arrow.now().format("YYYY-MM-DD HH:mm")
+        createname = current_user.username
+        note = Dev_Note.query.filter(Dev_Note.id == id).one()
+        note.articlename = notename
+        note.article = notecontent
+        note.createdate = createdate
+        note.createuser = createname
+        db.session.commit()
+        flash(u"修改成功", 'success')
+        return redirect(url_for('adminbg.notecreate_id', id=note.id))
