@@ -22,7 +22,17 @@
             <span>待办事项</span>
         </div>
         <div class="inform">
-            <span>通知公告</span>
+            <label class="noticelabel">通知公告</label>
+            <ul class="noticeul">
+                {% for datalist in data %}
+                <li class="noticeli">
+                    <label class="noticeinline"><a href="#" onclick="js_notice('{{ datalist.id }}')">{{ datalist.articlename }}</a></label>
+                    <label class="noticeinline noticedate">{{ datalist.createdate }}</label>
+                    <label class="noticeinline noticeuser">{{ datalist.createuser }}</label>
+                </li>
+                {% endfor %}
+            </ul>
+
         </div>
     </div>
 </div>
