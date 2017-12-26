@@ -10,6 +10,7 @@ from urllib import unquote
 from sysmanger import optionsupdate
 import arrow
 from ext import db
+from notice import noticeindexlist
 
 adminbg = Blueprint('adminbg', __name__)
 
@@ -22,8 +23,7 @@ def admin():
     管理后台视图
     :return: 返回管理页面
     """
-    note = Dev_Note.query.order_by(Dev_Note.id.desc()).paginate(1, 10)
-    notice = note.items
+    notice = noticeindexlist()
     return render_template('/admin/admin.html', data=notice)
 
 
@@ -208,5 +208,5 @@ def notelist():
     通知公告列表页
     :return:
     """
-    pass
+    return render_template("/admin/noticelist.html")
 

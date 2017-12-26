@@ -5,9 +5,10 @@ from flask import (render_template, url_for, request, flash, redirect, session, 
 from flask_login import login_required
 
 from ext import md5s
-from models import *
+from models import Dev_Note, Dev_Loging, User, db
 from log import eventlog
 from forms import ChangePwd
+from notice import noticeindexlist
 
 profileview = Blueprint('profileview', __name__)
 
@@ -49,4 +50,8 @@ def userinfo(username):
                 flash(u"旧密码错误")
                 eventlog(u"[修改密码失败] 旧密码验证失败")
     eventlog(u"[访问个人资料页面]" + username)
-    return render_template("/user/userinfo.html", username=username, date=date, ip=ip, permission=per, form=form)
+    notice = noticeindexlist()
+    return render_template(
+        "/user/userinfo.html", username=username, date=date, ip=ip, permission=per, form=form,
+        note=notice
+    )
