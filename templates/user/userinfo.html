@@ -8,37 +8,56 @@
             </li>
         </ol>
     </div>
-    <div class="protitle">{{ username }} 用户资料</div>
     <div id="profile">
-        <div class="profile-user-info">
-            <div class="profile-info-row">
-                <div class="profile-info-name">用户名</div>
-                <div class="profile-info-value">{{ username }}</div>
-            </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name">用户权限</div>
-                <div class="profile-info-value">{{ permission }}</div>
-            </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name">上次登录时间</div>
-                <div class="profile-info-value">{{ date }}</div>
-            </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name">上次IP</div>
-                <div class="profile-info-value">{{ ip }}</div>
+        <div class="profileleft">
+            <div class="protitle">待办事项</div>
+        </div>
+        <div class="profileright">
+            <div class="protitle">通知公告</div>
+            <ul class="noticeul">
+                {% for notelist in note %}
+                <li class="noticeli">
+                    <label class="noticeinline"><a href="{{url_for('indexview.indexnotice',id=notelist.id)}}">{{ notelist.articlename }}</a></label>
+                    <label class="noticeinline noticedate">{{ notelist.createdate }}</label>
+                    <label class="noticeinline noticeuser">{{ notelist.createuser }}</label>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="profileleft">
+            <div class="protitle">{{ username }} 用户资料</div>
+            <div class="profile-user-info">
+                <div class="profile-info-row">
+                    <div class="profile-info-name">用户名</div>
+                    <div class="profile-info-value">{{ username }}</div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name">用户权限</div>
+                    <div class="profile-info-value">{{ permission }}</div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name">上次登录时间</div>
+                    <div class="profile-info-value">{{ date }}</div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name">上次IP</div>
+                    <div class="profile-info-value">{{ ip }}</div>
+                </div>
             </div>
         </div>
+        <div class="profileright">
+            <div class="protitle">修改密码</div>
+            {% from "_changepwd.html" import render_field %}
+            <form class="form" method="POST">
+                {{ form.hidden_tag() }}
+                <table>
+                    {{render_field(form.oldpwd)}} {{render_field(form.newpwd)}} {{render_field(form.confirm)}}
+                </table>
+                {{ form.submit }}
+            </form>
+            {% for message in get_flashed_messages() %}
+            <span class="warning">{{ message }}</span> {% endfor %}
+        </div>
     </div>
-    <div class="protitle">修改密码</div>
-    {% from "_changepwd.html" import render_field %}
-    <form class="form" method="POST">
-        {{ form.hidden_tag() }}
-        <table>
-            {{render_field(form.oldpwd)}} {{render_field(form.newpwd)}} {{render_field(form.confirm)}}
-        </table>
-        {{ form.submit }}
-    </form>
-    {% for message in get_flashed_messages() %}
-    <span class="warning">{{ message }}</span> {% endfor %}
 </div>
 {%- endblock -%}

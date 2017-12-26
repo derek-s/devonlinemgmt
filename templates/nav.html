@@ -9,7 +9,7 @@
                 {% else %}
                 <li class="nav-child"><a href="{{url_for('adminbg.admin')}}">管理后台</a></li>
                 {% endif %} {% endif %}
-                <li class="nav-child"><a href="{{url_for('profileview.userinfo',username= current_user.username)}}">个人资料</a></li>
+                <li class="nav-child"><a href="{{url_for('profileview.userinfo',username= current_user.username)}}">个人中心</a></li>
                 <li class="nav-child"><a href="{{url_for('loginview.logout')}}">登出</a></li>
             </ul>
         </div>

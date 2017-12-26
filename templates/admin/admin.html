@@ -11,6 +11,7 @@
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.usrmanage')}}">用户管理</a></li>
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.sysmanage')}}">系统设置</a></li>
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.logviews')}}">操作日志</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.notelist')}}">通知公告管理</a></li>
         </ul>
     </div>
     <div id="rightcont">
@@ -26,7 +27,7 @@
             <ul class="noticeul">
                 {% for datalist in data %}
                 <li class="noticeli">
-                    <label class="noticeinline"><a href="#" onclick="js_notice('{{ datalist.id }}')">{{ datalist.articlename }}</a></label>
+                    <label class="noticeinline"><a href="{{url_for('indexview.indexnotice',id=datalist.id)}}">{{ datalist.articlename }}</a></label>
                     <label class="noticeinline noticedate">{{ datalist.createdate }}</label>
                     <label class="noticeinline noticeuser">{{ datalist.createuser }}</label>
                 </li>

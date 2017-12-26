@@ -1,0 +1,66 @@
+{% extends "base.html" %} {% block title %}通知公告管理|管理后台 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
+<div id="admincontent">
+    <div id="leftmenu">
+        <ul id="sideul" class="nav nav-sidebar">
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.admin')}}">首页</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.query')}}">数据查询</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.lvrmanager')}}">弱电间信息管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.dvrmanage')}}">设备信息管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.dvrstatus')}}">设备情况管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.basicinfo')}}">基础信息维护</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.usrmanage')}}">用户管理</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.sysmanage')}}">系统设置</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.logviews')}}">操作日志</a></li>
+            <li class="sideli"><a class="adminmenu sideactive" href="{{url_for('adminbg.notelist')}}">通知公告管理</a></li>
+        </ul>
+    </div>
+    <div id="rightcont">
+        <div id="admintblock">
+            <h1 class="admintitleb">通知公告管理</h1>
+            <a href="{{url_for('adminbg.notecreate')}}" class="btn btn-primary adtitlebutton">创建新公告</a>
+        </div>
+
+        <div class="adminbar">
+            <label class="adminlabel">公告名称检索</label><input id="nnameinput" class="form-control input-lg input-serach">
+            <label class="adminlabel">发布者名称检索</label><input id="ncnameinput" class="form-control input-lg input-serach">
+            <label class="adminlabel">发布时间检索</label>
+            <input id="ndatas" class="form-control input-lg input-serach">
+            <button id="noticequery" class="btn btn-primary">查询</button>
+        </div>
+        <div id="logtable" class="panel panel-info">
+
+            <div id="logtableth" class="panel-heading">当前显示： 通知公告 第{{page}}页</div>
+            <div id="data">
+                <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
+                    <tr>
+                        <th style="width:5%"><input id="noticeall" type="checkbox"><label class="tbckv">全选</labe></th>
+                        <th style="width:5%">ID</th>
+                        <th style="width:50%">公告标题</th>
+                        <th style="width:10%">发布人</th>
+                        <th style="width:10%">发布时间</th>
+                        <th style="width:70%">操作</th>
+                    </tr>
+                    {% for data in posts %}
+                    <tr class="jsondata">
+                        <td>{{ data.ID }}</td>
+                        <td>{{ data.Date }}</td>
+                        <td>{{ data.UserName }}</td>
+                        <td>{{ data.IP }}</td>
+                        <td>{{ data.Log }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div>
+                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.logviews',username,cats,date)}} {%endif%}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    laydate.render({
+        elem: '#logdatas'
+    });
+</script>
+
+{% endblock %}

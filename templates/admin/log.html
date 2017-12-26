@@ -11,12 +11,13 @@
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.usrmanage')}}">用户管理</a></li>
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.sysmanage')}}">系统设置</a></li>
             <li class="sideli"><a class="adminmenu sideactive" href="{{url_for('adminbg.logviews')}}">操作日志</a></li>
+            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.notelist')}}">通知公告管理</a></li>
         </ul>
     </div>
     <div id="rightcont">
         <h1 class="admintitle">操作日志</h1>
         <div class="adminbar">
-            <label class="adminlabel">用户名检索</label><input id="logusers" class="form-control input-lg input-serach"></input>
+            <label class="adminlabel">用户名检索</label><input id="logusers" class="form-control input-lg input-serach">
             <label class="adminlabel">日志类检索</label>
             <div id="logcats" class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownlogs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">全部<span class="caret"></span></button>
@@ -37,7 +38,7 @@
                 </ul>
             </div>
             <label class="adminlabel">日志时间检索</label>
-            <input id="logdatas" class="form-control input-lg input-serach"></input>
+            <input id="logdatas" class="form-control input-lg input-serach">
             <button id="logqbutton" class="btn btn-primary">查询</button>
 
         </div>
