@@ -184,3 +184,11 @@ class Dev_Note(db.Model):
         self.createdate = createdate
         self.createuser = createuser
 
+    def to_json(self):
+        return {
+            'articlename': self.articlename,
+            'createuser': self.createuser,
+            'createdate': self.createdate,
+            'article': self.article
+        }
+
