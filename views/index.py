@@ -64,5 +64,6 @@ def indexnotice(id):
     :param id:
     :return:
     """
-    note = Dev_Note.query.filter(Dev_Note.id == id).all()
-    return render_template("notice.html")
+    note = Dev_Note.query.filter(Dev_Note.id == id).one()
+    print note
+    return render_template("notice.html", notice=note)

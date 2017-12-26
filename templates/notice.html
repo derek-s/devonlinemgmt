@@ -1,12 +1,22 @@
-{% extends "base.html" %} {%import '_macros.html' as macros%} {% block title %}{{ noticename }} - 设备信息管理系统{% endblock %}{% block content -%} {% include "nav.html" %}
+{% extends "base.html" %} {%import '_macros.html' as macros%} {% block title %}{{ notice.articlename }} - 设备信息管理系统{% endblock %}{% block content -%} {% include "nav.html" %}
 <div id="content">
     <div id="bnavigation">
         <ol class="breadcrumb">
             <li>当前位置: <a href="{{url_for('indexview.index')}}">首页</a></li>
+            <li class="active">{{ notice.articlename }}</li>
         </ol>
     </div>
+    <div class="noticeblock">
+        <h1 class="noticename">{{ notice.articlename }}</h1>
+        <div class="noticemeta">
+            <p class="noticecuser">发布人：{{ notice.createuser }}</p>
+            <p class="noticecdate">发布日期：{{ notice.createdate }}</p>
+        </div>
+        <div class="noticecont">
+            {% autoescape false %} {{ notice.article }} {% endautoescape %}
 
-
+        </div>
+    </div>
 </div>
 
 {%- endblock -%}
