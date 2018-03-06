@@ -1,0 +1,33 @@
+{% macro pagination_widget(pagination, endpoint,username, cats, date,fragment='') %}
+<div class="pagenum">
+    <label class="incotp">合计 {{ pagination.total }} 条</label>
+    <ul class="pagination">
+        <li{% if not pagination.has_prev %} class="disabled" {% endif %}>
+            <a href="javascript:void(0);" onclick="{% if pagination.has_prev %}js_ajaxnotes({{pagination.prev_num}},'{{username}}','{{cats}}','{{date}}'){% else %}#{% endif %}">
+            &laquo;
+        </a>
+            </li>
+            {% for p in pagination.iter_pages() %} {% if p %} {% if p == pagination.page %}
+            <li id="pnactive" class="active">
+                <a href="javascript:void(0);" onclick="js_ajaxnotes({{p}},'{{username}}','{{cats}}','{{date}}')">{{ p }}</a>
+            </li>
+            {% else %}
+            <li>
+                <a href="javascript:void(0);" onclick="js_ajaxnotes({{p}},'{{username}}','{{cats}}','{{date}}')">{{ p }}</a>
+            </li>
+            {% endif %} {% else %}
+            <li class="disabled"><a href="#">&hellip;</a></li>
+            {% endif %} {% endfor %}
+            <li{% if not pagination.has_next %} class="disabled" {% endif %}>
+                <a href="javascript:void(0)" onclick="{% if pagination.has_next %}js_ajaxnotes({{pagination.next_num}},'{{username}}','{{cats}}','{{date}}'){% else %}#{% endif %}">
+            &raquo;
+        </a>
+                </li>
+                <li class="pull-right">
+                    <label for="transfer_page">跳转到:</label>
+                    <input type="text" class="text-info" size="3" id="transfer_pagelog">
+                    <button type="button" class="btn btn-primary btn-sm" id="transferlogs">Go</button>
+                </li>
+    </ul>
+</div>
+{% endmacro %}
