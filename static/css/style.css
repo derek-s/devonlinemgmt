@@ -327,6 +327,7 @@ label.adminlabel {
     vertical-align: top;
 }
 
+h1.admintitleb,
 h1.admintitle {
     font-size: 26px;
     margin-bottom: 45px;
@@ -429,4 +430,45 @@ h1.noticename {
 
 .noticecdate {
     margin-left: 30px;
+}
+
+.profileleft {
+    float: left;
+    width: 48%;
+    height: 300px;
+}
+
+.profileright {
+    float: right;
+    width: 48%;
+    height: 300px;
+}
+
+.adtitlebutton {
+    vertical-align: top;
+    margin-left: 10px;
+}
+
+h1.admintitleb {
+    display: inline;
+}
+
+#nnameinput,
+#ncnameinput,
+#ndatas {
+    display: inline;
+    width: 125px;
+    height: 35px;
+}
+
+#admintblock {
+    margin-bottom: 30px;
+}
+
+#noticequery {
+    vertical-align: top;
+}
+
+.tbckv {
+    vertical-align: top;
 }
