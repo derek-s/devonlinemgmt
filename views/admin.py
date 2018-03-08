@@ -208,5 +208,23 @@ def notelist():
     通知公告列表页
     :return:
     """
-    return render_template("/admin/noticelist.html")
+    page = request.values.get('page', 1, type=int)
+    aname = request.values.get('aname', "", type=str)
+    cuser = request.values.get('cuser', "", type=str)
+    cdata = request.values.get('cdata', "", type=str)
+    notices = Dev_Note.query.filter(
+        (Dev_Note.articlename.like("%" + aname + "%"), "")[aname is None],
+        (Dev_Note.createuser.like("%" + cuser + "%"), "")[cuser is None],
+        (Dev_Note.createdate.like("%" + cdata + "%"), "")[cdata is None]
+    )
+    paginateion = notices.paginate(
+        page, per_page=Setting().pagination
+    )
+    posts = paginateion.items
+    count = notices.count()
+    eventlog("[查看通知公告列表页] " + "第" + str(page) + "页")
+    return render_template(
+        "/admin/noticelist.html", posts=posts, count=count, pagination=paginateion,
+        page=page
+    )
 
