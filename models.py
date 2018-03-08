@@ -192,3 +192,20 @@ class Dev_Note(db.Model):
             'article': self.article
         }
 
+
+class DevPEvents(db.Model):
+    """
+    待办事件模型
+    """
+    __tablename__ = "dev_PersonEvent"
+    id = db.Column("ID", db.Integer, primary_key=True)
+    eventname = db.Column("EventName", db.Text)
+    eventtime = db.Column("EventTime", db.Text)
+    ecreationdate = db.Column("ECreationDate", db.Text)
+    ecreationuser = db.Column("ECreationUser", db.Text)
+
+    def __init__(self, eventname, eventtime, ecreationdate, ecreationuser):
+        self.eventtime = eventname
+        self.eventname = eventname
+        self.ecreationdate = ecreationdate
+        self.ecreationuser = ecreationuser
