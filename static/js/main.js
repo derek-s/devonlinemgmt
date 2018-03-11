@@ -59,3 +59,35 @@ function js_ajaxlog(page, uname, catname, datas) {
     })
     layer.close(loading);
 }
+
+function check(snum) {
+    if (snum != "") {
+        if (snum.indexOf(" ") > -1) {
+            warningf("输入中包含空格")
+            return false
+        }
+        return checknum(snum)
+    } else {
+        warningf("输入框不能为空")
+        return false
+    }
+}
+
+function checknum(sum) {
+    if (!isNaN(sum)) {
+        return true
+    } else {
+        warningf("请输入数字")
+        return false
+    }
+}
+
+function warningf(stra) {
+    var warning = $("#warning")
+    warning.removeClass("disno")
+    warning.html(stra)
+}
+
+function js_ajaxnotes(page, uname, catname, datas) {
+
+}
