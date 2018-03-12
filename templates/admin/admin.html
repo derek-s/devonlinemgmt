@@ -20,27 +20,38 @@
             <span>hi, {{ current_user.username }} 欢迎使用设备信息管理系统</span>
         </div>
         <div class="backlog">
-            <label class="noticelabel">待办事项</label> {% if events is not none %}
+            <label class="noticelabel">待办事项</label> {% if not events %}
             <lable>暂无</lable>
             {% else %}
             <ul class="noticeul">
+                <li class="noticeli">
+                    <label class="noticeinline eventname">待办事项</label>
+                    <label class="noticeinline ecreatedate">创建时间</label>
+                    <label class="noticeinline ecompdate">截止时间</label>
+                </li>
                 {% for eventlist in events %}
                 <li class="noticeli">
-                    <label class="noticeinline">{{ eventlist.EventName }}</label>
-                    <label class="noticeinline noticedate">{{ eventlist.ECreationDate }}</label>
+                    <label class="noticeinline eventname">{{ eventlist.eventname }}</label>
+                    <label class="noticeinline ecreatedate">{{ eventlist.ecreationdate }}</label>
+                    <label class="noticeinline ecompdate">{{ eventlist.eventtime }}</label>
                 </li>
                 {% endfor %}
             </ul>
             {% endif %}
         </div>
         <div class="inform">
-            <label class="noticelabel">通知公告</label> {% if data is not none %}
+            <label class="noticelabel">通知公告</label> {% if not data %}
             <lable>暂无</lable>
             {% else %}
             <ul class="noticeul">
+                <li class="noticeli">
+                    <label class="noticeinline noticename">公告名称</label>
+                    <label class="noticeinline noticedate">创建时间</label>
+                    <label class="noticeinline noticeuser">创建人</label>
+                </li>
                 {% for datalist in data %}
                 <li class="noticeli">
-                    <label class="noticeinline"><a href="{{url_for('indexview.indexnotice',id=datalist.id)}}">{{ datalist.articlename }}</a></label>
+                    <label class="noticeinline noticename"><a href="{{url_for('indexview.indexnotice',id=datalist.id)}}">{{ datalist.articlename }}</a></label>
                     <label class="noticeinline noticedate">{{ datalist.createdate }}</label>
                     <label class="noticeinline noticeuser">{{ datalist.createuser }}</label>
                 </li>
