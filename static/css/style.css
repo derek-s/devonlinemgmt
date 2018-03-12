@@ -478,11 +478,14 @@ h1.admintitleb {
 }
 
 .eventname {
-    width: 60%
+    width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .noticename {
-    width: 60%;
+    width: 100%;
 }
 
 .noticeuser {
@@ -505,4 +508,8 @@ h1.admintitleb {
     bottom: 35px;
     margin: 0;
     padding: 1px 5px 1px 5px;
+}
+
+.alabelblock {
+    height: 55px;
 }
