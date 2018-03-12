@@ -205,7 +205,7 @@ class DevPEvents(db.Model):
     ecreationuser = db.Column("ECreationUser", db.Text)
 
     def __init__(self, eventname, eventtime, ecreationdate, ecreationuser):
-        self.eventtime = eventname
+        self.eventtime = eventtime
         self.eventname = eventname
         self.ecreationdate = ecreationdate
         self.ecreationuser = ecreationuser

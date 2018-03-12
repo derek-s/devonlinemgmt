@@ -14,7 +14,9 @@ def peventsindexlist(username):
     返回前台个人待办事项列表
     :return:
     """
-    event = DevPEvents.query.order_by(DevPEvents.id.desc()).paginate(1, 10)
+    event = DevPEvents.query.filter(
+        DevPEvents.ecreationuser == username
+    ).order_by(DevPEvents.id.desc()).paginate(1, 10)
     event_items = event.items
     return event_items
 
