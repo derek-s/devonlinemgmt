@@ -268,7 +268,10 @@ ul.errors {
     margin-top: 30px;
 }
 
-.welcome {}
+.welcome {
+    font-size: 16px;
+    margin-bottom: 30px;
+}
 
 .adminmenu {
     color: #000;
@@ -362,6 +365,7 @@ h1.admintitle {
 .backlog {
     width: 500px;
     float: left;
+    margin-right: 30px;
 }
 
 .noticelabel {
@@ -384,7 +388,6 @@ h1.admintitle {
 
 .noticeuser {
     float: right;
-    margin-right: 15px;
 }
 
 .noticedate {
@@ -394,6 +397,7 @@ h1.admintitle {
 .noticeul {
     margin: 0;
     padding: 0;
+    height: 250px;
 }
 
 .noticeblock {
@@ -422,14 +426,6 @@ h1.noticename {
 .noticecdate {
     text-align: center;
     display: inline;
-}
-
-.noticeuser {
-    margin-right: 30px;
-}
-
-.noticecdate {
-    margin-left: 30px;
 }
 
 .profileleft {
@@ -471,4 +467,30 @@ h1.admintitleb {
 
 .tbckv {
     vertical-align: top;
+}
+
+.ecreatedate {
+    float: right;
+}
+
+.ecompdate {
+    float: right
+}
+
+.noticename,
+.eventname {
+    width: 50%;
+}
+
+.noticeuser {
+    width: 15%;
+}
+
+.noticedate {
+    width: 35%
+}
+
+.ecreatedate,
+.ecompdate {
+    width: 25%
 }
