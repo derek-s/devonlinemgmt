@@ -20,10 +20,23 @@
             <span>hi, {{ current_user.username }} 欢迎使用设备信息管理系统</span>
         </div>
         <div class="backlog">
-            <span>待办事项</span>
+            <label class="noticelabel">待办事项</label> {% if events is not none %}
+            <lable>暂无</lable>
+            {% else %}
+            <ul class="noticeul">
+                {% for eventlist in events %}
+                <li class="noticeli">
+                    <label class="noticeinline">{{ eventlist.EventName }}</label>
+                    <label class="noticeinline noticedate">{{ eventlist.ECreationDate }}</label>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
         <div class="inform">
-            <label class="noticelabel">通知公告</label>
+            <label class="noticelabel">通知公告</label> {% if data is not none %}
+            <lable>暂无</lable>
+            {% else %}
             <ul class="noticeul">
                 {% for datalist in data %}
                 <li class="noticeli">
@@ -33,7 +46,7 @@
                 </li>
                 {% endfor %}
             </ul>
-
+            {% endif %}
         </div>
     </div>
 </div>
