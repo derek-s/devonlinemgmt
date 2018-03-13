@@ -33,21 +33,19 @@
             <div id="data">
                 <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
                     <tr>
-                        <th style="width:5%"><input id="noticeall" type="checkbox"><label class="tbckv">全选</labe></th>
                         <th style="width:5%">ID</th>
                         <th style="width:50%">公告标题</th>
                         <th style="width:10%">发布人</th>
                         <th style="width:10%">发布时间</th>
-                        <th style="width:70%">操作</th>
+                        <th style="width:25%">操作</th>
                     </tr>
                     {% for data in posts %}
                     <tr class="jsondata">
-                        <td><input id="notice-{{ data.id }}" type="checkbox"></td>
                         <td>{{ data.id }}</td>
                         <td>{{ data.articlename }}</td>
                         <td>{{ data.createuser }}</td>
                         <td>{{ data.createdate }}</td>
-                        <td>查看 编辑 删除</td>
+                        <td><a href="{{url_for('indexview.indexnotice',id=data.id)}}">查看</a> | <a href="{{url_for('adminbg.notecreate_id',id=data.id)}}">编辑</a> | <a onclick="javascript:if(confirm('您确定要删除么')){alert('{{ data.id }}')}">删除</a></td>
                     </tr>
                     {% endfor %}
                 </table>

@@ -20,7 +20,7 @@
             <span>hi, {{ current_user.username }} 欢迎使用设备信息管理系统</span>
         </div>
         <div class="backlog">
-            <div><label class="noticelabel">待办事项</label><a href="{{url_for('adminbg.notecreate')}}" class="btn btn-primary nadeventbutton">创建新事项</a></div> {% if not events %}
+            <div class="alabelblock"><label class="noticelabel">待办事项</label><a href="{{url_for('adminbg.notecreate')}}" class="btn btn-primary nadeventbutton">创建新事项</a></div> {% if not events %}
             <lable>暂无</lable>
             {% else %}
             <ul class="noticeul">
@@ -40,7 +40,7 @@
             {% endif %}
         </div>
         <div class="inform">
-            <div><label class="noticelabel">通知公告</label><a href="{{url_for('adminbg.notecreate')}}" class="btn btn-primary nadnoticebutton">创建新公告</a></div> {% if not data %}
+            <div class="alabelblock"><label class="noticelabel">通知公告</label><a href="{{url_for('adminbg.notecreate')}}" class="btn btn-primary nadnoticebutton">创建新公告</a></div> {% if not data %}
             <lable>暂无</lable>
             {% else %}
             <ul class="noticeul">
