@@ -11,6 +11,8 @@ from sysmanger import optionsupdate
 import arrow
 from ext import db
 from notice import noticeindexlist
+from pevent import peventsindexlist
+import json
 
 adminbg = Blueprint('adminbg', __name__)
 
@@ -24,7 +26,8 @@ def admin():
     :return: 返回管理页面
     """
     notice = noticeindexlist()
-    return render_template('/admin/admin.html', data=notice)
+    event = peventsindexlist(current_user.username)
+    return render_template('/admin/admin.html', data=notice, events=event)
 
 
 @adminbg.route("/admin/query")
@@ -102,11 +105,11 @@ def sysmanage():
         pagesize = request.form.get('syspagen', 1)
         if pagesize.isdigit():
             optionsupdate('pagination', int(pagesize))
-            flash(u"修改完成。", 'success')
+            flash(u"修改完成", 'success')
             eventlog("[修改系统设置]")
         else:
             session.pop('_flashes', None)
-            flash(u"分页条数输入有误，请检查输入。", 'danger')
+            flash(u"分页条数输入有误，请检查输入", 'danger')
     syspagn = Setting().pagination
     return render_template('/admin/sysmanage.html', syspagn=syspagn)
 
@@ -173,7 +176,7 @@ def notecreate():
 @admin_required
 def notecreate_id(id):
     """
-    通知公告创建页面
+    通知公告修改页面
     :return:
     """
     eventlog("[访问修改公告页面 公告id: " + str(id) + "]")
@@ -210,11 +213,13 @@ def notelist():
     """
     page = request.values.get('page', 1, type=int)
     aname = request.values.get('aname', "", type=str)
+    b64aname = b64decode(unquote(aname))
     cuser = request.values.get('cuser', "", type=str)
+    b64cuser = b64decode(unquote(cuser))
     cdata = request.values.get('cdata', "", type=str)
     notices = Dev_Note.query.filter(
-        (Dev_Note.articlename.like("%" + aname + "%"), "")[aname is None],
-        (Dev_Note.createuser.like("%" + cuser + "%"), "")[cuser is None],
+        (Dev_Note.articlename.like("%" + b64aname + "%"), "")[aname is None],
+        (Dev_Note.createuser.like("%" + b64cuser + "%"), "")[cuser is None],
         (Dev_Note.createdate.like("%" + cdata + "%"), "")[cdata is None]
     )
     paginateion = notices.paginate(
@@ -228,3 +233,29 @@ def notelist():
         page=page
     )
 
+
+@adminbg.route("/admin/notelist/<int:id>/delete", methods=['POST'])
+@login_required
+@admin_required
+def notedel(id):
+    """
+    删除通知公告
+    :param id: 公告id
+    :return:
+    """
+    print "1"
+    delstatus = {
+        "status": 1,
+        "message": "success"
+    }
+    notice = Dev_Note.query.filter(
+        Dev_Note.id == id
+    )
+    if not notice:
+        delstatus['status'] = 404
+        delstatus['message'] = "Not Found"
+        return json.dumps(delstatus)
+    notice.delete()
+    db.session.commit()
+    eventlog("[删除公告 公告id: " + str(id) + "]")
+    return json.dumps(delstatus)
