@@ -484,8 +484,12 @@ h1.admintitleb {
     white-space: nowrap;
 }
 
+h1.noticename {
+    width: 100%
+}
+
 .noticename {
-    width: 100%;
+    width: 60%;
 }
 
 .noticeuser {
