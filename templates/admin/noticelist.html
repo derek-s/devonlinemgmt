@@ -26,6 +26,7 @@
             <label class="adminlabel">发布时间检索</label>
             <input id="ndatas" class="form-control input-lg input-serach">
             <button id="noticequery" class="btn btn-primary">查询</button>
+            <button id="emptybutton" class="btn btn-primary" onclick="$('input').val('')">清空</button>
         </div>
         <div id="logtable" class="panel panel-info">
 
@@ -45,7 +46,7 @@
                         <td>{{ data.articlename }}</td>
                         <td>{{ data.createuser }}</td>
                         <td>{{ data.createdate }}</td>
-                        <td><a href="{{url_for('indexview.indexnotice',id=data.id)}}">查看</a> | <a href="{{url_for('adminbg.notecreate_id',id=data.id)}}">编辑</a> | <a onclick="javascript:if(confirm('您确定要删除 {{data.articlename}}  么')){js_delete('{{ data.id }}')}">删除</a></td>
+                        <td><a href="{{url_for('indexview.indexnotice',id=data.id)}}">查看</a> | <a href="{{url_for('adminbg.notecreate_id',id=data.id)}}">编辑</a> | <a href="#" onclick="javascript:if(confirm('您确定要删除 {{data.articlename}}  么')){js_delete('{{ data.id }}')}">删除</a></td>
                     </tr>
                     {% endfor %}
                 </table>

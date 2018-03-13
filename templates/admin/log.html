@@ -40,7 +40,7 @@
             <label class="adminlabel">日志时间检索</label>
             <input id="logdatas" class="form-control input-lg input-serach">
             <button id="logqbutton" class="btn btn-primary">查询</button>
-
+            <button id="emptybutton" class="btn btn-primary" onclick="javascript:emptyinput()">清空</button>
         </div>
         <div id="logtable" class="panel panel-info">
 
@@ -74,6 +74,11 @@
         laydate.render({
             elem: '#logdatas'
         });
+
+        function emptyinput() {
+            $('input').val("");
+            $('button#dropdownlogs').html("全部<span class='caret'></span>")
+        }
     </script>
 
     {% endblock %}
