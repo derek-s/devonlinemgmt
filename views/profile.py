@@ -19,7 +19,7 @@ def userinfo(username):
     lastlogin = Dev_Loging.query.filter(
         Dev_Loging.UserName == username, Dev_Loging.Log.like("%登录成功%")).order_by(
         Dev_Loging.Date.desc()).first()
-    date = lastlogin.Date
+    logindate = lastlogin.Date
     ip = lastlogin.IP
     userdb = User.query.filter(User.username == username).first()
     permission = userdb.permissions
@@ -52,6 +52,6 @@ def userinfo(username):
     eventlog(u"[访问个人资料页面]" + username)
     notice = noticeindexlist()
     return render_template(
-        "/user/userinfo.html", username=username, date=date, ip=ip, permission=per, form=form,
+        "/user/userinfo.html", username=username, date=logindate, ip=ip, permission=per, form=form,
         note=notice
     )
