@@ -1,12 +1,13 @@
 $(document).ready(
     function() {
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrf_token)
+        path =
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                    }
                 }
-            }
-        })
+            })
         $.base64.utf8encode = true;
         $.base64.utf8decode = true;
         //下拉菜单
@@ -92,10 +93,11 @@ function js_ajaxnotes(page, uname, catname, datas) {
     var loading = layer.load(2, {
         shade: [0.3, '#fff']
     });
+
     $.post($SCRIPT_ROOT + 'notelist', {
         page: page,
-        cuser: uname,
-        aname: catname,
+        cuser: catname,
+        aname: uname,
         cdata: datas
     }, function(data) {
         $("div#logtable").empty()
@@ -103,4 +105,36 @@ function js_ajaxnotes(page, uname, catname, datas) {
         $("div#logtable").append(divmain.find("div#logtable").html())
     })
     layer.close(loading);
+}
+
+
+$(document).on("click", "button#noticequery", function() {
+    var teststr = "5YWo6YOo"
+    var page = $("input#transfer_pagelog").val()
+    var name = $("input#nnameinput").val()
+    var cat = $("input#ncnameinput").val()
+    var uname = encodeURIComponent(($.base64.encode(name)), "utf-8")
+    var catname = encodeURIComponent(($.base64.encode(cat)), 'utf-8')
+    var datas = $("input#ndatas").val()
+    if (catname == teststr) {
+        catname = ""
+    }
+    console.log(page, uname, catname.datas)
+    js_ajaxnotes(page, uname, catname, datas)
+});
+
+
+function js_delete(id) {
+    $.ajax({
+        url: $PATH_ROOT + "/" + id + "/delete",
+        type: "POST",
+        dateType: "JSON",
+        success: function(resp) {
+            if (resp.status != 1) {
+                alert("删除失败")
+            }
+            alert("删除成功")
+            location.reload()
+        }
+    })
 }
