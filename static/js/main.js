@@ -89,5 +89,18 @@ function warningf(stra) {
 }
 
 function js_ajaxnotes(page, uname, catname, datas) {
-
+    var loading = layer.load(2, {
+        shade: [0.3, '#fff']
+    });
+    $.post($SCRIPT_ROOT + 'notelist', {
+        page: page,
+        cuser: uname,
+        aname: catname,
+        cdata: datas
+    }, function(data) {
+        $("div#logtable").empty()
+        var divmain = ($(data)).filter("div#main")
+        $("div#logtable").append(divmain.find("div#logtable").html())
+    })
+    layer.close(loading);
 }
