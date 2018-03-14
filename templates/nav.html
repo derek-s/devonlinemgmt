@@ -1,6 +1,7 @@
 <div id="nav">
     <div class="navblock">
         <div class="navlogo"><a href="{{url_for('indexview.index')}}">设备信息管理系统</a></div>
+        {% if current_user.is_authenticated %}
         <div class="navlist">
             <ul class="menu">
                 <li class="nav-child"><span class="uname">{{ current_user.username }}</span></li>
@@ -13,5 +14,6 @@
                 <li class="nav-child"><a href="{{url_for('loginview.logout')}}">登出</a></li>
             </ul>
         </div>
+        {% endif %}
     </div>
 </div>
