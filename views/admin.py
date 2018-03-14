@@ -206,7 +206,6 @@ def notecreate_id(id):
             flash(u"修改成功", 'success')
             return redirect(url_for('adminbg.notecreate_id', id=note.id))
         except Exception as e:
-            print e
             abort(500)
 
 
@@ -265,6 +264,5 @@ def notedel(id):
     notice.delete()
     db.session.commit()
     eventlog("[删除公告 公告id: " + str(id) + "]")
-    print delstatus
     return json.dumps(delstatus)
 
