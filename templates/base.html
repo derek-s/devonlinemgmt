@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
     <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}" type="text/javascript"></script>
