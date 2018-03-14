@@ -13,7 +13,7 @@ from views.login import loginview
 from views.index import indexview
 from views.serach import serachview
 from views.profile import profileview
-
+from errorhandler import errorview
 
 SECRET_KEY = '12efc6ca97aefb8e1f6a589c6f334a405bca977bc9cec023f193ee975379e153'
 
@@ -24,6 +24,7 @@ app.register_blueprint(loginview)
 app.register_blueprint(indexview)
 app.register_blueprint(serachview)
 app.register_blueprint(profileview)
+app.register_blueprint(errorview)
 
 app.secret_key = SECRET_KEY
 app.config[
