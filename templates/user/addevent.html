@@ -1,0 +1,59 @@
+{% extends "base.html" %}{% block title %}设备信息管理系统{% endblock %}{% block content -%}
+<div id="addeventiframe">
+    <label class="addeventlabel">待办事项</label> <textarea name="event" id="eventinput" cols="50" rows="10"></textarea>
+    <label class="addeventlabel">截止时间</label> <input id="enddatas" class="form-control input-lg input-serach addevinput">
+    <button onclick="addevent()" class="btn btn-default aeventbutton">添加</button>
+</div>
+<script>
+    $(document).ready(
+        function() {
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token)
+                    }
+                }
+            })
+        }
+    )
+    laydate.render({
+        elem: '#enddatas'
+    });
+
+    function addevent() {
+        eventtext = $('textarea#eventinput').val()
+        endtime = $('input#enddatas').val()
+        if (eventtext == "") {
+            alert("待办事项不能为空")
+        } else if (endtime == "") {
+            alert("截至时间不能为空")
+        } else {
+            pagedata = {
+                "content": eventtext,
+                "endtime": endtime,
+                "user": '{{ username }}'
+            }
+            jsondata = JSON.stringify(
+                pagedata
+            )
+            $.ajax({
+                url: $PATH_ROOT,
+                type: "POST",
+                contentType: "application/json",
+                data: jsondata,
+                success: function(resp) {
+                    resp = JSON.parse(resp)
+                    if (resp.status != 1) {
+                        alert("添加失败")
+                    }
+                    alert("添加成功")
+                    var eventbox = parent.layer.getFrameIndex(window.name);
+                    parent.location.reload();
+                }
+            })
+        }
+
+
+    }
+</script>
+{%- endblock -%}

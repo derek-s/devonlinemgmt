@@ -20,7 +20,7 @@
             <span>hi, {{ current_user.username }} 欢迎使用设备信息管理系统</span>
         </div>
         <div class="backlog">
-            <div class="alabelblock"><label class="noticelabel">待办事项</label><a href="{{url_for('adminbg.notecreate')}}" class="btn btn-primary nadeventbutton">创建新事项</a></div> {% if not events %}
+            <div class="alabelblock"><label class="noticelabel">待办事项</label><button onclick="jsload_addevent('{{current_user.username}}')" class="btn btn-primary nadeventbutton">创建新事项</bu></div> {% if not events %}
             <lable>暂无</lable>
             {% else %}
             <ul class="noticeul">
@@ -31,7 +31,7 @@
                 </li>
                 {% for eventlist in events %}
                 <li class="noticeli">
-                    <label class="noticeinline eventname">{{ eventlist.eventname }}</label>
+                    <label class="noticeinline eventname"><a href="#" onclick="jsload_event('{{eventlist.id}}')">{{ eventlist.eventname }}</a></label>
                     <label class="noticeinline ecreatedate">{{ eventlist.ecreationdate }}</label>
                     <label class="noticeinline ecompdate">{{ eventlist.eventtime }}</label>
                 </li>
