@@ -532,3 +532,11 @@ a.error {
 p.error {
     margin-top: 15px;
 }
+
+.nadeventp {
+    position: relative;
+    left: 10px;
+    bottom: 1px;
+    margin: 0;
+    padding: 1px 5px 1px 5px;
+}
