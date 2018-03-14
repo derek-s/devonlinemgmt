@@ -23,6 +23,11 @@ def login():
         if user:
             login_user(user)
             eventlog("[登录成功]")
+            params = request.args.items()
+            if params:
+                if params[0][0] == "next":
+                    nexturl = params[0][1]
+                    return redirect(nexturl)
             return redirect(url_for('indexview.index'))
         else:
             flash(u"登录失败!")

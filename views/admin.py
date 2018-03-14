@@ -183,11 +183,14 @@ def notecreate_id(id):
     notename = ""
     notecontent = ""
     if request.method == 'GET':
-        note = Dev_Note.query.filter(Dev_Note.id == id).one()
-        notename = note.articlename
-        notecontent = note.article
-        return render_template(
-            '/admin/notecreate.html', name=notename, editorcontent=notecontent, operation=u"编辑公告")
+        try:
+            note = Dev_Note.query.filter(Dev_Note.id == id).one()
+            notename = note.articlename
+            notecontent = note.article
+            return render_template(
+                '/admin/notecreate.html', name=notename, editorcontent=notecontent, operation=u"编辑公告")
+        except Exception as e:
+            abort(500)
     if request.method == 'POST':
         notename = request.form.get('notename', "默认标题")
         notecontent = request.form.get('note', None)
