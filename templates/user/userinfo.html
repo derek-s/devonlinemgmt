@@ -1,4 +1,5 @@
 {% extends "base.html" %}{% import 'bootstrap/wtf.html' as wtf %}{% block title %}{{ keyword }}{{ username }}的个人资料-设备信息管理系统{% endblock %}{% block content -%} {% include "nav.html" %}
+
 <div id="content">
     <div id="bnavigation">
         <ol class="breadcrumb">
@@ -10,11 +11,42 @@
     </div>
     <div id="profile">
         <div class="profileleft">
-            <div class="protitle">待办事项</div>
+            <div class="protitle">待办事项{% if current_user.username == username %}<a href="{{url_for('adminbg.notecreate')}}" class="btn btn-primary nadeventp">创建新事项</a></div>
+            {% if not pevent %}
+            <lable>暂无</lable>
+            {% else %}
+            <ul class="noticeul">
+                <li class="noticeli">
+                    <label class="noticeinline eventname">待办事项</label>
+                    <label class="noticeinline ecreatedate">创建时间</label>
+                    <label class="noticeinline ecompdate">截止时间</label>
+                </li>
+                {% for eventlist in pevent %}
+                <li class="noticeli">
+                    <label class="noticeinline eventname">{{ eventlist.eventname }}</label>
+                    <label class="noticeinline ecreatedate">{{ eventlist.ecreationdate }}</label>
+                    <label class="noticeinline ecompdate">{{ eventlist.eventtime }}</label>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% else %}
+            </div>
+            <ul class="noticeul">
+            <label>您无法查看他人待办事项</label>
+            </ul>
+            {% endif %}
         </div>
         <div class="profileright">
-            <div class="protitle">通知公告</div>
+            <div class="protitle">通知公告</div>{% if not note %}
+            <lable>暂无</lable>
+            {% else %}
             <ul class="noticeul">
+                <li class="noticeli">
+                    <label class="noticeinline noticename">公告名称</label>
+                    <label class="noticeinline noticedate">创建时间</label>
+                    <label class="noticeinline noticeuser">创建人</label>
+                </li>
                 {% for notelist in note %}
                 <li class="noticeli">
                     <label class="noticeinline"><a href="{{url_for('indexview.indexnotice',id=notelist.id)}}">{{ notelist.articlename }}</a></label>
@@ -23,6 +55,7 @@
                 </li>
                 {% endfor %}
             </ul>
+            {% endif %}
         </div>
         <div class="profileleft">
             <div class="protitle">{{ username }} 用户资料</div>
@@ -47,6 +80,7 @@
         </div>
         <div class="profileright">
             <div class="protitle">修改密码</div>
+            {% if current_user.username == username %}
             {% from "_changepwd.html" import render_field %}
             <form class="form" method="POST">
                 {{ form.hidden_tag() }}
@@ -57,6 +91,9 @@
             </form>
             {% for message in get_flashed_messages() %}
             <span class="warning">{{ message }}</span> {% endfor %}
+            {% else %}
+            <label>您无法修改他人密码</label>
+            {% endif %}
         </div>
     </div>
 </div>
