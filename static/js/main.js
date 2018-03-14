@@ -128,8 +128,9 @@ function js_delete(id) {
     $.ajax({
         url: $PATH_ROOT + "/" + id + "/delete",
         type: "POST",
-        dateType: "JSON",
+        dateType: "json",
         success: function(resp) {
+            resp = JSON.parse(resp)
             if (resp.status != 1) {
                 alert("删除失败")
             }
