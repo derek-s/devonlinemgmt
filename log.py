@@ -15,11 +15,14 @@ def eventlog(log):
     :return: 无
     """
     date = arrow.now().format("YYYY-MM-DD HH:mm")
-    username = current_user.username
-    ip = request.remote_addr
-    loginfo = Dev_Loging(date, username, ip, log)
-    db.session.add(loginfo)
-    db.session.commit()
+    try:
+        username = current_user.username
+        ip = request.remote_addr
+        loginfo = Dev_Loging(date, username, ip, log)
+        db.session.add(loginfo)
+        db.session.commit()
+    except Exception as e:
+        pass
 
 
 def logonlog(username, log):
