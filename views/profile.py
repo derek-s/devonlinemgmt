@@ -9,6 +9,7 @@ from models import Dev_Note, Dev_Loging, User, db
 from log import eventlog
 from forms import ChangePwd
 from notice import noticeindexlist
+from pevent import peventsindexlist
 
 profileview = Blueprint('profileview', __name__)
 
@@ -51,7 +52,8 @@ def userinfo(username):
                 eventlog(u"[修改密码失败] 旧密码验证失败")
     eventlog(u"[访问个人资料页面]" + username)
     notice = noticeindexlist()
+    pevent = peventsindexlist(username)
     return render_template(
         "/user/userinfo.html", username=username, date=logindate, ip=ip, permission=per, form=form,
-        note=notice
+        note=notice, pevent=pevent
     )
