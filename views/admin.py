@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
-from flask import Blueprint, render_template, request, url_for, flash, session, redirect
+from flask import Blueprint, render_template, request, url_for, flash, session, redirect, abort
 from flask_login import login_required, current_user
 from decorators import admin_required
 from models import Dev_Loging, Setting, Dev_Note
@@ -193,14 +193,18 @@ def notecreate_id(id):
         notecontent = request.form.get('note', None)
         createdate = arrow.now().format("YYYY-MM-DD HH:mm")
         createname = current_user.username
-        note = Dev_Note.query.filter(Dev_Note.id == id).one()
-        note.articlename = notename
-        note.article = notecontent
-        note.createdate = createdate
-        note.createuser = createname
-        db.session.commit()
-        flash(u"修改成功", 'success')
-        return redirect(url_for('adminbg.notecreate_id', id=note.id))
+        try:
+            note = Dev_Note.query.filter(Dev_Note.id == id).one()
+            note.articlename = notename
+            note.article = notecontent
+            note.createdate = createdate
+            note.createuser = createname
+            db.session.commit()
+            flash(u"修改成功", 'success')
+            return redirect(url_for('adminbg.notecreate_id', id=note.id))
+        except Exception as e:
+            print e
+            abort(500)
 
 
 @adminbg.route("/admin/notelist", methods=['GET', 'POST'])
@@ -243,7 +247,7 @@ def notedel(id):
     :param id: 公告id
     :return:
     """
-    print "1"
+
     delstatus = {
         "status": 1,
         "message": "success"
@@ -258,4 +262,6 @@ def notedel(id):
     notice.delete()
     db.session.commit()
     eventlog("[删除公告 公告id: " + str(id) + "]")
+    print delstatus
     return json.dumps(delstatus)
+
