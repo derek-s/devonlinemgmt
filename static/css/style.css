@@ -563,3 +563,10 @@ p.error {
 #addeventiframe {
     margin-left: 30px;
 }
+.adminpanel {
+    margin-top: 115px;
+    border: none;
+    border-top: 1px solid transparent !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
