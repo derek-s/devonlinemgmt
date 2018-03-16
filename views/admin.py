@@ -51,6 +51,37 @@ def query():
     return render_template('/admin/dbquery.html', posts=posts, count=count, pagination=pagination, campus=campus)
 
 
+@adminbg.route("/admin/query/list")
+@login_required
+@admin_required
+def query_list():
+    """
+    后台查询视图 根据校区/楼宇进行查询
+    :return: json
+    """
+    page = request.args.get('page', 1, type=int)
+    request.script_root = url_for('indexview.index', _external=True)
+    campusname = b64decode(unquote(request.args.get('campusname', "", type=str)))
+    buildname = b64decode(unquote(request.args.get('buildname', "", type=str)))
+    devinfo = Dev_DeviceStatus.query.filter(
+        (Dev_DeviceStatus.Campus.like("%" + campusname + "%"), "")[campusname is None],
+        (Dev_DeviceStatus.Location.like("%" + buildname + "%"), "")[buildname is None]
+    ).order_by(Dev_DeviceStatus.Campus.desc())
+    paginateion = devinfo.paginate(
+        page, per_page=Setting().pagination
+    )
+    count = devinfo.count()
+    posts = paginateion.items
+    campus = Dev_Campus.query.all()
+    eventlog(
+        "[查询校区/楼宇]" + campusname + buildname + " 第" + str(page) + "页"
+    )
+    return render_template(
+        "/admin/dbquery_list.html", posts=posts, count=count, pagination=paginateion, campus=campus,
+        ctitle=campusname.decode('utf-8'), btitle=buildname.decode('utf-8')
+    )
+
+
 @adminbg.route("/admin/lvrmanage")
 @login_required
 @admin_required
