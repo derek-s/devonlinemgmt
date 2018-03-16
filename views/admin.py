@@ -39,7 +39,8 @@ def query():
     :return: 返回数据查询结果并构建相应页面
     """
     page = request.args.get('page', 1, type=int)
-    request.script_root = url_for('adminbg.query', _external=True)
+    request.script_root = url_for('indexview.index', _external=True)
+    #request.script_root = url_for('adminbg.query', _external=True)
     count = Dev_DeviceStatus.query.count()
     pagination = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus.desc()).paginate(
         page, per_page=Setting().pagination
