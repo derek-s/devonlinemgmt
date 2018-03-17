@@ -73,7 +73,7 @@ $(document).ready(
         $("table#devinfolist>tbody").on('click', '.location', function() {
             //弱电间详情
             var str2;
-            var tablehead = '<table class="tabledevinfo table table-striped table-hover"><tbody><tr><th>ID</th><th>校区</th><th>楼宇名称</th><th>楼栋号码</th><th>楼层</th><th>房间号</th><th>机柜数量</th></tr>'
+            var tablehead = '<table class="tabledevinfo table table-striped table-hover"><tbody><tr><th>ID</th><th>校区</th><th>楼宇名称</th><th>楼栋号码</th><th>楼层</th><th>房间号</th><th>机柜数量</th><th>弱电间编号</th></tr>'
             var tableend = "</tbody></table>"
             var campus = encodeURIComponent($(this).prev().prev().text(), "utf-8")
             var location = encodeURIComponent($(this).prev().text(), "utf-8")
@@ -85,14 +85,14 @@ $(document).ready(
             }, function(data) {
                 $.each(data, function(one) {
                     lvrinfo = data[one]
-                    str2 = "<tr><td>" + lvrinfo.ID + "</td><td>" + lvrinfo.Campus + "</td><td>" + lvrinfo.BuildName + "</td><td>" + lvrinfo.BuildNo + "</td><td>" + lvrinfo.FloorNo + "</td><td>" + lvrinfo.RoomNo + "</td><td>" + lvrinfo.Cabinet + "</td></tr>"
+                    str2 = "<tr><td>" + lvrinfo.ID + "</td><td>" + lvrinfo.Campus + "</td><td>" + lvrinfo.BuildName + "</td><td>" + lvrinfo.BuildNo + "</td><td>" + lvrinfo.FloorNo + "</td><td>" + lvrinfo.RoomNo + "</td><td>" + lvrinfo.Cabinet + "</td><td>" + lvrinfo.LVRNo + "</td></tr>"
                 })
 
                 layer.open({
                     title: '弱电间信息',
                     type: 1,
                     skin: 'layui-layer-rim',
-                    area: ['500px', '240px'],
+                    area: ['600px', '240px'],
                     content: tablehead + str2 + tableend
                 });
             })

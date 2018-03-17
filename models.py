@@ -102,7 +102,8 @@ class Dev_LVRInfo(db.Model):
             'BuildNo': self.BuildNo,
             'FloorNo': self.FloorNo,
             'RoomNo': self.RoomNo,
-            'Cabinet': self.Cabinet
+            'Cabinet': self.Cabinet,
+            'LVRNo': self.LVRNo
         }
 
     def bn_to_json(self):

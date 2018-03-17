@@ -1,31 +1,125 @@
-{% extends "base.html" %} {% block title %}弱电间信息管理|管理后台 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
+{% extends "base.html" %}{% block head %}<script src="{{ url_for('static', filename='js/adcommon.js') }}" type="text/javascript"></script>{% endblock %} {% block title %}弱电间信息管理|管理后台 - 设备信息管理系统{% endblock %} {%import '_macros.html' as macros%} {% block content %} {% include "nav.html"
+%}
 <div id="admincontent">
     <div id="leftmenu">
         <ul id="sideul" class="nav nav-sidebar">
-            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.admin')}}">首页</a></li>
-            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.query')}}">数据查询</a></li>
-            <li class="sideli"><a class="adminmenu sideactive" href="{{url_for('adminbg.lvrmanager')}}">弱电间信息管理</a></li>
-            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.dvrmanage')}}">设备信息管理</a></li>
-            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.dvrstatus')}}">设备情况管理</a></li>
-            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.basicinfo')}}">基础信息维护</a></li>
-            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.usrmanage')}}">用户管理</a></li>
-            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.sysmanage')}}">系统设置</a></li>
-            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.logviews')}}">操作日志</a></li>
-            <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.notelist')}}">通知公告管理</a></li>
+            <li class="sideli">
+                <a class="adminmenu" href="{{url_for('adminbg.admin')}}">首页</a>
+            </li>
+            <li class="sideli">
+                <a class="adminmenu" href="{{url_for('adminbg.query')}}">数据查询</a>
+            </li>
+            <li class="sideli">
+                <a class="adminmenu sideactive" href="{{url_for('adminbg.lvrmanager')}}">弱电间信息管理</a>
+            </li>
+            <li class="sideli">
+                <a class="adminmenu" href="{{url_for('adminbg.dvrmanage')}}">设备信息管理</a>
+            </li>
+            <li class="sideli">
+                <a class="adminmenu" href="{{url_for('adminbg.dvrstatus')}}">设备情况管理</a>
+            </li>
+            <li class="sideli">
+                <a class="adminmenu" href="{{url_for('adminbg.basicinfo')}}">基础信息维护</a>
+            </li>
+            <li class="sideli">
+                <a class="adminmenu" href="{{url_for('adminbg.usrmanage')}}">用户管理</a>
+            </li>
+            <li class="sideli">
+                <a class="adminmenu" href="{{url_for('adminbg.sysmanage')}}">系统设置</a>
+            </li>
+            <li class="sideli">
+                <a class="adminmenu" href="{{url_for('adminbg.logviews')}}">操作日志</a>
+            </li>
+            <li class="sideli">
+                <a class="adminmenu" href="{{url_for('adminbg.notelist')}}">通知公告管理</a>
+            </li>
         </ul>
     </div>
     <div id="rightcont">
         <h1 class="admintitle">弱电间信息管理</h1>
-        <table>
-            <th>序号</th>
-            <th>校区</th>
-            <th>弱电间信息</th>
-            <th>设备信息</th>
-            <th>上联IP</th>
-            <th>上联端口</th>
-            <th>设备型号</th>
-            <th>相关操作</th>
-        </table>
+        <div id="toolbar">
+            <div id="adquery">
+                <label>校区</label>
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownCampus" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="true">全部
+                        <span class="caret"></span>
+                    </button>
+                    <ul id="ddm-campus" class="dropdown-menu" aria-labelledby="dropdownCampus">
+                        <li>
+                            <a href="javascript:void(0);" rel="all">全部</a>
+                        </li>
+                        {%- for campusone in campus %}
+                        <li>
+                            <a href="javascript:void(0);" rel="campus">{{ campusone.Campus }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <label>楼宇</label>
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownBuild" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="true">全部
+                        <span class="caret"></span>
+                    </button>
+                    <ul id="ddm-buildname" class="dropdown-menu" aria-labelledby="dropdownBuild">
+                        <li>
+                            <a href="javascript:void(0);" rel="all">全部</a>
+                        </li>
+                    </ul>
+                </div>
+                <button id="adqbutton" class="btn btn-primary">查询</button>
+            </div>
+            <div id="serachbar">
+                <input id="indexserach" class="form-control input-lg input-serach" type="text" name="devinfoserp" placeholder="请输入搜索关键词（支持模糊搜索）">
+                <button id="indexsbutton" class="btn btn-primary">搜 索</button>
+            </div>
+        </div>
+        <div class="adminpanel panel-info">
+            <div class="panel-heading">全部数据</div>
+            <div id="data">
+                <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
+                    <tr>
+                        <th>ID</th>
+                        <th>校区</th>
+                        <th>楼宇名称</th>
+                        <th>楼号</th>
+                        <th>层号</th>
+                        <th>房间号</th>
+                        <th>机柜数量</th>
+                        <th>弱电间编号</th>
+                        <th>操作</th>
+                    </tr>
+                    {% for data in posts %}
+                    <tr class="jsondata">
+                        <td>{{ data.ID }}</td>
+                        <td>{{ data.Campus }}</td>
+                        <td>{{ data.BuildName }}</td>
+                        <td>{{ data.BuildNo }}</td>
+                        <td>{{ data.FloorNo }}</td>
+                        <td>{{ data.RoomNo }}</td>
+                        <td>{{ data.Cabinet }}</td>
+                        <td>{{ data.LVRNo }}</td>
+                        <td>管理</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="ajaxnetpage">
+                <a id="ajaxntindex" class="btn btn-primary" href="javascript:void(0);">下一页</a>
+            </div>
+            <div>
+                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.lvrmanager')}} {%endif%}
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $('#transfer').click(function () {
+                    var page = $('#transfer_page').val();
+                    window.location.href = "{{url_for('adminbg.lvrmanager')}}" + "?page=" + page;
+                })
+            })
+        </script>
     </div>
 </div>
 

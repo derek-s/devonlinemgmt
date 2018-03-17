@@ -80,7 +80,7 @@ def querylvr():
     roomno = unquote(reroomno).decode('utf-8')
     serptemp = []
     serp = Dev_LVRInfo.query.filter_by(
-        Campus=campus, BuildName=location, RoomNo=roomno
+        Campus=campus, BuildName=location, LVRNo=roomno
     ).all()
     for serpx in serp:
         serptemp.append(serpx.to_json())

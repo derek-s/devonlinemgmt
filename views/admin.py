@@ -3,7 +3,7 @@
 from flask import Blueprint, render_template, request, url_for, flash, session, redirect, abort
 from flask_login import login_required, current_user
 from decorators import admin_required
-from models import Dev_Loging, Setting, Dev_Note, Dev_DeviceStatus, Dev_Campus
+from models import Dev_Loging, Setting, Dev_Note, Dev_DeviceStatus, Dev_Campus, Dev_LVRInfo
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
@@ -126,7 +126,15 @@ def lvrmanager():
     弱电间管理视图
     :return: 返回数据查询结果并构建相应页面
     """
-    return render_template('/admin/lvrmanager.html')
+    request.script_root = url_for('indexview.index', _external=True)
+    page = request.args.get('page', 1, type=int)
+    count = Dev_LVRInfo.query.count()
+    pagination = Dev_LVRInfo.query.order_by(Dev_LVRInfo.Campus.desc()).paginate(
+        page, per_page=Setting().pagination
+    )
+    posts = pagination.items
+    campus = Dev_Campus.query.all()
+    return render_template('/admin/lvrmanager.html', posts=posts, count=count, pagination=pagination, campus=campus)
 
 
 @adminbg.route("/admin/dvrmanage")
