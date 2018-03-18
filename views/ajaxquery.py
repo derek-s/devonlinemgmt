@@ -7,6 +7,7 @@ from urllib import unquote
 from base64 import b64decode, b64encode
 from log import eventlog
 
+
 ajaxquery = Blueprint("ajaxquery", __name__)
 
 
@@ -187,3 +188,6 @@ def queryserach():
         "[ajax加载搜索页面下一页]" + serach.encode('utf-8') + " 第" + str(page_num) + "页"
     )
     return jsonify(serachresult)
+
+
+
