@@ -135,11 +135,7 @@ $(document).ready(
             }
             window.open($PATH_ROOT + "/list?campusname=" + campusname + "&buildname=" + buildname)
         })
-        $("button#indexsbutton").on('click', function() {
-            //搜索
-            var keyword = $("input#indexserach").val()
-            window.open($PATH_ROOT + "/serach?keyword=" + encodeURIComponent($.base64.encode(keyword)))
-        })
+        
         $("a#ajaxntserach").on('click', function() {
             //搜索页ajax
             $(this).text("正在加载，请稍后……")
