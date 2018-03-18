@@ -135,6 +135,11 @@ else %}{{ ctitle }} {{ btitle }} - 设备信息管理系统{% endif%} {% if btit
                     window.location.href = "{{url_for('adminbg.query_list')}}" + "?page=" + page;
                 })
             })
+            $("button#indexsbutton").on('click', function() {
+            //搜索
+            var keyword = $("input#indexserach").val()
+            window.open($PATH_ROOT + "/serach?keyword=" + encodeURIComponent($.base64.encode(keyword)))
+        })
         </script>
     </div>
 </div>

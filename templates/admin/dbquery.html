@@ -85,6 +85,11 @@
                     window.location.href = "{{url_for('adminbg.query')}}" + "?page=" + page;
                 })
             })
+            $("button#indexsbutton").on('click', function() {
+            //搜索
+            var keyword = $("input#indexserach").val()
+            window.open($PATH_ROOT + "/serach?keyword=" + encodeURIComponent($.base64.encode(keyword)))
+        })
         </script>
     </div>
 </div>
