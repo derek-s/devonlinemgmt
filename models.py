@@ -210,3 +210,13 @@ class DevPEvents(db.Model):
         self.eventname = eventname
         self.ecreationdate = ecreationdate
         self.ecreationuser = ecreationuser
+
+
+class DevBuild(db.Model):
+    """
+    楼宇信息模型
+    """
+    __tablename__ = "dev_Build"
+    ID = db.Column("ID", db.Integer, primary_key=True)
+    Campus = db.Column("Campus", db.Text)
+    BuildName = db.Column("BuildName", db.Text)
