@@ -133,7 +133,7 @@ $(document).ready(
             } else if (buildname == teststr) {
                 buildname = ""
             }
-            window.open($PATH_ROOT + "/list?campusname=" + campusname + "&buildname=" + buildname)
+            window.open($SCRIPT_ROOT + "admin/query/list?campusname=" + campusname + "&buildname=" + buildname)
         })
         
         $("a#ajaxntserach").on('click', function() {
