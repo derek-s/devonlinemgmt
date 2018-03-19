@@ -159,9 +159,8 @@ def queryserach():
     """
     pagenum = request.values.get('pagenum', None, type=int)
     count = request.values.get('count', None, type=int)
-    word = request.values.get('keyword', '123', type=str)
-    serach = unquote(b64decode(word)).decode('utf-8')
-
+    word = request.values.get('keyword', None, type=str)
+    serach = b64decode(unquote(word)).decode('utf-8')
     serp = Dev_DeviceStatus.query.filter(
         (Dev_DeviceStatus.Campus.like("%" + serach + "%"), "")[serach is None] |
         (Dev_DeviceStatus.Location.like("%" + serach + "%"), "")[serach is None] |
@@ -188,6 +187,4 @@ def queryserach():
         "[ajax加载搜索页面下一页]" + serach.encode('utf-8') + " 第" + str(page_num) + "页"
     )
     return jsonify(serachresult)
-
-
 

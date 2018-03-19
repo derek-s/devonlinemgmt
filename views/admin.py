@@ -94,6 +94,21 @@ def query_serach():
     page = request.args.get('page', 1, type=int)
     word = request.args.get('keyword', "", type=str)
     serach = unquote(b64decode(word)).decode('utf-8')
+    serp = qserach(serach)
+    paginateion = serp.paginate(
+        page, per_page=Setting().pagination
+    )
+    count = serp.count()
+    posts = paginateion.items
+    eventlog(
+         "[搜索]" + serach.encode('utf-8') + " 第" + str(page) + "页"
+    )
+    return render_template(
+        '/admin/dbquery_serach.html', posts=posts, count=count, pagination=paginateion, keyword=serach
+    )
+
+
+def qserach(serach):
     serp = Dev_DeviceStatus.query.filter(
         (Dev_DeviceStatus.Campus.like("%" + serach + "%"), "")[serach is None] |
         (Dev_DeviceStatus.Location.like("%" + serach + "%"), "")[serach is None] |
@@ -104,18 +119,7 @@ def query_serach():
         (Dev_DeviceStatus.HigherlinkPort.like("%" + serach + "%"), "")[serach is None] |
         (Dev_DeviceStatus.DeviceModel.like("%" + serach + "%"), "")[serach is None]
     ).order_by(Dev_DeviceStatus.Campus.desc())
-    paginateion = serp.paginate(
-        page, per_page=Setting().pagination
-    )
-    count = serp.count()
-    posts = paginateion.items
-    eventlog(
-        "[搜索]" + serach.encode('utf-8') + " 第" + str(page) + "页"
-    )
-    return render_template(
-        '/admin/dbquery_serach.html', posts=posts, count=count, pagination=paginateion, keyword=serach
-    )
-
+    return serp
 
 
 @adminbg.route("/admin/lvrmanage")
@@ -201,10 +205,9 @@ def querylvrlist():
 @admin_required
 def querylvrserach():
     """
-    后台弱电间信息搜索在
+    后台弱电间信息搜索
     :return:
     """
-    page = request.args.get('page', 1, type=int)
     request.script_root = url_for('indexview.index', _external=True)
     page = request.args.get('page', 1, type=int)
     word = request.args.get('keyword', "", type=str)
