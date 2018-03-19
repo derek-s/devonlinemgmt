@@ -37,7 +37,7 @@
         </ul>
     </div>
     <div id="rightcont">
-        <h1 class="admintitle">弱电间信息管理 - {{ ctitle }} 数据检索结果</h1>
+        <h1 class="admintitle">弱电间信息管理 - {{ ctitle }}{{ btitle }} 数据检索结果</h1>
         <div id="toolbar">
             <div id="adquery">
                 <label>校区</label>
@@ -133,7 +133,7 @@
                     $("button#indexsbutton").on('click', function () {
                         //搜索
                         var keyword = $("input#indexserach").val()
-                        window.open($SCRIPT_ROOT + "admin/lvrmanage/serach?keyword=" + encodeURIComponent($.base64.encode(keyword)))
+                        window.open("{{url_for('adminbg.querylvrserach')}}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
                     })
                     $('#transfer').click(function () {
                         var page = $('#transfer_page').val();
@@ -146,7 +146,7 @@
                         var datacount = $("tr.jsondata").length
                         var ajaxcnameen = encodeURIComponent(ajaxcamname, 'utf-8')
                         var ajaxbnameen = encodeURIComponent(ajaxbilname, 'utf-8')
-                        $.post($SCRIPT_ROOT + '_qindexlist', {
+                        $.post("{{ url_for('adminbg.querylvrlist') }}", {
                             count: datacount,
                             pagenum: pagenum,
                             campusname: ajaxcnameen,
@@ -160,15 +160,16 @@
                                 trc += tra + "<td>" + eachone.ID + "</td><td>" + eachone.Campus + "</td><td>" + eachone.BuildName + "</td><td>" + eachone.BuildNo + "</td><td>" + eachone.FloorNo + "</td><td>" + eachone.RoomNo + "</td><td>" + eachone.Cabinet + "</td><td>" + eachone.LVRNo + "</td><td>" + "管理" + "</td>" + trb
                                 hasnext = eachone.next
                             })
+                            console.log(hasnext)
                             $("table#devinfolist>tbody tr:last-child").after(trc)
                             if (!hasnext) {
-                                $("a#ajaxntlist").remove()
+                                $("a#ajaxntindex").remove()
                             } else {
-                                $("a#ajaxntlist").text('下一页')
+                                $("a#ajaxntindex").text('下一页')
                             }
                         }).fail(function (status) {
                             if (status.status == '404') {
-                                $("a#ajaxntlist").remove()
+                                $("a#ajaxntindex").remove()
                             }
                         })
                     })
