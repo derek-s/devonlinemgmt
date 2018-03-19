@@ -45,9 +45,7 @@ else %}{{ ctitle }} {{ btitle }} - 设备信息管理系统{% endif%} {% if btit
                 <label>校区</label>
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownCampus" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="true">{% if ctitle == ""%}全部{% else %}{{ ctitle }}{% endif %}
-                        <span class="caret"></span>
-                    </button>
+                        aria-expanded="true">{% if ctitle == ""%}全部{% else %}{{ ctitle }}{% endif %}<span class="caret"></span></button>
                     <ul id="ddm-campus" class="dropdown-menu" aria-labelledby="dropdownCampus">
                         <li>
                             <a href="javascript:void(0);" rel="all">全部</a>
@@ -62,9 +60,7 @@ else %}{{ ctitle }} {{ btitle }} - 设备信息管理系统{% endif%} {% if btit
                 <label>楼宇</label>
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownBuild" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="true">{% if btitle == ""%}全部{% else %}{{ btitle }}{% endif %}
-                        <span class="caret"></span>
-                    </button>
+                        aria-expanded="true">{% if btitle == ""%}全部{% else %}{{ btitle }}{% endif %}<span class="caret"></span></button>
                     <ul id="ddm-buildname" class="dropdown-menu" aria-labelledby="dropdownBuild">
                         <li>
                             <a href="javascript:void(0);" rel="all">全部</a>
@@ -138,7 +134,7 @@ else %}{{ ctitle }} {{ btitle }} - 设备信息管理系统{% endif%} {% if btit
             $("button#indexsbutton").on('click', function() {
             //搜索
             var keyword = $("input#indexserach").val()
-            window.open($PATH_ROOT + "/serach?keyword=" + encodeURIComponent($.base64.encode(keyword)))
+            window.open($SCRIPT_ROOT + "admin/query/serach?keyword=" + encodeURIComponent($.base64.encode(keyword)))
         })
         </script>
     </div>
