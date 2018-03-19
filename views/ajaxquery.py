@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 from flask import Blueprint, jsonify, request
 from flask_login import login_required
-from models import Dev_DeviceStatus, Dev_LVRInfo, Dev_Campus, Dev_DeviceInfo, Setting
+from models import Dev_DeviceStatus, Dev_LVRInfo, Dev_Campus, Dev_DeviceInfo, Setting, DevBuild
 from urllib import unquote
 from base64 import b64decode, b64encode
 from log import eventlog
@@ -52,13 +52,13 @@ def _querybuild():
     campusname = unquote(campusurl).decode('utf-8')
     bntemp = []
     settemp = []
-    for bnlist in Dev_DeviceStatus.query.filter(
-            (Dev_DeviceStatus.Campus.like("%" + campusname + "%"), "")[campusname is None]
-    ).with_entities(Dev_DeviceStatus.Location):
+    for bnlist in DevBuild.query.filter(
+            (DevBuild.Campus.like("%" + campusname + "%"), "")[campusname is None]
+    ).with_entities(DevBuild.BuildName).order_by(DevBuild.ID):
         for bname in bnlist:
             settemp.append(bname)
-    setlist = set(settemp)
-    for bsname in setlist:
+    #setlist = set(settemp)
+    for bsname in settemp:
         name = {
             'BuildName': bsname
         }
