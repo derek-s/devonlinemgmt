@@ -82,7 +82,7 @@ def query_list():
     )
 
 
-@adminbg.route("/admin/query/serach")
+@adminbg.route("/admin/query/serach", methods=['GET', 'POST'])
 @login_required
 @admin_required
 def query_serach():
@@ -169,7 +169,7 @@ def querylvrpage():
     return jsonify(lvrinfotemp)
 
 
-@adminbg.route("/admin/lvrmanage/list")
+@adminbg.route("/admin/lvrmanage/list", methods=['GET', 'POST'])
 @login_required
 @admin_required
 def querylvrlist():
@@ -177,30 +177,67 @@ def querylvrlist():
     后台弱电间信息校区查询
     :return:
     """
-    page = request.args.get('page', 1, type=int)
-    request.script_root = url_for('indexview.index', _external=True)
-    campusname = b64decode(unquote(request.args.get('campusname', "", type=str)))
-    buildname = b64decode(unquote(request.args.get('buildname', "", type=str)))
+    if request.method == 'GET':
+        page = request.args.get('page', 1, type=int)
+        request.script_root = url_for('indexview.index', _external=True)
+        campusname = b64decode(unquote(request.args.get('campusname', "", type=str)))
+        buildname = b64decode(unquote(request.args.get('buildname', "", type=str)))
+        lvrinfo = lvrlistsql(campusname, buildname)
+        paginateion = lvrinfo.paginate(
+            page, per_page=Setting().pagination
+        )
+        count = lvrinfo.count()
+        posts = paginateion.items
+        campus = Dev_Campus.query.all()
+        eventlog(
+            "[后台弱电间信息 查询校区/楼宇]" + campusname + buildname + " 第" + str(page) + "页"
+        )
+        return render_template(
+            "/admin/lvrmanage_list.html", posts=posts, count=count, pagination=paginateion, campus=campus,
+            ctitle=campusname.decode('utf-8'), btitle=buildname.decode('utf-8')
+        )
+    elif request.method == 'POST':
+        pagenum = request.values.get('pagenum', None, type=int)
+        count = request.values.get('count', None, type=int)
+        campusname = unquote(request.values.get('campusname', "", type=str))
+        buildname = unquote(request.values.get('buildname', "", type=str))
+        lvrinfo = lvrlistsql(campusname, buildname)
+        page_num = ((count / Setting().pagination + pagenum), 0)[count / Setting().pagination == 0]
+        paginateion = lvrinfo.paginate(
+            page_num, per_page=Setting().pagination
+        )
+        lvrinfolist = []
+        hasnext = {
+            'next': paginateion.has_next
+        }
+
+        for lvrline in paginateion.items:
+            jsonlist = lvrline.to_json()
+            jsonlist.update(hasnext)
+            lvrinfolist.append(jsonlist)
+        eventlog(
+            "[ajax加载弱电间查询页面下一页]" + campusname + buildname + " 第" + str(page_num) + "页"
+        )
+        return jsonify(lvrinfolist)
+    else:
+        abort(500)
+
+
+def lvrlistsql(campusname, buildname):
+    """
+    校区查询SQL
+    :param campusname: 校区名称
+    :param buildname: 楼宇名称
+    :return:
+    """
     lvrinfo = Dev_LVRInfo.query.filter(
         (Dev_LVRInfo.Campus.like("%" + campusname + "%"), "")[campusname is None],
-        (Dev_LVRInfo.BuildName.like("%") + buildname + "%", "")[buildname is None]
+        (Dev_LVRInfo.BuildName.like("%" + buildname + "%"), "")[buildname is None]
     ).order_by(Dev_LVRInfo.Campus.desc())
-    paginateion = lvrinfo.paginate(
-        page, per_page=Setting().pagination
-    )
-    count = lvrinfo.count()
-    posts = paginateion.items
-    campus = Dev_Campus.query.all()
-    eventlog(
-        "[后台弱电间信息 查询校区/楼宇]" + campusname + buildname + " 第" + str(page) + "页"
-    )
-    return render_template(
-        "/admin/lvrmanage_list.html", posts=posts, count=count, pagination=paginateion, campus=campus,
-        ctitle=campusname.decode('utf-8'), btitle=buildname.decode('utf-8')
-    )
+    return lvrinfo
 
 
-@adminbg.route("/admin/lvrmanage/search")
+@adminbg.route("/admin/lvrmanage/search", methods=['GET', 'POST'])
 @login_required
 @admin_required
 def querylvrserach():
@@ -208,28 +245,64 @@ def querylvrserach():
     后台弱电间信息搜索
     :return:
     """
-    request.script_root = url_for('indexview.index', _external=True)
-    page = request.args.get('page', 1, type=int)
-    word = request.args.get('keyword', "", type=str)
-    serach = unquote(b64decode(word)).decode('utf-8')
+    if request.method == 'GET':
+        request.script_root = url_for('indexview.index', _external=True)
+        page = request.args.get('page', 1, type=int)
+        word = request.args.get('keyword', "", type=str)
+        serach = unquote(b64decode(word)).decode('utf-8')
+        serp = lvrsearchsql(serach)
+        paginateion = serp.paginate(
+            page, per_page=Setting().pagination
+        )
+        count = serp.count()
+        posts = paginateion.items
+        eventlog(
+            "[管理后台弱电间 搜索]" + serach.encode('utf-8') + " 第" + str(page) + "页"
+        )
+        return render_template(
+            "/admin/lvrmanage_serach.html", posts=posts, count=count, pagination=paginateion, keyword=serach
+        )
+    elif request.method == 'POST':
+        pagenum = request.values.get('pagenum', None, type=int)
+        count = request.values.get('count', None, type=int)
+        word = request.values.get('keyword', None, type=str)
+        search = b64decode(unquote(word)).decode('utf-8')
+        serp = lvrsearchsql(search)
+        page_num = ((count / Setting().pagination + pagenum), 0)[count / Setting().pagination == 0]
+        paginateion = serp.paginate(
+            page_num, per_page=Setting().pagination
+        )
+        serachresult = []
+        hasnext = {
+            'next': paginateion.has_next
+        }
+        for serachone in paginateion.items:
+            jsonlist = serachone.to_json()
+            jsonlist.update(hasnext)
+            serachresult.append(jsonlist)
+        eventlog(
+            "[ajax加载搜索页面下一页]" + search.encode('utf-8') + " 第" + str(page_num) + "页"
+        )
+        return jsonify(serachresult)
+    else:
+        abort(500)
+
+
+def lvrsearchsql(search):
+    """
+    弱电间搜索SQL
+    :return:
+    """
     serp = Dev_LVRInfo.query.filter(
-        (Dev_LVRInfo.Campus.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_LVRInfo.BuildName.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_LVRInfo.BuildNo.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_LVRInfo.RoomNo.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_LVRInfo.LVRNo.like("%" + serach + "%"), "")[serach is None]
+        (Dev_LVRInfo.Campus.like("%" + search + "%"), "")[search is None] |
+        (Dev_LVRInfo.BuildName.like("%" + search + "%"), "")[search is None] |
+        (Dev_LVRInfo.BuildNo.like("%" + search + "%"), "")[search is None] |
+        (Dev_LVRInfo.RoomNo.like("%" + search + "%"), "")[search is None] |
+        (Dev_LVRInfo.LVRNo.like("%" + search + "%"), "")[search is None]
     ).order_by(Dev_LVRInfo.Campus.desc())
-    paginateion = serp.paginate(
-        page, per_page=Setting().pagination
-    )
-    count = serp.count()
-    posts = paginateion.items
-    eventlog(
-        "[管理后台弱电间 搜索]" + serach.encode('utf-8') + " 第" + str(page) + "页"
-    )
-    return render_template(
-        "/admin/lvrmanage_serach.html", posts=posts, count=count, pagination=paginateion, keyword=serach
-    )
+    return serp
+
+
 
 
 @adminbg.route("/admin/dvrmanage")
