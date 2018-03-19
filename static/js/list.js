@@ -11,28 +11,9 @@ $(document).ready(
         $.base64.utf8decode = true;
         //下拉菜单
         if ($('#dropdownCampus').text() == "全部") {
-            $.post($SCRIPT_ROOT + '_querybuild', {
-                campusname: '',
-
-            }, function(data) {
-                $.each(data, function(one) {
-                    $('#ddm-buildname').append(
-                        '<li class="ajaxbname"><a href="javascript:void(0);">' + data[one].BuildName + '</a></li>'
-                    )
-                })
-            })
-        } else {
-            var capname = encodeURIComponent($('#dropdownCampus').text())
-            $.post($SCRIPT_ROOT + '_querybuild', {
-                campusname: capname
-            }, function(data) {
-                $('li.ajaxbname').remove()
-                $.each(data, function(one) {
-                    $('#ddm-buildname').append(
-                        '<li class="ajaxbname"><a href="javascript:void(0);">' + data[one].BuildName + '</a></li>'
-                    )
-                })
-            })
+            $("button#dropdownBuild").attr('disabled',true); 
+        }else{
+            $("button#dropdownBuild").attr('disabled',false); 
         }
         $('#ddm-campus').on('click', function(e) {
             $('li.ajaxbname').remove()
@@ -41,17 +22,22 @@ $(document).ready(
             $target.is('a') && $('button#dropdownCampus').html($target.text() + '<span class="caret"></span>')
             var strbuild = encodeURIComponent($target.text(), "utf-8")
             if ($target.text() == '全部') {
-                strbuild = ""
-            }
-            $.post($SCRIPT_ROOT + '_querybuild', {
-                campusname: strbuild
-            }, function(data) {
-                $.each(data, function(one) {
-                    $('#ddm-buildname').append(
-                        '<li class="ajaxbname"><a href="javascript:void(0);">' + data[one].BuildName + '</a></li>'
-                    )
+                strbuild = "";
+                console.log("1")
+                $("button#dropdownBuild").attr('disabled',true); 
+            }else{
+                $.post($SCRIPT_ROOT + '_querybuild', {
+                    campusname: strbuild
+                }, function(data) {
+                    $.each(data, function(one) {
+                        $('#ddm-buildname').append(
+                            '<li class="ajaxbname"><a href="javascript:void(0);">' + data[one].BuildName + '</a></li>'
+                        )
+                    })
                 })
-            })
+                
+                $("button#dropdownBuild").attr('disabled',false); 
+            }
         })
         $("#ddm-buildname").on('click', function(e) {
             var $target = $(e.target)

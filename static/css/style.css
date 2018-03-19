@@ -570,3 +570,7 @@ p.error {
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
 }
+.dropdown-menu {
+    max-height: 350px;
+    overflow: auto;
+}

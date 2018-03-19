@@ -18,6 +18,7 @@
         var $SCRIPT_ROOT = {{request.script_root | tojson | safe}};
         var $PATH_ROOT = {{request.path | tojson | safe}}
         var csrf_token = "{{ csrf_token() }}"
+
     </script>
     {% if 'adminbg' in request.url_rule.endpoint %}
     <script src="{{ url_for('static', filename='js/main.js') }}" type="text/javascript"></script>
