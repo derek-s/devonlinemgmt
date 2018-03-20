@@ -220,7 +220,7 @@ def querylvrlist():
         )
         return jsonify(lvrinfolist)
     else:
-        abort(500)
+        abort(404)
 
 
 def lvrlistsql(campusname, buildname):
@@ -303,22 +303,39 @@ def lvrsearchsql(search):
     return serp
 
 
-@adminbg.route("/admin/dvrmanage")
+@adminbg.route("/admin/dvrmanage", methods=['GET', 'POST'])
 @login_required
 @admin_required
 def dvrmanage():
     """
     :return: 返回数据查询结果并构建相应页面
     """
-    page = request.args.get('page', 1, type=int)
-    request.script_root = url_for('indexview.index', _external=True)
-    count = Dev_DeviceInfo.query.count()
-    pagination = Dev_DeviceInfo.query.order_by(Dev_DeviceInfo.ID.asc()).paginate(
-        page, per_page=Setting().pagination
-    )
-    datas = pagination.items
-    devtype = DevDevType.query.all()
-    return render_template('/admin/dvrmanage.html', datas=datas, count=count, pagination=pagination, devtype=devtype)
+    if request.method == 'GET':
+        page = request.args.get('page', 1, type=int)
+        request.script_root = url_for('indexview.index', _external=True)
+        count = Dev_DeviceInfo.query.count()
+        pagination = Dev_DeviceInfo.query.order_by(Dev_DeviceInfo.ID.asc()).paginate(
+            page, per_page=Setting().pagination
+        )
+        datas = pagination.items
+        devtype = DevDevType.query.all()
+        return render_template('/admin/dvrmanage.html', datas=datas, count=count, pagination=pagination, devtype=devtype)
+    elif request.method == 'POST':
+        count = request.values.get('count', None, type=int)
+        pagenum = request.values.get('pagenum', None, type=int)
+        page_num = ((count / Setting().pagination + pagenum), 0)[count / Setting().pagination == 0]
+        dvrinfo = Dev_DeviceInfo.query.order_by(Dev_DeviceInfo.ID.asc()).paginate(
+            (page_num), per_page=Setting().pagination
+        )
+        dvrinfotemp = []
+        hasnext = {
+            'next': dvrinfo.has_next
+        }
+        for devx in dvrinfo.items:
+            jsonlist = devx.to_json()
+            jsonlist.update(hasnext)
+            dvrinfotemp.append(jsonlist)
+        return jsonify(dvrinfotemp)
 
 
 @adminbg.route("/admin/dvrmanage/list", methods=['GET', 'POST'])
@@ -338,10 +355,7 @@ def dvrmanagelist():
             devonline = "Y"
         elif devonline == "5ZCm":
             devonline = "N"
-        devinfo = Dev_DeviceInfo.query.filter(
-            (Dev_DeviceInfo.DeviceCategory.like("%" + devtype + "%"), "")[devtype is None],
-            (Dev_DeviceInfo.DeviceCondition.like("%" + devonline +"%"), "")[devonline is None]
-        ).order_by(Dev_DeviceInfo.ID.asc())
+        devinfo = dvrselectsql(devtype, devonline)
         pagination = devinfo.paginate(
             page, per_page=Setting().pagination
         )
@@ -351,14 +365,40 @@ def dvrmanagelist():
         return render_template(
             '/admin/devmanage_list.html', datas=datas, count=count, pagination=pagination, devtype=dev_types,
             devtypebname=devtype.decode('utf-8'), devostatus=devonline)
+    elif request.method == 'POST':
+        devtype = b64decode(unquote(request.values.get('devtype', "", type=str)))
+        devonline = unquote(request.values.get('devonline', "", type=str))
+        if devonline == "5piv":
+            devonline = "Y"
+        elif devonline == "5ZCm":
+            devonline = "N"
+        count = request.values.get('count', None, type=int)
+        pagenum = request.values.get('pagenum', None, type=int)
+        page_num = ((count / Setting().pagination + pagenum), 0)[count / Setting().pagination == 0]
+        devinfo = dvrselectsql(devtype, devonline)
+        dvrinfo = devinfo.paginate(
+            page_num, per_page=Setting().pagination
+        )
+        dvrinfotemp = []
+        hasnext = {
+            'next': dvrinfo.has_next
+        }
+        for devx in dvrinfo.items:
+            jsonlist = devx.to_json()
+            jsonlist.update(hasnext)
+            dvrinfotemp.append(jsonlist)
+        return jsonify(dvrinfotemp)
 
-
-def dvrselectsql():
+def dvrselectsql(devtype, devonline):
     """
     设备信息查询sql
     :return:
     """
-    pass
+    devinfo = Dev_DeviceInfo.query.filter(
+        (Dev_DeviceInfo.DeviceCategory.like("%" + devtype + "%"), "")[devtype is None],
+        (Dev_DeviceInfo.DeviceCondition.like("%" + devonline + "%"), "")[devonline is None]
+    ).order_by(Dev_DeviceInfo.ID.asc())
+    return devinfo
 
 
 @adminbg.route("/admin/basicinfo")

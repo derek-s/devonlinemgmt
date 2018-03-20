@@ -121,6 +121,39 @@
             var page = $('#transfer_page').val();
             window.location.href = "{{url_for('adminbg.dvrmanagelist',devtype=request.args.get('devtype'),devonline=request.args.get('devonline'))| safe}}" + "&page=" + page;
         })
+        $("a#ajaxntindex").bind('click', function () {
+            //list加载下一页
+            $(this).text("正在加载，请稍后……")
+            var pagenum = $("li#pnactive>a").text()
+            var datacount = $("tr.jsondata").length
+            var devtype = encodeURIComponent($.base64.encode($('#dropdown_devtype').text()), 'utf-8')
+            var devonline = encodeURIComponent($.base64.encode($('#dropdown_devonline').text()), 'utf-8')
+            $.post("{{ url_for('adminbg.dvrmanagelist') }}", {
+                count: datacount,
+                pagenum: pagenum,
+                devtype: devtype,
+                devonline: devonline
+            }, function (data) {
+                var trc = ""
+                var tra = '<tr class="jsondata">'
+                var trb = '</tr>'
+                $.each(data, function (one) {
+                    eachone = data[one]
+                    trc += tra + "<td>" + eachone.ID + "</td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "管理" + "</td>" + trb
+                    hasnext = eachone.next
+                })
+                $("table#devinfolist>tbody tr:last-child").after(trc)
+                if (!hasnext) {
+                    $("a#ajaxntindex").remove()
+                } else {
+                    $("a#ajaxntindex").text('下一页')
+                }
+            }).fail(function (status) {
+                if (status.status == '404') {
+                    $("a#ajaxntindex").remove()
+                }
+            })
+        })
     })
 </script>
 
