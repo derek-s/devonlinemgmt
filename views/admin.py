@@ -321,22 +321,44 @@ def dvrmanage():
     return render_template('/admin/dvrmanage.html', datas=datas, count=count, pagination=pagination, devtype=devtype)
 
 
+@adminbg.route("/admin/dvrmanage/list", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def dvrmanagelist():
+    """
+    设备信息页分类查询
+    :return:
+    """
+    if request.method == 'GET':
+        page = request.args.get('page', 1, type=int)
+        request.script_root = url_for('indexview.index', _external=True)
+        devtype = b64decode(unquote(request.args.get('devtype', "", type=str)))
+        devonline = unquote(request.args.get('devonline', "", type=str))
+        if devonline == "5piv":
+            devonline = "Y"
+        elif devonline == "5ZCm":
+            devonline = "N"
+        devinfo = Dev_DeviceInfo.query.filter(
+            (Dev_DeviceInfo.DeviceCategory.like("%" + devtype + "%"), "")[devtype is None],
+            (Dev_DeviceInfo.DeviceCondition.like("%" + devonline +"%"), "")[devonline is None]
+        ).order_by(Dev_DeviceInfo.ID.asc())
+        pagination = devinfo.paginate(
+            page, per_page=Setting().pagination
+        )
+        count = devinfo.count()
+        datas = pagination.items
+        dev_types = DevDevType.query.all()
+        return render_template(
+            '/admin/devmanage_list.html', datas=datas, count=count, pagination=pagination, devtype=dev_types,
+            devtypebname=devtype.decode('utf-8'), devostatus=devonline)
+
+
 def dvrselectsql():
     """
     设备信息查询sql
     :return:
     """
     pass
-
-
-@adminbg.route("/admin/dvrstatus")
-@login_required
-@admin_required
-def dvrstatus():
-    """
-    :return: 返回数据查询结果并构建相应页面
-    """
-    return render_template('/admin/dvrstatus.html')
 
 
 @adminbg.route("/admin/basicinfo")
