@@ -93,7 +93,7 @@
                     })
                     $('#transfer').click(function () {
                         var page = $('#transfer_page').val();
-                        window.location.href = "{{url_for('adminbg.querylvrserach')}}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)) + "&page=" + page;
+                        window.location.href = "{{url_for('adminbg.querylvrserach', keyword=request.args.get('keyword') | safe)}}" + "&page=" + page;
                     })
                     $("a#ajaxntindex").bind('click', function () {
                         //list加载下一页

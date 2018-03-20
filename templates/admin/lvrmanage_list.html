@@ -129,7 +129,7 @@
                         } else if (buildname == teststr) {
                             buildname = ""
                         }
-                        window.open($PATH_ROOT + "?campusname=" + campusname + "&buildname=" + buildname)
+                        window.location.href = ($PATH_ROOT + "?campusname=" + campusname + "&buildname=" + buildname)
                     })
                     ajaxcamname = '{{ ctitle }}'
                     ajaxbilname = '{{ btitle }}'
@@ -140,7 +140,7 @@
                     })
                     $('#transfer').click(function () {
                         var page = $('#transfer_page').val();
-                        window.location.href = "{{url_for('adminbg.querylvrlist')}}" + "?page=" + page;
+                        window.location.href = "{{url_for('adminbg.querylvrlist', buildname=request.args.get('buildname'),campusname=request.args.get('campusname'))| safe}}" + "&page=" + page;
                     })
                     $("a#ajaxntindex").bind('click', function () {
                         //list加载下一页
@@ -163,7 +163,6 @@
                                 trc += tra + "<td>" + eachone.ID + "</td><td>" + eachone.Campus + "</td><td>" + eachone.BuildName + "</td><td>" + eachone.BuildNo + "</td><td>" + eachone.FloorNo + "</td><td>" + eachone.RoomNo + "</td><td>" + eachone.Cabinet + "</td><td>" + eachone.LVRNo + "</td><td>" + "管理" + "</td>" + trb
                                 hasnext = eachone.next
                             })
-                            console.log(hasnext)
                             $("table#devinfolist>tbody tr:last-child").after(trc)
                             if (!hasnext) {
                                 $("a#ajaxntindex").remove()

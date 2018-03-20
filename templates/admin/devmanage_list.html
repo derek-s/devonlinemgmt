@@ -119,7 +119,7 @@
     $(function() {
         $('#transfer').click(function() {
             var page = $('#transfer_page').val();
-            window.location.href = "{{url_for('adminbg.dvrmanage')}}" + "?page=" + page;
+            window.location.href = "{{url_for('adminbg.dvrmanagelist',devtype=request.args.get('devtype'),devonline=request.args.get('devonline'))| safe}}" + "&page=" + page;
         })
     })
 </script>

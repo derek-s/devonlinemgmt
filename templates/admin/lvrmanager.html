@@ -114,7 +114,6 @@
                         var teststr = "5YWo6YOo"
                         var campusname = encodeURIComponent(($.base64.encode($("#dropdownCampus").text())), 'utf-8')
                         var buildname = encodeURIComponent(($.base64.encode($("#dropdownBuild").text())), 'utf-8')
-                        console.log($("#dropdownCampus").text())
                         if (campusname == teststr) {
                             campusname = ""
                             if (buildname == teststr) {
@@ -123,7 +122,7 @@
                         } else if (buildname == teststr) {
                             buildname = ""
                         }
-                        window.open($PATH_ROOT + "/list?campusname=" + campusname + "&buildname=" + buildname)
+                        window.location.href = ($PATH_ROOT + "/list?campusname=" + campusname + "&buildname=" + buildname)
                     })
                     $('#transfer').click(function () {
                         var page = $('#transfer_page').val();
@@ -143,7 +142,6 @@
                             count: datacount,
                             pagenum: pagenum
                         }, function (data) {
-
                             var trc = ""
                             var tra = '<tr class="jsondata">'
                             var trb = '</tr>'

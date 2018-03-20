@@ -125,7 +125,7 @@ else %}{{ ctitle }} {{ btitle }} - 设备信息管理系统{% endif%} {% if btit
             $(function () {
                 $('#transfer').click(function () {
                     var page = $('#transfer_page').val();
-                    window.location.href = "{{url_for('adminbg.query_list')}}" + "?page=" + page;
+                    window.location.href = "{{url_for('adminbg.query_list',buildname=request.args.get('buildname'),campusname=request.args.get('campusname')) | safe}}" + "&page=" + page;
                 })
             })
             $("button#indexsbutton").on('click', function() {
