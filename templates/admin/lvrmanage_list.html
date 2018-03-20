@@ -37,7 +37,7 @@
         </ul>
     </div>
     <div id="rightcont">
-        <h1 class="admintitle">弱电间信息管理 - {{ ctitle }}{{ btitle }} 数据检索结果</h1>
+        <h1 class="admintitle">弱电间信息管理 - {{ ctitle }}{{ btitle }} -数据检索结果</h1>
         <div id="toolbar">
             <div id="adquery">
                 <label>校区</label>
@@ -109,7 +109,7 @@
                 <a id="ajaxntindex" class="btn btn-primary" href="javascript:void(0);">下一页</a>
             </div>
             <div>
-                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.querylvrlist')}} {%endif%}
+                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.querylvrlist', buildname=request.args.get('buildname'),campusname=request.args.get('campusname'))}} {%endif%}
             </div>
             {% else %}
             <div id="data">
