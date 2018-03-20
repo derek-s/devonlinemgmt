@@ -76,6 +76,7 @@
             <div class="panel-heading">{%- if ctitle == "" and btitle == ""%}全部数据{% endif %} {%- if ctitle != "" and btitle == ""%} {{ ctitle }}弱电间信息数据{%
                 endif%} {%- if ctitle == "" and btitle != ""%} {{ btitle }}弱电间信息数据{% endif%} {%- if ctitle != "" and btitle
                 != ""%} {{ ctitle }} {{ btitle }}弱电间信息数据{% endif %}</div>
+                {% if count != 0 %}
             <div id="data">
                 <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
                     <tr>
@@ -110,6 +111,11 @@
             <div>
                 {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.querylvrlist')}} {%endif%}
             </div>
+            {% else %}
+            <div id="data">
+                <p>暂无相关数据</p>
+            </div>
+            {% endif %}
         </div>
         <script type="text/javascript">
                 $(function () {

@@ -220,3 +220,12 @@ class DevBuild(db.Model):
     ID = db.Column("ID", db.Integer, primary_key=True)
     Campus = db.Column("Campus", db.Text)
     BuildName = db.Column("BuildName", db.Text)
+
+
+class DevDevType(db.Model):
+    """
+    设备类型模型
+    """
+    __tablename__ = "dev_DevType"
+    ID = db.Column("ID", db.Integer, primary_key=True)
+    Type = db.Column("Type", db.Text)

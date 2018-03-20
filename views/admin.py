@@ -3,7 +3,7 @@
 from flask import Blueprint, jsonify, render_template, request, url_for, flash, session, redirect, abort
 from flask_login import login_required, current_user
 from decorators import admin_required
-from models import Dev_Loging, Setting, Dev_Note, Dev_DeviceStatus, Dev_Campus, Dev_LVRInfo
+from models import Dev_Loging, Setting, Dev_Note, Dev_DeviceStatus, Dev_Campus, Dev_LVRInfo, Dev_DeviceInfo, DevDevType
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
@@ -303,8 +303,6 @@ def lvrsearchsql(search):
     return serp
 
 
-
-
 @adminbg.route("/admin/dvrmanage")
 @login_required
 @admin_required
@@ -312,7 +310,23 @@ def dvrmanage():
     """
     :return: 返回数据查询结果并构建相应页面
     """
-    return render_template('/admin/dvrmanage.html')
+    page = request.args.get('page', 1, type=int)
+    request.script_root = url_for('indexview.index', _external=True)
+    count = Dev_DeviceInfo.query.count()
+    pagination = Dev_DeviceInfo.query.order_by(Dev_DeviceInfo.ID.asc()).paginate(
+        page, per_page=Setting().pagination
+    )
+    datas = pagination.items
+    devtype = DevDevType.query.all()
+    return render_template('/admin/dvrmanage.html', datas=datas, count=count, pagination=pagination, devtype=devtype)
+
+
+def dvrselectsql():
+    """
+    设备信息查询sql
+    :return:
+    """
+    pass
 
 
 @adminbg.route("/admin/dvrstatus")

@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}设备信息管理|管理后台 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
+{% extends "base.html" %} {% block title %}设备信息管理|管理后台 - 设备信息管理系统{% endblock %} {%import '_macros.html' as macros%}{% block content %} {% include "nav.html" %}
 <div id="admincontent">
     <div id="leftmenu">
         <ul id="sideul" class="nav nav-sidebar">
@@ -15,18 +15,80 @@
         </ul>
     </div>
     <div id="rightcont">
+        
         <h1 class="admintitle">设备信息管理</h1>
-        <table>
-            <th>序号</th>
-            <th>校区</th>
-            <th>弱电间信息</th>
-            <th>设备信息</th>
-            <th>上联IP</th>
-            <th>上联端口</th>
-            <th>设备型号</th>
-            <th>相关操作</th>
-        </table>
-    </div>
+        <div id="toolbar">
+                <div id="adquery">
+                        <label>设备类型</label>
+                        <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdown_devtype" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="true">全部<span class="caret"></span></button>
+                                <ul id="ddm-types" class="dropdown-menu" aria-labelledby="dropdown_devtype">
+                                    <li>
+                                        <a href="javascript:void(0);" rel="all">全部</a>
+                                    </li>
+                                    {%- for devtypeone in devtype %}
+                                    <li>
+                                        <a href="javascript:void(0);" rel="dtypes">{{ devtypeone.Type }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                        </div>
+                        <label>上架状态</label>
+                        <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdown_devonline" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="true">全部<span class="caret"></span></button>
+                                <ul id="ddm-types" class="dropdown-menu" aria-labelledby="dropdown_devonline">
+                                    <li>
+                                        <a href="javascript:void(0);" rel="all">全部</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);" rel="dtypes">是</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);" rel="dtypes">否</a>
+                                    </li>
+                                </ul>
+                        </div>
+                </div>
+                <div id="serachbar">
+                        <input id="indexserach" class="form-control input-lg input-serach" type="text" name="devinfoserp" placeholder="请输入搜索关键词（支持模糊搜索）">
+                        <button id="indexsbutton" class="btn btn-primary">搜 索</button>
+                    </div>
+        </div>
+        <div class="adminpanel panel-info">
+            <div class="panel-heading">全部数据</div>
+            <div id="data">
+                <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
+                    <tr>
+                        <th>序号</th>
+                        <th>设备名称</th>
+                        <th>设备类型</th>
+                        <th>设备序列号</th>
+                        <th>是否上架</th>
+                        <th>唯一ID</th>
+                        <th>相关操作</th>
+                    </tr>
+                    {% for devinfone in datas %}
+                    <tr class="jsondata">
+                        <td>{{ devinfone.ID }}</td>
+                        <td>{{ devinfone.DeviceName }}</td>
+                        <td>{{ devinfone.DeviceCategory }}</td>
+                        <td>{{ devinfone.DeviceSN }}</td>
+                        <td>{{ devinfone.DeviceCondition }}</td>
+                        <td>{{ devinfone.DeviceID }}</td>
+                        <td>管理</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="ajaxnetpage">
+                <a id="ajaxntindex" class="btn btn-primary" href="javascript:void(0);">下一页</a>
+            </div>
+            <div>
+                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.dvrmanage')}} {%endif%}
+            </div>
+        </div>
 </div>
 
 
