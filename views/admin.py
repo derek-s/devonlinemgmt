@@ -14,6 +14,8 @@ from notice import noticeindexlist
 from pevent import peventsindexlist
 import json
 
+from .admin_dbquery import admin_query, admin_query_list, admin_query_serach
+from .admin_lvr import  lvr_manager_index
 adminbg = Blueprint('adminbg', __name__)
 
 
@@ -27,7 +29,10 @@ def admin():
     """
     notice = noticeindexlist()
     event = peventsindexlist(current_user.username)
-    return render_template('/admin/admin.html', data=notice, events=event)
+    return render_template('/admin/admin.html',
+                           data=notice,
+                           events=event
+                           )
 
 
 @adminbg.route("/admin/query")
@@ -38,17 +43,14 @@ def query():
     数据查询视图
     :return: 返回数据查询结果并构建相应页面
     """
-    page = request.args.get('page', 1, type=int)
-    request.script_root = url_for('indexview.index', _external=True)
-    #request.script_root = url_for('adminbg.query', _external=True)
-    count = Dev_DeviceStatus.query.count()
-    pagination = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus.desc()).paginate(
-        page, per_page=Setting().pagination
+    result = admin_query()
+    return render_template(
+        '/admin/dbquery.html',
+        posts=result['posts'],
+        count=result['count'],
+        pagination=result['pagination'],
+        campus=result['campus']
     )
-    posts = pagination.items
-    campus = Dev_Campus.query.all()
-
-    return render_template('/admin/dbquery.html', posts=posts, count=count, pagination=pagination, campus=campus)
 
 
 @adminbg.route("/admin/query/list")
@@ -59,26 +61,15 @@ def query_list():
     后台查询视图 根据校区/楼宇进行查询
     :return: json
     """
-    page = request.args.get('page', 1, type=int)
-    request.script_root = url_for('indexview.index', _external=True)
-    campusname = b64decode(unquote(request.args.get('campusname', "", type=str)))
-    buildname = b64decode(unquote(request.args.get('buildname', "", type=str)))
-    devinfo = Dev_DeviceStatus.query.filter(
-        (Dev_DeviceStatus.Campus.like("%" + campusname + "%"), "")[campusname is None],
-        (Dev_DeviceStatus.Location.like("%" + buildname + "%"), "")[buildname is None]
-    ).order_by(Dev_DeviceStatus.Campus.desc())
-    paginateion = devinfo.paginate(
-        page, per_page=Setting().pagination
-    )
-    count = devinfo.count()
-    posts = paginateion.items
-    campus = Dev_Campus.query.all()
-    eventlog(
-        "[查询校区/楼宇]" + campusname + buildname + " 第" + str(page) + "页"
-    )
+    result = admin_query_list()
     return render_template(
-        "/admin/dbquery_list.html", posts=posts, count=count, pagination=paginateion, campus=campus,
-        ctitle=campusname.decode('utf-8'), btitle=buildname.decode('utf-8')
+        "/admin/dbquery_list.html",
+        posts=result['posts'],
+        count=result['count'],
+        pagination=result['pagination'],
+        campus=result['campus'],
+        ctitle=result['campusname'],
+        btitle=result['buildname']
     )
 
 
@@ -90,36 +81,14 @@ def query_serach():
     数据查询搜索页
     :return:
     """
-    request.script_root = url_for('indexview.index', _external=True)
-    page = request.args.get('page', 1, type=int)
-    word = request.args.get('keyword', "", type=str)
-    serach = unquote(b64decode(word)).decode('utf-8')
-    serp = qserach(serach)
-    paginateion = serp.paginate(
-        page, per_page=Setting().pagination
-    )
-    count = serp.count()
-    posts = paginateion.items
-    eventlog(
-         "[搜索]" + serach.encode('utf-8') + " 第" + str(page) + "页"
-    )
+    result = admin_query_serach()
     return render_template(
-        '/admin/dbquery_serach.html', posts=posts, count=count, pagination=paginateion, keyword=serach
+        '/admin/dbquery_serach.html',
+        posts=result['posts'],
+        count=result['count'],
+        pagination=result['pagiation'],
+        keyword=result['keyword']
     )
-
-
-def qserach(serach):
-    serp = Dev_DeviceStatus.query.filter(
-        (Dev_DeviceStatus.Campus.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.Location.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.RoomNo.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.HostName.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.LAA.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.HigherlinkIP.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.HigherlinkPort.like("%" + serach + "%"), "")[serach is None] |
-        (Dev_DeviceStatus.DeviceModel.like("%" + serach + "%"), "")[serach is None]
-    ).order_by(Dev_DeviceStatus.Campus.desc())
-    return serp
 
 
 @adminbg.route("/admin/lvrmanage")
@@ -130,15 +99,12 @@ def lvrmanager():
     弱电间管理视图
     :return: 返回数据查询结果并构建相应页面
     """
-    request.script_root = url_for('indexview.index', _external=True)
-    page = request.args.get('page', 1, type=int)
-    count = Dev_LVRInfo.query.count()
-    pagination = Dev_LVRInfo.query.order_by(Dev_LVRInfo.Campus.desc()).paginate(
-        page, per_page=Setting().pagination
-    )
-    posts = pagination.items
-    campus = Dev_Campus.query.all()
-    return render_template('/admin/lvrmanager.html', posts=posts, count=count, pagination=pagination, campus=campus)
+    result = lvr_manager_index()
+    return render_template('/admin/lvrmanager.html',
+                           posts=result['posts'],
+                           count=result['count'],
+                           pagination=result['pagination'],
+                           campus=result['campus'])
 
 
 @adminbg.route("/admin/lvrmanage/_queryipage", methods=['POST'])
