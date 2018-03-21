@@ -266,6 +266,7 @@ ul.errors {
     float: left;
     margin-left: 30px;
     margin-top: 30px;
+    height: 100%
 }
 
 .welcome {
@@ -573,4 +574,37 @@ p.error {
 .dropdown-menu {
     max-height: 350px;
     overflow: auto;
+}
+
+.iContent {
+    height: 100%
+}
+.content-iframe {
+    height: 100%;
+    margin-top: 35px;
+}
+.ileft {
+    float: left;
+    width: 50%;
+}
+.iright {
+    float: right;
+    width: 50%;
+}
+h2.iheader {
+    font-size: 18px;
+    line-height: 40px;
+    font-weight: bold;
+}
+label.i_label {
+    display: block;
+    font-weight: normal;
+    line-height: 30px;
+}
+input#i_input {
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 1px;
+    width: 95%;
+    margin: 10px 0 20px 0;
 }

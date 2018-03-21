@@ -1,0 +1,51 @@
+{% extends "/admin/basicinfo_base.html" %}
+{% block title %}校区信息维护|管理后台 - 设备信息管理系统{% endblock %}
+{%import '_macros.html' as macros%}
+{% block content %}
+<div class="iContent">
+    <div class="ileft">
+        <h2 class="iheader">添加新校区</h2>
+        <label class="i_label" for="i_input">校区名称</label>
+        <input type="text" id="i_input"/>
+        <button type="button" class="btn btn-primary">添加校区</button>
+    </div>
+    <div class="iright">
+            <div id="idowplist">
+                <select>
+                    <option value="all">全部</option>
+                    <option value="delete">删除</option>
+                </select>
+            </div>
+            <div id="serachbar">
+                    <input id="indexserach" class="form-control input-lg input-serach" type="text" name="devinfoserp" placeholder="搜索校区名称">
+                    <button id="indexsbutton" class="btn btn-primary">搜 索</button>
+            </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th></th>
+                    <th>名称</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in datas %}
+                <tr>
+                    <th width="10%" scope="row">{{ row.ID }}</th>
+                    <td width="5%">
+                        <input type="checkbox" name="vehicle" value="{{ row.id }}" />
+                    </td>
+                    <td width="50%">{{ row.Campus }}</td>
+                    <td width="35%">编辑|删除</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div>
+            {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.query')}} {%endif%}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

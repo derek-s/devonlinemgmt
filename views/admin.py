@@ -20,6 +20,7 @@ from .admin_lvr import lvr_list_get, lvr_list_post, lvr_search_get, lvr_search_p
 from .admin_dvr import dvr_manage_get, dvr_manage_post, dvr_list_get, dvr_list_post
 from .admin_dvr import dvr_search_get, dvr_search_post
 from .admin_notice import notice_create_post, notice_modfiy_get, notice_modfiy_post, notice_list, notice_delete
+from .admin_basic import basic_campus
 
 adminbg = Blueprint('adminbg', __name__)
 
@@ -246,6 +247,22 @@ def basicinfo():
     """
     return render_template('/admin/basicinfo.html')
 
+
+@adminbg.route("/admin/basicinfo/campus")
+@login_required
+@admin_required
+def basiccampus():
+    """
+    校区信息
+    :return:
+    """
+    bcampus = basic_campus()
+    return  render_template(
+        '/admin/basicinfo_C.html',
+        datas=bcampus['datas'],
+        count=bcampus['count'],
+        pagination=bcampus['pagination']
+        )
 
 @adminbg.route("/admin/usrmanage")
 @login_required
