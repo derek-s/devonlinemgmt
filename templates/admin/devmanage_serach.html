@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% block head%}
 <script src="{{ url_for('static', filename='js/dvrcommon.js') }}" type="text/javascript"></script>
 {% endblock %}
-{% block title %}设备信息管理|管理后台 - 设备信息管理系统{% endblock %} {%import '_macros.html' as macros%}{% block content %} {% include "nav.html" %}
+{% block title %}{{ keyword }} 搜索结果| 设备信息管理 | 管理后台 - 设备信息管理系统{% endblock %} {%import '_macros.html' as macros%}{% block content %} {% include "nav.html" %}
 <div id="admincontent">
     <div id="leftmenu">
         <ul id="sideul" class="nav nav-sidebar">
@@ -17,71 +17,21 @@
         </ul>
     </div>
     <div id="rightcont">
-        {% if devtypebname == "" and devostatus == "" %}
-        <h1 class="admintitle">设备信息管理 - 全部设备 - 数据查询结果</h1>
-        {% endif %}
-        {% if devtypebname == "" and devostatus == "Y" %}
-        <h1 class="admintitle">设备信息管理 - 全部上架设备 - 数据查询结果</h1>
-        {% endif %}
-        {% if devtypebname == "" and devostatus == "N" %}
-        <h1 class="admintitle">设备信息管理 - 全部未上架设备 - 数据查询结果</h1>
-        {% endif %}
-        {% if devtypebname != "" and devostatus == "Y" %}
-        <h1 class="admintitle">设备信息管理 - {{devtypebname}} 上架设备 - 数据查询结果</h1>
-        {% endif %}
-        {% if devtypebname != "" and devostatus == "N" %}
-        <h1 class="admintitle">设备信息管理 - {{devtypebname}} 未上架设备 - 数据查询结果</h1>
-        {% endif %}
-        {% if devtypebname != "" and devostatus == "" %}
-        <h1 class="admintitle">设备信息管理 - {{devtypebname}} 全部设备 - 数据查询结果</h1>
-        {% endif %}
+        <h1 class="admintitle">设备信息管理 - {{keyword}} 搜索结果 - 数据查询结果</h1>
         <div id="toolbar">
-                <div id="adquery">
-                        <label>设备类型</label>
-                        <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdown_devtype" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="true">{% if devtypebname == "" %}全部{% else %}{{devtypebname}}{% endif %}<span class="caret"></span></button>
-                                <ul id="ddm-types" class="dropdown-menu" aria-labelledby="dropdown_devtype">
-                                    <li>
-                                        <a href="javascript:void(0);" rel="all">全部</a>
-                                    </li>
-                                    {%- for devtypeone in devtype %}
-                                    <li>
-                                        <a href="javascript:void(0);" rel="dtypes">{{ devtypeone.Type }}</a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                        </div>
-                        <label>上架状态</label>
-                        <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdown_devonline" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="true">{% if devostatus == "" %}全部{% elif devostatus == "Y"%}是{% else %}否{% endif %}<span class="caret"></span></button>
-                                <ul id="ddm-online" class="dropdown-menu" aria-labelledby="dropdown_devonline">
-                                    <li>
-                                        <a href="javascript:void(0);" rel="all">全部</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" rel="dtypes">是</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" rel="dtypes">否</a>
-                                    </li>
-                                </ul>
-                        </div>
-                        <button id="adqbutton" class="btn btn-primary">查询</button>
-                </div>
-                <div id="serachbar">
+                <div id="serachpage">
                         <input id="indexserach" class="form-control input-lg input-serach" type="text" name="devinfoserp" placeholder="请输入搜索关键词（支持模糊搜索）">
                         <button id="indexsbutton" class="btn btn-primary">搜 索</button>
                     </div>
         </div>
         <div class="adminpanel panel-info">
-            <div class="panel-heading">全部数据</div>
             {% if count == 0 %}
+            <div class="panel-heading">全部数据</div>
             <div id="data">
                     <p>暂无相关数据</p>
                 </div>
             {% else %}
+            <div class="panel-heading">{{ keyword }} 搜索结果 共<span>{{count}}</span> 条</div>
             <div id="data">
                 <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
                     <tr>
@@ -111,7 +61,7 @@
                 <a id="ajaxntindex" class="btn btn-primary" href="javascript:void(0);">下一页</a>
             </div>
             <div>
-                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.dvrmanagelist', devtype=request.args.get('devtype'),devonline=request.args.get('devonline'))}} {%endif%}
+                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.dvrsearch', keyword=request.args.get('keyword') | safe)}} {%endif%}
             </div>
         </div>
 </div>
@@ -124,20 +74,19 @@
         })
         $('#transfer').click(function() {
             var page = $('#transfer_page').val();
-            window.location.href = "{{url_for('adminbg.dvrmanagelist',devtype=request.args.get('devtype'),devonline=request.args.get('devonline'))| safe}}" + "&page=" + page;
+            window.location.href = "{{url_for('adminbg.dvrsearch',keyword=request.args.get('keyword') | safe)}}" + "&page=" + page;
         })
         $("a#ajaxntindex").bind('click', function () {
             //list加载下一页
             $(this).text("正在加载，请稍后……")
             var pagenum = $("li#pnactive>a").text()
             var datacount = $("tr.jsondata").length
-            var devtype = encodeURIComponent($.base64.encode($('#dropdown_devtype').text()), 'utf-8')
-            var devonline = encodeURIComponent($.base64.encode($('#dropdown_devonline').text()), 'utf-8')
-            $.post("{{ url_for('adminbg.dvrmanagelist') }}", {
+            var word = $.base64.encode('{{ keyword }}')
+            var serach = encodeURIComponent(word, 'utf-8')
+            $.post("{{url_for('adminbg.dvrsearch')}}", {
                 count: datacount,
                 pagenum: pagenum,
-                devtype: devtype,
-                devonline: devonline
+                keyword: serach
             }, function (data) {
                 var trc = ""
                 var tra = '<tr class="jsondata">'

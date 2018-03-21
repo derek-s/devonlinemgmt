@@ -12,7 +12,6 @@ from base64 import b64decode
 from urllib import unquote
 
 
-
 def lvr_manager_index():
     request.script_root = url_for('indexview.index', _external=True)
     page = request.args.get('page', 1, type=int)
@@ -29,7 +28,6 @@ def lvr_manager_index():
         'campus': campus
     }
     return result
-
 
 
 def lvr_manager_ajaxquery():

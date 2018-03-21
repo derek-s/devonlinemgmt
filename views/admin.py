@@ -17,7 +17,8 @@ import json
 from .admin_dbquery import admin_query, admin_query_list, admin_query_serach
 from .admin_lvr import  lvr_manager_index, lvr_manager_ajaxquery
 from .admin_lvr import lvr_list_get, lvr_list_post, lvr_search_get, lvr_search_post
-
+from .admin_dvr import dvr_manage_get, dvr_manage_post, dvr_list_get, dvr_list_post
+from .admin_dvr import dvr_search_get, dvr_search_post
 
 adminbg = Blueprint('adminbg', __name__)
 
@@ -179,31 +180,16 @@ def dvrmanage():
     :return: 返回数据查询结果并构建相应页面
     """
     if request.method == 'GET':
-        page = request.args.get('page', 1, type=int)
-        request.script_root = url_for('indexview.index', _external=True)
-        count = Dev_DeviceInfo.query.count()
-        pagination = Dev_DeviceInfo.query.order_by(Dev_DeviceInfo.ID.asc()).paginate(
-            page, per_page=Setting().pagination
+        result = dvr_manage_get()
+        return render_template(
+            '/admin/dvrmanage.html',
+            datas=result['datas'],
+            count=result['count'],
+            pagination=result['pagination'],
+            devtype=result['devtype']
         )
-        datas = pagination.items
-        devtype = DevDevType.query.all()
-        return render_template('/admin/dvrmanage.html', datas=datas, count=count, pagination=pagination, devtype=devtype)
     elif request.method == 'POST':
-        count = request.values.get('count', None, type=int)
-        pagenum = request.values.get('pagenum', None, type=int)
-        page_num = ((count / Setting().pagination + pagenum), 0)[count / Setting().pagination == 0]
-        dvrinfo = Dev_DeviceInfo.query.order_by(Dev_DeviceInfo.ID.asc()).paginate(
-            (page_num), per_page=Setting().pagination
-        )
-        dvrinfotemp = []
-        hasnext = {
-            'next': dvrinfo.has_next
-        }
-        for devx in dvrinfo.items:
-            jsonlist = devx.to_json()
-            jsonlist.update(hasnext)
-            dvrinfotemp.append(jsonlist)
-        return jsonify(dvrinfotemp)
+        return dvr_manage_post()
 
 
 @adminbg.route("/admin/dvrmanage/list", methods=['GET', 'POST'])
@@ -215,58 +201,39 @@ def dvrmanagelist():
     :return:
     """
     if request.method == 'GET':
-        page = request.args.get('page', 1, type=int)
-        request.script_root = url_for('indexview.index', _external=True)
-        devtype = b64decode(unquote(request.args.get('devtype', "", type=str)))
-        devonline = unquote(request.args.get('devonline', "", type=str))
-        if devonline == "5piv":
-            devonline = "Y"
-        elif devonline == "5ZCm":
-            devonline = "N"
-        devinfo = dvrselectsql(devtype, devonline)
-        pagination = devinfo.paginate(
-            page, per_page=Setting().pagination
-        )
-        count = devinfo.count()
-        datas = pagination.items
-        dev_types = DevDevType.query.all()
+        result = dvr_list_get()
         return render_template(
-            '/admin/devmanage_list.html', datas=datas, count=count, pagination=pagination, devtype=dev_types,
-            devtypebname=devtype.decode('utf-8'), devostatus=devonline)
-    elif request.method == 'POST':
-        devtype = b64decode(unquote(request.values.get('devtype', "", type=str)))
-        devonline = unquote(request.values.get('devonline', "", type=str))
-        if devonline == "5piv":
-            devonline = "Y"
-        elif devonline == "5ZCm":
-            devonline = "N"
-        count = request.values.get('count', None, type=int)
-        pagenum = request.values.get('pagenum', None, type=int)
-        page_num = ((count / Setting().pagination + pagenum), 0)[count / Setting().pagination == 0]
-        devinfo = dvrselectsql(devtype, devonline)
-        dvrinfo = devinfo.paginate(
-            page_num, per_page=Setting().pagination
+            '/admin/devmanage_list.html',
+            datas=result['datas'],
+            count=result['count'],
+            pagination=result['pagination'],
+            devtype=result['devtype'],
+            devtypebname=result['devtypebname'],
+            devostatus=result['devostatus']
         )
-        dvrinfotemp = []
-        hasnext = {
-            'next': dvrinfo.has_next
-        }
-        for devx in dvrinfo.items:
-            jsonlist = devx.to_json()
-            jsonlist.update(hasnext)
-            dvrinfotemp.append(jsonlist)
-        return jsonify(dvrinfotemp)
+    elif request.method == 'POST':
+        return dvr_list_post()
 
-def dvrselectsql(devtype, devonline):
+
+@adminbg.route("/admin/dvrmanage/serach", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def dvrsearch():
     """
-    设备信息查询sql
+    设备信息搜索视图
     :return:
     """
-    devinfo = Dev_DeviceInfo.query.filter(
-        (Dev_DeviceInfo.DeviceCategory.like("%" + devtype + "%"), "")[devtype is None],
-        (Dev_DeviceInfo.DeviceCondition.like("%" + devonline + "%"), "")[devonline is None]
-    ).order_by(Dev_DeviceInfo.ID.asc())
-    return devinfo
+    if request.method == 'GET':
+        result = dvr_search_get()
+        return render_template(
+            '/admin/devmanage_serach.html',
+            datas=result['datas'],
+            count=result['count'],
+            pagination=result['pagination'],
+            keyword=result['keyword']
+        )
+    elif request.method == 'POST':
+        return dvr_search_post()
 
 
 @adminbg.route("/admin/basicinfo")
