@@ -19,6 +19,7 @@ from .admin_lvr import  lvr_manager_index, lvr_manager_ajaxquery
 from .admin_lvr import lvr_list_get, lvr_list_post, lvr_search_get, lvr_search_post
 from .admin_dvr import dvr_manage_get, dvr_manage_post, dvr_list_get, dvr_list_post
 from .admin_dvr import dvr_search_get, dvr_search_post
+from .admin_notice import notice_create_post, notice_modfiy_get, notice_modfiy_post, notice_list, notice_delete
 
 adminbg = Blueprint('adminbg', __name__)
 
@@ -318,21 +319,20 @@ def notecreate():
     通知公告创建页面
     :return:
     """
-    eventlog("[访问创建公告页面]")
-    notename = ""
-    notecontent = ""
+    if request.method == 'GET':
+        eventlog("[访问创建公告页面]")
+        notename = ""
+        notecontent = ""
+        return render_template(
+            '/admin/notecreate.html',
+            name=notename,
+            editorcontent=notecontent,
+            operation=u"创建公告"
+        )
     if request.method == 'POST':
-        notename = request.form.get('notename', "默认标题")
-        notecontent = request.form.get('note', None)
-        createdate = arrow.now().format("YYYY-MM-DD HH:mm")
-        createname = current_user.username
-        note = Dev_Note(notename, notecontent, createdate, createname)
-        db.session.add(note)
-        db.session.commit()
-        flash(u"发布成功", 'success')
-        return redirect(url_for('adminbg.notecreate_id', id=note.id))
-    return render_template(
-        '/admin/notecreate.html', name=notename, editorcontent=notecontent, operation=u"创建公告")
+        id = notice_create_post()
+        return redirect(url_for('adminbg.notecreate_id', id=id))
+
 
 
 @adminbg.route("/admin/notecreate/<id>", methods=['GET', 'POST'])
@@ -343,32 +343,24 @@ def notecreate_id(id):
     通知公告修改页面
     :return:
     """
-    eventlog("[访问修改公告页面 公告id: " + str(id) + "]")
-    notename = ""
-    notecontent = ""
+
     if request.method == 'GET':
         try:
-            note = Dev_Note.query.filter(Dev_Note.id == id).one()
-            notename = note.articlename
-            notecontent = note.article
+            eventlog("[访问修改公告页面 公告id: " + str(id) + "]")
+            result = notice_modfiy_get(id)
             return render_template(
-                '/admin/notecreate.html', name=notename, editorcontent=notecontent, operation=u"编辑公告")
+                '/admin/notecreate.html',
+                name=result['notename'],
+                editorcontent=result['notecontent'],
+                operation=u"编辑公告"
+            )
         except Exception as e:
             abort(500)
     if request.method == 'POST':
-        notename = request.form.get('notename', "默认标题")
-        notecontent = request.form.get('note', None)
-        createdate = arrow.now().format("YYYY-MM-DD HH:mm")
-        createname = current_user.username
+
         try:
-            note = Dev_Note.query.filter(Dev_Note.id == id).one()
-            note.articlename = notename
-            note.article = notecontent
-            note.createdate = createdate
-            note.createuser = createname
-            db.session.commit()
-            flash(u"修改成功", 'success')
-            return redirect(url_for('adminbg.notecreate_id', id=note.id))
+            note = notice_modfiy_post(id)
+            return redirect(url_for('adminbg.notecreate_id', id=note))
         except Exception as e:
             abort(500)
 
@@ -381,26 +373,13 @@ def notelist():
     通知公告列表页
     :return:
     """
-    page = request.values.get('page', 1, type=int)
-    aname = request.values.get('aname', "", type=str)
-    b64aname = b64decode(unquote(aname))
-    cuser = request.values.get('cuser', "", type=str)
-    b64cuser = b64decode(unquote(cuser))
-    cdata = request.values.get('cdata', "", type=str)
-    notices = Dev_Note.query.filter(
-        (Dev_Note.articlename.like("%" + b64aname + "%"), "")[aname is None],
-        (Dev_Note.createuser.like("%" + b64cuser + "%"), "")[cuser is None],
-        (Dev_Note.createdate.like("%" + cdata + "%"), "")[cdata is None]
-    )
-    paginateion = notices.paginate(
-        page, per_page=Setting().pagination
-    )
-    posts = paginateion.items
-    count = notices.count()
-    eventlog("[查看通知公告列表页] " + "第" + str(page) + "页")
+    notice = notice_list()
     return render_template(
-        "/admin/noticelist.html", posts=posts, count=count, pagination=paginateion,
-        page=page
+        "/admin/noticelist.html",
+        posts=notice['posts'],
+        count=notice['count'],
+        pagination=notice['pagination'],
+        page=notice['page']
     )
 
 
@@ -413,20 +392,6 @@ def notedel(id):
     :param id: 公告id
     :return:
     """
-
-    delstatus = {
-        "status": 1,
-        "message": "success"
-    }
-    notice = Dev_Note.query.filter(
-        Dev_Note.id == id
-    )
-    if not notice:
-        delstatus['status'] = 404
-        delstatus['message'] = "Not Found"
-        return json.dumps(delstatus)
-    notice.delete()
-    db.session.commit()
-    eventlog("[删除公告 公告id: " + str(id) + "]")
-    return json.dumps(delstatus)
+    notice_delete_result = notice_delete(id)
+    return notice_delete_result
 
