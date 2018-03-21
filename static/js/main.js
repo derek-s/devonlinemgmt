@@ -123,7 +123,7 @@ $(document).on("click", "button#noticequery", function() {
 });
 
 
-function js_delete(id) {
+function js_notice_delete(id) {
     $.ajax({
         url: $PATH_ROOT + "/" + id + "/delete",
         type: "POST",
