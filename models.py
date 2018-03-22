@@ -118,6 +118,8 @@ class Dev_Campus(db.Model):
     ID = db.Column("ID", db.Integer, primary_key=True)
     Campus = db.Column("Campus", db.String(255))
 
+    def __init__(self, Campus):
+        self.Campus = Campus
 
 class Dev_Loging(db.Model):
     __tablename__ = "dev_Loging"
