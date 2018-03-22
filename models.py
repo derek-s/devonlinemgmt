@@ -163,6 +163,8 @@ class Setting():
     def __init__(self):
         pagen = Dev_Options.query.filter_by(optinoname='pagination').one()
         self.pagination = int(pagen.optionvalue)
+        page_index = Dev_Options.query.filter_by(optinoname='pagination_index').one()
+        self.page_index = int(page_index.optionvalue)
     """
      pagination = 2
     """

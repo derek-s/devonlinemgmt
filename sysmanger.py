@@ -21,5 +21,4 @@ def optionsupdate(name, value):
         db.session.commit()
         flash(u"更新完成", 'success')
     except Exception as e:
-        print e
         pass
