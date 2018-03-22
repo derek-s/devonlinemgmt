@@ -4,7 +4,10 @@
 {% block content %}
 <div class="iContent">
     <div class="ileft">
-        <h2 class="iheader">校区信息</h2>
+        <div class="iSheader">
+            <h2 class="iheader i_inline">校区信息</h2>
+            <label class="i_label i_inline">{{ keyword }} 的搜索结果</label>
+        </div>
         <label class="i_label">添加新校区</label>
         <label class="i_label" for="i_input">校区名称</label>
         <input type="text" id="i_input"/>

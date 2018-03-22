@@ -130,6 +130,7 @@ p {
 }
 
 .incotp {
+    margin: 20px 0;
     line-height: 30px;
     margin-right: 35px;
 }
@@ -607,4 +608,34 @@ input#i_input {
     border-width: 1px;
     width: 95%;
     margin: 10px 0 20px 0;
+}
+#irightbar {
+    width: 100%;
+    float: left;
+}
+.idowplist {
+    float:left;
+}
+.isearch_block {
+    float:right;
+}
+.listbottombar {
+    width: 100%;
+    float: left;
+}
+.ipagination {
+    width: 550px;
+    float:right;
+}
+.pagenum{
+    float: left;
+    width: 100%;
+}
+.ibtmdowplist {
+    margin: 20px 0;
+    width: 180px;
+    float: left;
+}
+.i_inline {
+    display: inline;
 }

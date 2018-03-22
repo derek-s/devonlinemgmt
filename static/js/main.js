@@ -118,7 +118,6 @@ $(document).on("click", "button#noticequery", function() {
     if (catname == teststr) {
         catname = ""
     }
-    console.log(page, uname, catname.datas)
     js_ajaxnotes(page, uname, catname, datas)
 });
 

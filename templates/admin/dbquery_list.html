@@ -121,18 +121,18 @@ else %}{{ ctitle }} {{ btitle }} - 设备信息管理系统{% endif%} {% if btit
         </div>
         <script type="text/javascript">
             ajaxcamname = '{{ ctitle }}'
-            ajaxbilname = '{{ btitle }}'
-            $(function () {
-                $('#transfer').click(function () {
-                    var page = $('#transfer_page').val();
-                    window.location.href = "{{url_for('adminbg.query_list',buildname=request.args.get('buildname'),campusname=request.args.get('campusname')) | safe}}" + "&page=" + page;
+                ajaxbilname = '{{ btitle }}'
+                $(function () {
+                    $('#transfer').click(function () {
+                        var page = $('#transfer_page').val();
+                        window.location.href = "{{url_for('adminbg.query_list',buildname=request.args.get('buildname'),campusname=request.args.get('campusname')) | safe}}" + "&page=" + page;
+                    })
                 })
-            })
-            $("button#indexsbutton").on('click', function() {
-            //搜索
-            var keyword = $("input#indexserach").val()
-            window.open($SCRIPT_ROOT + "admin/query/serach?keyword=" + encodeURIComponent($.base64.encode(keyword)))
-        })
+                $("button#indexsbutton").on('click', function () {
+                    //搜索
+                    var keyword = $("input#indexserach").val()
+                    window.open($SCRIPT_ROOT + "admin/query/serach?keyword=" + encodeURIComponent($.base64.encode(keyword)))
+                })
         </script>
     </div>
 </div>

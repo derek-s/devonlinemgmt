@@ -34,3 +34,26 @@ def basic_campus():
         'pagination': pagination
     }
     return result
+
+
+def basic_campus_search():
+    request.script_root = url_for('indexview.index', _external=True)
+    page = request.values.get('pagenum', 1, type=int)
+    word = request.values.get('keyword', "", type=str)
+    print(word,(unquote(word),b64decode(unquote(word))))
+    search = b64decode(unquote(word)).decode('utf-8')
+    select_result = Dev_Campus.query.filter(
+        Dev_Campus.Campus == search
+    )
+    pagination = select_result.paginate(
+        page, per_page=Setting().pagination
+    )
+    count = select_result.count()
+    posts = pagination.items
+    result = {
+        'posts': posts,
+        'count': count,
+        'pagination': pagination,
+        'keyword': search
+    }
+    return result

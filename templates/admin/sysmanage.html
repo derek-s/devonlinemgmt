@@ -23,11 +23,12 @@
             <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message[1] }}
         </div>
         {% endfor %}
-        <form id="adminform" method="POST" action="{{url_for('adminbg.sysmanage')}}" onsubmit="return check($('#syspagn').val())">
+        <form id="adminform" method="POST" action="{{url_for('adminbg.sysmanage')}}" onsubmit="return check($('#syspagn').val()); check($('#syspage_index').val())">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <label class="adminlabel">分页条数（前后台均影响）</label>
+            <label class="adminlabel">前台分页条数</label>
+            <input id="syspage_index" class="form-control input-lg input-serach" name="syspageindex" value="{{syspageindex}}"></input>
+            <label class="adminlabel">后台分页条数</label>
             <input id="syspagn" class="form-control input-lg input-serach" name="syspagen" value="{{syspagn}}"></input>
-
             <button type="submit" id="syssbutton" class="btn btn-primary">保存设置</button>
         </form>
     </div>
