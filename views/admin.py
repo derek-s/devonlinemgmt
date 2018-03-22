@@ -20,8 +20,8 @@ from .admin_lvr import lvr_list_get, lvr_list_post, lvr_search_get, lvr_search_p
 from .admin_dvr import dvr_manage_get, dvr_manage_post, dvr_list_get, dvr_list_post
 from .admin_dvr import dvr_search_get, dvr_search_post
 from .admin_notice import notice_create_post, notice_modfiy_get, notice_modfiy_post, notice_list, notice_delete
-from .admin_basic import basic_campus, basic_campus_search
-
+from .admin_basic import basic_campus, basic_campus_search, basic_campus_add, basic_campus_modfiy
+from .admin_basic import basic_campus_delete
 adminbg = Blueprint('adminbg', __name__)
 
 
@@ -283,6 +283,37 @@ def basic_c_search():
         keyword=search['keyword']
         )
 
+
+@adminbg.route("/admin/basicinfo/campus/add", methods=['POST'])
+@login_required
+@admin_required
+def basic_c_add():
+    """
+    添加校区
+    :return: 返回添加结果
+    """
+    result = basic_campus_add()
+    return result
+
+
+@adminbg.route("/admin/basicinfo/campus/modfiy", methods=['POST'])
+@login_required
+@admin_required
+def basic_c_modfiy():
+    """
+    修改校区
+    :return: 返回修改结果
+    """
+    result = basic_campus_modfiy()
+    return result
+
+
+@adminbg.route("/admin/basicinfo/campus/detele", methods=['POST'])
+@login_required
+@admin_required
+def basic_c_detele():
+    result = basic_campus_delete()
+    return result
 
 @adminbg.route("/admin/usrmanage")
 @login_required

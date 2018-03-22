@@ -81,7 +81,6 @@ def notice_list():
 
 
 def notice_delete(id):
-    print(id)
     delstatus = {
         "status": 1,
         "message": "success"

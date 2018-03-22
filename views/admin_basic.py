@@ -9,6 +9,7 @@ from flask import Blueprint, jsonify, render_template, request, url_for, flash, 
 from flask_login import login_required, current_user
 from decorators import admin_required
 from models import Dev_Loging, Setting, Dev_Note, Dev_DeviceStatus, Dev_Campus, Dev_LVRInfo, Dev_DeviceInfo, DevDevType
+from models import DevBuild
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
@@ -40,10 +41,9 @@ def basic_campus_search():
     request.script_root = url_for('indexview.index', _external=True)
     page = request.values.get('pagenum', 1, type=int)
     word = request.values.get('keyword', "", type=str)
-    print(word,(unquote(word),b64decode(unquote(word))))
     search = b64decode(unquote(word)).decode('utf-8')
     select_result = Dev_Campus.query.filter(
-        Dev_Campus.Campus == search
+        Dev_Campus.Campus.like("%" + search + "%")
     )
     pagination = select_result.paginate(
         page, per_page=Setting().pagination
@@ -57,3 +57,80 @@ def basic_campus_search():
         'keyword': search
     }
     return result
+
+
+def basic_campus_add():
+    campusname = request.values.get("campusname")
+    campus_query_count = Dev_Campus.query.filter(Dev_Campus.Campus == campusname).count()
+    if campus_query_count != 0:
+        campus_table_query = Dev_Campus.query.filter(Dev_Campus.Campus == campusname).one()
+        campus_table_name = campus_table_query.Campus
+    else:
+        campus_table_name = ''
+    if campus_table_name == campusname:
+        campus_add_status = {
+            'status': 0,
+            'message': '被添加项已存在'
+        }
+        return json.dumps(campus_add_status)
+    else:
+        new_campus = Dev_Campus(campusname)
+        db.session.add(new_campus)
+        db.session.commit()
+        campus_add_status = {
+            'status': 1,
+            'message': 'success'
+        }
+        return json.dumps(campus_add_status)
+
+
+def basic_campus_modfiy():
+    """
+    修改校区名称
+    :param id: 校区id
+    :return:  修改结果
+    """
+    try:
+        campus_id = request.values.get("id")
+        campus_new = request.values.get("cname")
+        campus_info = Dev_Campus.query.filter(Dev_Campus.ID == campus_id).one()
+        campus_old = campus_info.Campus
+        DevBuild.query.filter(DevBuild.Campus == campus_old).update({DevBuild.Campus:campus_new})
+        Dev_LVRInfo.query.filter(Dev_LVRInfo.Campus == campus_old).update({Dev_LVRInfo.Campus:campus_new})
+        Dev_DeviceStatus.query.filter(Dev_DeviceStatus.Campus == campus_old).update({Dev_DeviceStatus.Campus:campus_new})
+        Dev_Campus.query.filter(Dev_Campus.Campus == campus_old).update({Dev_Campus.Campus:campus_new})
+        db.session.commit()
+        campus_modfiy_status = {
+            'status': 1,
+            'message': 'success'
+        }
+        return json.dumps(campus_modfiy_status)
+    except Exception as e:
+        campus_modfiy_status = {
+            'status': 5,
+            'message': 'Server Error'
+        }
+        return json.dumps(campus_modfiy_status)
+
+
+def basic_campus_delete():
+    delstatus = {
+        'status': '',
+        'message': ''
+    }
+    try:
+        campus_id = request.values.get("array_id")
+        for one in json.loads(campus_id.encode("utf-8")):
+            campus_info = Dev_Campus.query.filter(
+                Dev_Campus.ID == one
+            )
+            if campus_info:
+                campus_info.delete()
+        db.session.commit()
+        delstatus['status'] = 1
+        delstatus['message'] = "success"
+        return json.dumps(delstatus)
+    except Exception:
+        delstatus['status'] = 500
+        delstatus['message'] = "Server Error"
+        return json.dumps(delstatus)
