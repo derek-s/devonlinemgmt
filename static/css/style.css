@@ -624,7 +624,7 @@ input#i_input {
     float: left;
 }
 .ipagination {
-    width: 550px;
+    width: 575px;
     float:right;
 }
 .pagenum{
@@ -633,9 +633,20 @@ input#i_input {
 }
 .ibtmdowplist {
     margin: 20px 0;
-    width: 180px;
+    width: 150px;
     float: left;
 }
 .i_inline {
     display: inline;
+}
+.inline_button_link {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+#ioperabutton {
+    padding: 5px 10px;
+}
+select#ipage {
+    padding: 5px;
+    vertical-align: middle;
 }

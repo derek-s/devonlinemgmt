@@ -8,25 +8,10 @@
         <label class="i_label">添加新校区</label>
         <label class="i_label" for="i_input">校区名称</label>
         <input type="text" id="i_input"/>
-        <button type="button" class="btn btn-primary">添加校区</button>
+        <button id="i_c_add" type="button" class="btn btn-primary">添加校区</button>
     </div>
     <div class="iright">
         <div id="irightbar">
-            <div class="idowplist">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownOper" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="true">
-                        批量操作
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownOper">
-                        <li>
-                            <a href="#">删除</a>
-                        </li>
-                    </ul>
-                </div>
-                <button id="iopearbutton" class="btn btn-primary">应用</button>
-            </div>
             <div class="isearch_block">
                 <input id="indexserach" class="form-control input-lg input-serach" type="text" name="devinfoserp" placeholder="搜索校区名称">
                 <button id="indexsbutton" class="btn btn-primary">搜 索</button>
@@ -36,7 +21,7 @@
             <thead>
                 <tr>
                     <th>序号</th>
-                    <th></th>
+                    <th><input id="checkboxall" type="checkbox" name="oper_all"/></th>
                     <th>名称</th>
                     <th>操作</th>
                 </tr>
@@ -46,10 +31,13 @@
                 <tr>
                     <th width="10%" scope="row">{{ row.ID }}</th>
                     <td width="5%">
-                        <input type="checkbox" name="vehicle" value="{{ row.id }}" />
+                        <input id="oper-{{ row.ID }}" type="checkbox" name="oper" value="{{ row.ID }}" />
                     </td>
                     <td width="50%">{{ row.Campus }}</td>
-                    <td width="35%">编辑|删除</td>
+                    <td width="35%">
+                        <button onclick="javascript:js_bcampus_modfiy('{{ row.ID }}', '{{ row.Campus }}')" type="button" class="btn btn-link inline_button_link">编辑</button> |
+                        <button onclick="javascript:js_delArray_only('{{ row.ID }}')" type="button" class="btn btn-link inline_button_link">删除</button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -57,16 +45,10 @@
         <div class="listbottombar">
             <div class="ibtmdowplist">
                 <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownOper" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="true">
-                        批量操作
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownOper">
-                        <li>
-                            <a href="#">删除</a>
-                        </li>
-                    </ul>
+                    <select id="ipage" name="action" id="bulk-action-selector-top">
+                        <option value="-1">批量操作</option>
+                        <option value="delete">删除</option>
+                    </select>
                 </div>
                 <button id="iopearbutton" class="btn btn-primary">应用</button>
             </div>
@@ -81,5 +63,24 @@
             var keyword = $("input#indexserach").val()
             window.location.href = ("{{ url_for('adminbg.basic_c_search') }}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
         })
+    $("button#i_c_add").on('click', function(){
+        $.ajax({
+            url: $SCRIPT_ROOT + "admin/basicinfo/campus/add",
+            type: "POST",
+            data:{
+                campusname: $("input#i_input").val()
+            },
+            dateType: "json",
+            success: function(resp) {
+                resp = JSON.parse(resp)
+                if (resp.status != 1) {
+                    alert("添加失败 " + resp.message)
+                }else{
+                    alert("添加成功")
+                    window.location.reload()
+                }
+            }
+        })
+    })
 </script>
 {% endblock %}

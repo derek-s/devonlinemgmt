@@ -131,9 +131,10 @@ function js_notice_delete(id) {
             resp = JSON.parse(resp)
             if (resp.status != 1) {
                 alert("删除失败")
+            }else{
+                alert("删除成功")
+                location.reload()
             }
-            alert("删除成功")
-            location.reload()
         }
     })
 }
