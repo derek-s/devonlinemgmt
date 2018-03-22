@@ -20,11 +20,11 @@ def _queryipage():
     """
     count = request.values.get('count', None, type=int)
     pagenum = request.values.get('pagenum', None, type=int)
-    page_num = ((count/Setting().pagination+pagenum), 0)[count/Setting().pagination == 0]
+    page_num = ((count/Setting().page_index+pagenum), 0)[count/Setting().page_index == 0]
     devinfo = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus.desc()).paginate(
         (
             page_num
-        ), per_page=Setting().pagination
+        ), per_page=Setting().page_index
     )
     devinfotemp = []
     hasnext = {
@@ -131,9 +131,9 @@ def queryilist():
         (Dev_DeviceStatus.Campus.like("%" + campusname + "%"), "")[campusname is None],
         (Dev_DeviceStatus.Location.like("%" + buildname + "%"), "")[buildname is None]
     ).order_by(Dev_DeviceStatus.Campus.desc())
-    page_num = ((count / Setting().pagination + pagenum), 0)[count / Setting().pagination == 0]
+    page_num = ((count / Setting().page_index + pagenum), 0)[count / Setting().page_index == 0]
     paginateion = devinfo.paginate(
-        page_num, per_page=Setting().pagination
+        page_num, per_page=Setting().page_index
     )
     devinfotest = []
     hasnext = {
@@ -171,9 +171,9 @@ def queryserach():
         (Dev_DeviceStatus.HigherlinkPort.like("%" + serach + "%"), "")[serach is None] |
         (Dev_DeviceStatus.DeviceModel.like("%" + serach + "%"), "")[serach is None]
     ).order_by(Dev_DeviceStatus.Campus.desc())
-    page_num = ((count / Setting().pagination + pagenum), 0)[count / Setting().pagination == 0]
+    page_num = ((count / Setting().page_index + pagenum), 0)[count / Setting().page_index == 0]
     paginateion = serp.paginate(
-        page_num , per_page=Setting().pagination
+        page_num , per_page=Setting().page_index
     )
     serachresult = []
     hasnext = {

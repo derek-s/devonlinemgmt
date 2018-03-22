@@ -20,7 +20,7 @@ from .admin_lvr import lvr_list_get, lvr_list_post, lvr_search_get, lvr_search_p
 from .admin_dvr import dvr_manage_get, dvr_manage_post, dvr_list_get, dvr_list_post
 from .admin_dvr import dvr_search_get, dvr_search_post
 from .admin_notice import notice_create_post, notice_modfiy_get, notice_modfiy_post, notice_list, notice_delete
-from .admin_basic import basic_campus
+from .admin_basic import basic_campus, basic_campus_search
 
 adminbg = Blueprint('adminbg', __name__)
 
@@ -243,6 +243,7 @@ def dvrsearch():
 @admin_required
 def basicinfo():
     """
+    基础信息页面
     :return: 返回数据查询结果并构建相应页面
     """
     return render_template('/admin/basicinfo.html')
@@ -254,7 +255,7 @@ def basicinfo():
 def basiccampus():
     """
     校区信息
-    :return:
+    :return: 返回页面
     """
     bcampus = basic_campus()
     return  render_template(
@@ -263,6 +264,25 @@ def basiccampus():
         count=bcampus['count'],
         pagination=bcampus['pagination']
         )
+
+
+@adminbg.route("/admin/basicinfo/campus/search")
+@login_required
+@admin_required
+def basic_c_search():
+    """
+    校区搜索
+    :return: 返回页面
+    """
+    search = basic_campus_search()
+    return render_template(
+        '/admin/basicinfo_C_S.html',
+        datas=search['posts'],
+        count=search['count'],
+        pagination=search['pagination'],
+        keyword=search['keyword']
+        )
+
 
 @adminbg.route("/admin/usrmanage")
 @login_required
@@ -285,15 +305,19 @@ def sysmanage():
     default_value = ""
     if request.method == 'POST':
         pagesize = request.form.get('syspagen', 1)
+        pagesize_index = request.form.get('syspageindex', 1)
+        print pagesize_index, pagesize
         if pagesize.isdigit():
             optionsupdate('pagination', int(pagesize))
+            optionsupdate('pagination_index', int(pagesize_index))
             flash(u"修改完成", 'success')
             eventlog("[修改系统设置]")
         else:
             session.pop('_flashes', None)
             flash(u"分页条数输入有误，请检查输入", 'danger')
     syspagn = Setting().pagination
-    return render_template('/admin/sysmanage.html', syspagn=syspagn)
+    syspage_index = Setting().page_index
+    return render_template('/admin/sysmanage.html', syspagn=syspagn, syspageindex=syspage_index)
 
 
 @adminbg.route("/admin/log", methods=['GET', 'POST'])
@@ -360,7 +384,6 @@ def notecreate_id(id):
     通知公告修改页面
     :return:
     """
-
     if request.method == 'GET':
         try:
             eventlog("[访问修改公告页面 公告id: " + str(id) + "]")
