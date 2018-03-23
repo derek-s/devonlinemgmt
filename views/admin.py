@@ -21,7 +21,7 @@ from .admin_dvr import dvr_manage_get, dvr_manage_post, dvr_list_get, dvr_list_p
 from .admin_dvr import dvr_search_get, dvr_search_post
 from .admin_notice import notice_create_post, notice_modfiy_get, notice_modfiy_post, notice_list, notice_delete
 from .admin_basic import basic_campus, basic_campus_search, basic_campus_add, basic_campus_modfiy
-from .admin_basic import basic_campus_delete
+from .admin_basic import basic_campus_delete, basic_campus_layer
 adminbg = Blueprint('adminbg', __name__)
 
 
@@ -314,6 +314,15 @@ def basic_c_modfiy():
 def basic_c_detele():
     result = basic_campus_delete()
     return result
+
+
+@adminbg.route("/admin/basicinfo/_querycampus", methods=['get', 'POST'])
+@login_required
+@admin_required
+def basic_c_query():
+    return basic_campus_layer()
+
+
 
 @adminbg.route("/admin/usrmanage")
 @login_required

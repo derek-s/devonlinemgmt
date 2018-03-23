@@ -134,3 +134,24 @@ def basic_campus_delete():
         delstatus['status'] = 500
         delstatus['message'] = "Server Error"
         return json.dumps(delstatus)
+
+
+def basic_campus_layer():
+    campus_list = []
+    campus_info = {
+        "campus_info": campus_list,
+        "status": 404
+    }
+    try:
+        campus = Dev_Campus.query.all()
+        for campus_one in campus:
+            campus_info_one = {
+                "id": campus_one.ID,
+                "campus_name": campus_one.Campus.encode("utf-8")
+            }
+            campus_list.append(campus_info_one)
+        campus_info['status'] = 1
+        return json.dumps(campus_info)
+    except Exception as e:
+        campus_info['status'] = 404
+        return json.dumps(campus_info)
