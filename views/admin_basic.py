@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/3/21 21:47
 # @Author  : Derek.S
-# @Site    : 
+# @Site    :
 # @File    : admin_basic.py
 
 from flask import Blueprint, jsonify, render_template, request, url_for, flash, session, redirect, abort
@@ -155,3 +155,43 @@ def basic_campus_layer():
     except Exception as e:
         campus_info['status'] = 404
         return json.dumps(campus_info)
+
+
+def basic_build_list():
+    page = request.args.get('page', 1, type=int)
+    campus_id = request.args.get('campus_id', "-1", type=str)
+    request.script_root = url_for('indexview.index', _external=True)
+    if campus_id == "-1":
+        build_count = DevBuild.query.count()
+        pagination = DevBuild.query.order_by(DevBuild.ID.asc()).paginate(
+            page, per_page=Setting().pagination
+        )
+        datas = pagination.items
+        result = {
+            "datas": datas,
+            "count": build_count,
+            "pagination": pagination,
+            "campus_name": u"全部",
+            "campus_id": campus_id
+        }
+        return result
+    else:
+        campus_info = Dev_Campus.query.filter(Dev_Campus.ID == int(campus_id)).one()
+        campus_name = campus_info.Campus
+        build_info = DevBuild.query.filter(
+                DevBuild.Campus == campus_name
+        )
+        build_count = build_info.count()
+        pagination = build_info.order_by(DevBuild.ID.asc()).paginate(
+            page, per_page=Setting().pagination
+        )
+        datas = pagination.items
+        result = {
+            "datas": datas,
+            "count": build_count,
+            "pagination": pagination,
+            "campus_name": campus_name,
+            "campus_id": campus_id
+        }
+        return result
+
