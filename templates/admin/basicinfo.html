@@ -18,23 +18,73 @@
         <div class="iContent">
             <div class="zone">
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active">
-                        <a href="#">校区信息维护</a>
+                    <li role="presentation" class="active navtab campus">
+                        <a class="navtab-a" href="#">校区信息维护</a>
                     </li>
-                    <li role="presentation">
-                        <a href="#">楼宇信息维护</a>
+                    <li role="presentation" class="navtab build">
+                        <a class="navtab-a" href="#">楼宇信息维护</a>
                     </li>
-                    <li role="presentation">
-                        <a href="#">设备类型信息维护</a>
+                    <li role="presentation" class="navtab devtype">
+                        <a class="navtab-a" href="#">设备类型信息维护</a>
                     </li>
                 </ul>
             </div>
             <div class="content-iframe">
-                <iframe src="{{ url_for('adminbg.basiccampus')}}" frameborder="0" height="100%" width="100%"></iframe>
+                <iframe class="ibasiciframe" src="{{ url_for('adminbg.basiccampus')}}" frameborder="0" height="100%" width="100%"></iframe>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("li.navtab").on('click', function () {
+            content_html = '<button class="btn btn_link ibtnlayer" value="-1">全部校区</button>'
+            $(this).siblings().removeClass("active")
+            $(this).addClass("active")
+            if ($(this).hasClass("build")) {
+                $.ajax({
+                    url: $SCRIPT_ROOT + "basicinfo/_querycampus",
+                    type: "post",
+                    dataType: "json",
+                    success: function (resp) {
+                        $.each(resp.campus_info, function () {
+                            content_html += '<button class="btn btn_link ibtnlayer" value="' + $(this)[0].id + '">' + $(this)[0].campus_name + '</button>'
+                        })
+                        campus_select(content_html)
+                    }
+                })
+            }else if ($(this).hasClass("campus")){
+                $(".ibasiciframe").remove()
+                url = "{{ url_for('adminbg.basiccampus')}}"
+                pageurl = '<iframe class="ibasiciframe" src="' + url + '" frameborder="0" height="100%" width="100%"></iframe>'
+                $(pageurl).prependTo("div.content-iframe")
+            }
+        })
+    })
 
+    function campus_select(html) {
+        $(".ibasiciframe").remove()
+        layerCampus = layer.open({
+            title: '选择要管理楼宇的校区',
+            type: 1,
+            shade: 0,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['420px', '240px'], //宽高
+            content: html,
+            cancel: function (index, layero) {
+                url = "{{ url_for('adminbg.basic_build')}}" + "?campus_id=-1"
+                pageurl = '<iframe class="ibasiciframe" src="' + url + '" frameborder="0" height="100%" width="100%"></iframe>'
+                $(pageurl).prependTo("div.content-iframe")
+            }
+        })
+        $("button.ibtnlayer").on("click", function () {
+            id = $(this).val()
+            url = "{{ url_for('adminbg.basic_build')}}" + "?campus_id=" + id
+            pageurl = '<iframe class="ibasiciframe" src="' + url + '" frameborder="0" height="100%" width="100%"></iframe>'
+            $(pageurl).prependTo("div.content-iframe")
+            layer.close(layerCampus)
+        })
+    }
+</script>
 
 {% endblock %}

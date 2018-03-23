@@ -132,7 +132,6 @@ p {
 .incotp {
     margin: 20px 0;
     line-height: 30px;
-    margin-right: 35px;
 }
 
 .pagination {
@@ -182,13 +181,15 @@ p {
     height: 100%;
     display: block;
     float: left;
+    min-width: 200px;
 }
 
 #admincontent {
     float: left;
     width: 100%;
     display: block;
-    height: 100%
+    height: 100%;
+    min-width: 900px
 }
 
 #main {
@@ -267,7 +268,8 @@ ul.errors {
     float: left;
     margin-left: 30px;
     margin-top: 30px;
-    height: 100%
+    height: 100%;
+    min-width: 600px;
 }
 
 .welcome {
@@ -586,11 +588,12 @@ p.error {
 }
 .ileft {
     float: left;
-    width: 50%;
+    width: 30%;
 }
 .iright {
     float: right;
-    width: 50%;
+    width: 70%;
+    min-width: 600px;
 }
 h2.iheader {
     font-size: 18px;
@@ -624,7 +627,7 @@ input#i_input {
     float: left;
 }
 .ipagination {
-    width: 575px;
+    width: 600px;
     float:right;
 }
 .pagenum{
@@ -649,4 +652,7 @@ input#i_input {
 select#ipage {
     padding: 5px;
     vertical-align: middle;
+}
+.ibtnlayer {
+    margin: 10px
 }
