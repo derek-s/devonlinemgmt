@@ -118,7 +118,6 @@
 <script type="text/javascript">
     $(function() {
         $("button#indexsbutton").on('click', function () {
-            //搜索
             var keyword = $("input#indexserach").val()
             window.open("{{url_for('adminbg.dvrsearch')}}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
         })
@@ -127,7 +126,6 @@
             window.location.href = "{{url_for('adminbg.dvrmanagelist',devtype=request.args.get('devtype'),devonline=request.args.get('devonline'))| safe}}" + "&page=" + page;
         })
         $("a#ajaxntindex").bind('click', function () {
-            //list加载下一页
             $(this).text("正在加载，请稍后……")
             var pagenum = $("li#pnactive>a").text()
             var datacount = $("tr.jsondata").length
