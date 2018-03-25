@@ -225,6 +225,9 @@ class DevBuild(db.Model):
     Campus = db.Column("Campus", db.Text)
     BuildName = db.Column("BuildName", db.Text)
 
+    def __init__(self, Campus, BuildName):
+        self.Campus = Campus
+        self.BuildName = BuildName
 
 class DevDevType(db.Model):
     """
