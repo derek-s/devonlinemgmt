@@ -22,6 +22,7 @@ from .admin_dvr import dvr_search_get, dvr_search_post
 from .admin_notice import notice_create_post, notice_modfiy_get, notice_modfiy_post, notice_list, notice_delete
 from .admin_basic import basic_campus, basic_campus_search, basic_campus_add, basic_campus_modfiy
 from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_list
+from .admin_basic import basic_bulid_add
 adminbg = Blueprint('adminbg', __name__)
 
 
@@ -337,6 +338,13 @@ def basic_build():
         campus_id=result['campus_id']
         )
 
+
+@adminbg.route("/admin/basicinfo/build/add", methods=['POST'])
+@login_required
+@admin_required
+def basic_b_add():
+    result = basic_bulid_add()
+    return result
 
 
 @adminbg.route("/admin/usrmanage")
