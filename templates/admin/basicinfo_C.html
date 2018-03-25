@@ -64,7 +64,8 @@
             window.location.href = ("{{ url_for('adminbg.basic_c_search') }}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
         })
     $("button#i_c_add").on('click', function(){
-        $.ajax({
+        if($("input#i_input").val() != ""){
+            $.ajax({
             url: $SCRIPT_ROOT + "admin/basicinfo/campus/add",
             type: "POST",
             data:{
@@ -81,6 +82,10 @@
                 }
             }
         })
+        }else {
+            alert("校区名称不能为空")
+        }
+        
     })
 </script>
 {% endblock %}

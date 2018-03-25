@@ -61,27 +61,34 @@ def basic_campus_search():
 
 def basic_campus_add():
     campusname = request.values.get("campusname")
-    campus_query_count = Dev_Campus.query.filter(Dev_Campus.Campus == campusname).count()
-    if campus_query_count != 0:
-        campus_table_query = Dev_Campus.query.filter(Dev_Campus.Campus == campusname).one()
-        campus_table_name = campus_table_query.Campus
-    else:
-        campus_table_name = ''
-    if campus_table_name == campusname:
+    if campusname == "":
         campus_add_status = {
-            'status': 0,
-            'message': '被添加项已存在'
+            'status': 500,
+            'message': '添加项为空'
         }
         return json.dumps(campus_add_status)
     else:
-        new_campus = Dev_Campus(campusname)
-        db.session.add(new_campus)
-        db.session.commit()
-        campus_add_status = {
-            'status': 1,
-            'message': 'success'
-        }
-        return json.dumps(campus_add_status)
+        campus_query_count = Dev_Campus.query.filter(Dev_Campus.Campus == campusname).count()
+        if campus_query_count != 0:
+            campus_table_query = Dev_Campus.query.filter(Dev_Campus.Campus == campusname).one()
+            campus_table_name = campus_table_query.Campus
+        else:
+            campus_table_name = ''
+        if campus_table_name == campusname:
+            campus_add_status = {
+                'status': 0,
+                'message': '被添加项已存在'
+            }
+            return json.dumps(campus_add_status)
+        else:
+            new_campus = Dev_Campus(campusname)
+            db.session.add(new_campus)
+            db.session.commit()
+            campus_add_status = {
+                'status': 1,
+                'message': 'success'
+            }
+            return json.dumps(campus_add_status)
 
 
 def basic_campus_modfiy():
