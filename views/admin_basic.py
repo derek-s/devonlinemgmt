@@ -202,3 +202,45 @@ def basic_build_list():
         }
         return result
 
+
+def basic_bulid_add():
+    campus_id = request.values.get("campus_id")
+    bulidname = request.values.get("buildname")
+    if bulidname == "":
+        build_add_status = {
+            'status': 500,
+            'message': '添加项为空'
+        }
+        return json.dumps(build_add_status)
+    else:
+        campus_select = Dev_Campus.query.filter(
+            Dev_Campus.ID == campus_id
+        )
+        campus_count = campus_select.count()
+        if campus_count != 0:
+            campus_select_one = campus_select.one()
+            campus_name = campus_select_one.Campus
+            build_select_count = DevBuild.query.filter(
+                DevBuild.Campus == campus_name,DevBuild.BuildName == bulidname
+            ).count()
+            if build_select_count != 0:
+                build_add_status = {
+                    'status': 2,
+                    'message': '添加项已存在'
+                }
+                return json.dumps(build_add_status)
+            else:
+                newbulid = DevBuild(campus_name, bulidname)
+                db.session.add(newbulid)
+                db.session.commit()
+                build_add_status = {
+                    'status': 1,
+                    'message': 'success'
+                }
+                return json.dumps(build_add_status)
+        else:
+            build_add_status = {
+                'status': 404,
+                'message': '校区数据不存在'
+            }
+            return json.dumps(build_add_status)
