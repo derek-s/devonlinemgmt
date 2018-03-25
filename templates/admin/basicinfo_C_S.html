@@ -65,27 +65,31 @@
 </div>
 <script type="text/javascript">
     $("button#indexsbutton").on('click', function () {
-            var keyword = $("input#indexserach").val()
-            window.location.href = ("{{ url_for('adminbg.basic_c_search') }}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
-        })
-    $("button#i_c_add").on('click', function(){
-        $.ajax({
-            url: $SCRIPT_ROOT + "admin/basicinfo/campus/add",
-            type: "POST",
-            data:{
-                campusname: $("input#i_input").val()
-            },
-            dateType: "json",
-            success: function(resp) {
-                resp = JSON.parse(resp)
-                if (resp.status != 1) {
-                    alert("添加失败 " + resp.message)
-                }else{
-                    alert("添加成功")
-                    window.location.reload()
+        var keyword = $("input#indexserach").val()
+        window.location.href = ("{{ url_for('adminbg.basic_c_search') }}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
+    })
+    $("button#i_c_add").on('click', function () {
+        if ($("input#i_input").val() != "") {
+            $.ajax({
+                url: $SCRIPT_ROOT + "admin/basicinfo/campus/add",
+                type: "POST",
+                data: {
+                    campusname: $("input#i_input").val()
+                },
+                dateType: "json",
+                success: function (resp) {
+                    resp = JSON.parse(resp)
+                    if (resp.status != 1) {
+                        alert("添加失败 " + resp.message)
+                    } else {
+                        alert("添加成功")
+                        window.location.reload()
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            alert("校区名称不能为空")
+        }
     })
 </script>
 {% endblock %}

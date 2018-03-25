@@ -74,10 +74,11 @@
         })
     $("button#i_c_add").on('click', function(){
         $.ajax({
-            url: $SCRIPT_ROOT + "#",
+            url: $SCRIPT_ROOT + "admin/basicinfo/build/add",
             type: "POST",
             data:{
-                campusname: $("input#i_input").val()
+                campus_id: "{{ campus_id }}",
+                buildname: $("input#i_input").val()
             },
             dateType: "json",
             success: function(resp) {
