@@ -31,13 +31,13 @@ $(document).ready(
 )
 
 function js_bcampus_modfiy(id, cmpname) {
-    cmphtml = "<label>校区名称</label>" + "<input id='i_cmp_lay' value=" + cmpname +">" + "<button id='ilay_Cbutton' class='btn btn-primary'>保存修改</button>"
+    cmphtml = "<div class='ilayer_modfiy'><label class='ilayer_modfiy_label'>校区名称</label>" + "<input id='i_cmp_lay' value=" + cmpname +">" + "<button id='ilay_Cbutton' class='btn btn-primary'>保存修改</button></div>"
     layer.open({
         title: '编辑校区信息',
         type: 1,
         shade: 0,
         skin: 'layui-layer-rim', //加上边框
-        area: ['420px', '240px'], //宽高
+        //area: ['420px', '240px'], //宽高
         content: cmphtml
       });
     $("button#ilay_Cbutton").on("click", function(){

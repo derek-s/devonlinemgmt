@@ -656,3 +656,14 @@ select#ipage {
 .ibtnlayer {
     margin: 10px
 }
+.ilayer_modfiy_label {
+    display: block;
+}
+#ilay_Cbutton {
+    display: block;
+    margin-top: 10px;
+    padding: 5px;
+}
+.ilayer_modfiy {
+    margin: 10px;
+}
