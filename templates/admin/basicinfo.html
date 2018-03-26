@@ -58,6 +58,11 @@
                 url = "{{ url_for('adminbg.basiccampus')}}"
                 pageurl = '<iframe class="ibasiciframe" src="' + url + '" frameborder="0" height="100%" width="100%"></iframe>'
                 $(pageurl).prependTo("div.content-iframe")
+            }else{
+                $(".ibasiciframe").remove()
+                url = "{{ url_for('adminbg.basic_t_index')}}"
+                pageurl = '<iframe class="ibasiciframe" src="' + url + '" frameborder="0" height="100%" width="100%"></iframe>'
+                $(pageurl).prependTo("div.content-iframe")
             }
         })
     })

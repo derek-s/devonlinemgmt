@@ -6,6 +6,7 @@
     <div class="ileft">
         <div class="iSheader">
             <h2 class="iheader i_inline">设备类型信息</h2>
+            <label class="i_label i_inline">{{ keyword }} 的搜索结果</label>
         </div>
         <label class="i_label">添加新类型</label>
         <label class="i_label" for="i_input">类型名称</label>
@@ -55,7 +56,7 @@
                 <button onclick="javascript:js_t_batchd()" id="iopearbutton" class="btn btn-primary">应用</button>
             </div>
             <div class="ipagination">
-                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.basic_t_index')}} {%endif%}
+                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.basic_t_search', keyword=request.args.get('keyword')|safe)}} {%endif%}
             </div>
         </div>
     </div>
@@ -63,7 +64,7 @@
 <script type="text/javascript">
     $('#transfer').click(function() {
             var page = $('#transfer_page').val();
-            window.location.href = "{{url_for('adminbg.basic_t_index')}}" + "?page=" + page;
+            window.location.href = "{{url_for('adminbg.basic_t_search',keyword=request.args.get('keyword')|safe)}}" + "?page=" + page;
     })
     $("button#indexsbutton").on('click', function () {
             var keyword = $("input#indexserach").val()

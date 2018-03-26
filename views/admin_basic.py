@@ -326,3 +326,122 @@ def basic_buildname_search():
         'keyword': search
     }
     return result
+
+
+def basic_type_index():
+    request.script_root = url_for('indexview.index', _external=True)
+    page = request.values.get('page', 1, type=int)
+    count = DevDevType.query.count()
+    pagination = DevDevType.query.order_by(DevDevType.ID.asc()).paginate(
+        page, per_page=Setting().pagination
+    )
+    datas = pagination.items
+    result = {
+        'datas': datas,
+        'count': count,
+        'pagination': pagination
+    }
+    return result
+
+
+def basic_type_Add():
+    typename = request.values.get("typename")
+    if typename == "":
+        type_add_status = {
+            'status': 500,
+            'message': "添加项为空"
+        }
+        return json.dumps(type_add_status)
+    else:
+        type_query_count = DevDevType.query.filter(DevDevType.Type == typename).count()
+        if type_query_count != 0:
+            type_table_query = DevDevType.query.filter(DevDevType == typename).one()
+            type_table_name = type_table_query.Type
+        else:
+            type_table_name = ""
+        if type_table_name == typename:
+            type_add_status = {
+                'status': 0,
+                'message': '被添加项已存在'
+            }
+            return json.dumps(type_add_status)
+        else:
+            new_type = DevDevType(typename)
+            db.session.add(new_type)
+            db.session.commit()
+            type_add_status = {
+                'status': 1,
+                'message': 'success'
+            }
+            return json.dumps(type_add_status)
+
+
+def basic_type_modfiy():
+    try:
+        type_id = request.values.get("id")
+        type_new = request.values.get("tname")
+        type_info = DevDevType.query.filter(
+            DevDevType.ID == type_id
+        ).one()
+        type_old = type_info.Type
+        DevDevType.query.filter(DevDevType.Type == type_old).update({DevDevType.Type:type_new})
+        Dev_DeviceInfo.query.filter(
+            Dev_DeviceInfo.DeviceCategory == type_old
+        ).update({Dev_DeviceInfo.DeviceCategory:type_new})
+        db.session.commit()
+        type_modfiy_status = {
+            'status': 1,
+            'message': 'success'
+        }
+        return json.dumps(type_modfiy_status)
+    except Exception as e:
+        type_modfiy_status = {
+            'status': 5,
+            'message': 'Server Error'
+        }
+        return json.dumps(type_modfiy_status)
+
+
+def basic_type_delete():
+    try:
+        type_id = request.values.get("array_id")
+        for one in json.loads(type_id.encode("utf-8")):
+            type_info = DevDevType.query.filter(
+                DevDevType.ID == one
+            )
+            if type_info:
+                type_info.delete()
+        db.session.commit()
+        delete_status = {
+            'status': 1,
+            'message': 'success'
+        }
+        return json.dumps(delete_status)
+    except Exception as e:
+        delete_status = {
+            'status': 500,
+            'message': 'success'
+        }
+        return json.dumps(delete_status)
+
+
+def basic_type_search():
+    request.script_root = url_for('indexview.index', _external=True)
+    page = request.values.get('page', 1, type=int)
+    word = request.values.get('keyword', "", type=str)
+    search = b64decode(unquote(word)).decode('utf-8')
+    select_result = DevDevType.query.filter(
+        DevDevType.Type.like("%" + search + "%")
+    )
+    pagination = select_result.paginate(
+        page, per_page=Setting().pagination
+    )
+    count = select_result.count()
+    datas = pagination.items
+    result = {
+        'datas': datas,
+        'count': count,
+        'pagination': pagination,
+        'keyword': search
+    }
+    return result

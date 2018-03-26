@@ -19,7 +19,9 @@ from .admin_dvr import dvr_search_get, dvr_search_post
 from .admin_notice import notice_create_post, notice_modfiy_get, notice_modfiy_post, notice_list, notice_delete
 from .admin_basic import basic_campus, basic_campus_search, basic_campus_add, basic_campus_modfiy
 from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_list
-from .admin_basic import basic_bulid_add, basic_build_delete, basic_build_modfiy, basic_buildname_search
+from .admin_basic import basic_bulid_add, basic_build_delete, basic_build_modfiy, basic_buildname_search, basic_type_index
+from .admin_basic import basic_type_Add, basic_type_modfiy, basic_type_delete, basic_type_search
+
 adminbg = Blueprint('adminbg', __name__)
 
 
@@ -370,6 +372,56 @@ def basic_b_search():
         pagination=result['pagination'],
         keyword=result['keyword']
     )
+
+
+@adminbg.route("/admin/basicinfo/devtype")
+@login_required
+@admin_required
+def basic_t_index():
+    result = basic_type_index()
+    return render_template(
+        '/admin/basicinfo_DT.html',
+        datas=result['datas'],
+        count=result['count'],
+        pagination=result['pagination']
+    )
+
+
+@adminbg.route("/admin/basicinfo/devtype/add", methods=['POST'])
+@login_required
+@admin_required
+def basic_t_Add():
+    return basic_type_Add()
+
+
+@adminbg.route("/admin/basicinfo/devtype/modfiy", methods=['POST'])
+@login_required
+@admin_required
+def basic_t_modfiy():
+    return basic_type_modfiy()
+
+
+@adminbg.route("/admin/basicinfo/devtype/delete", methods=['POST'])
+@login_required
+@admin_required
+def basic_t_delete():
+    return basic_type_delete()
+
+
+@adminbg.route("/admin/basicinfo/devtype/search")
+@login_required
+@admin_required
+def basic_t_search():
+    result = basic_type_search()
+    return render_template(
+        '/admin/basicinfo_DT_S.html',
+        datas=result['datas'],
+        count=result['count'],
+        pagination=result['pagination'],
+        keyword=result['keyword']
+    )
+
+
 
 @adminbg.route("/admin/usrmanage")
 @login_required
