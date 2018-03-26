@@ -236,3 +236,6 @@ class DevDevType(db.Model):
     __tablename__ = "dev_DevType"
     ID = db.Column("ID", db.Integer, primary_key=True)
     Type = db.Column("Type", db.Text)
+
+    def __init__(self, Type):
+        self.Type = Type
