@@ -64,10 +64,12 @@ function js_bcampus_modfiy(id, cmpname) {
     })
 }
 
-function js_delArray_only(id) {
+function js_delArray_only(id, optype) {
     id_del= new Array()
     id_del.push(id)
-    js_bcampus_delete(id_del)
+    if (optype == "campus"){
+        js_bcampus_delete(id_del)
+    }
 }
 
 function js_delArray(id) {
@@ -76,7 +78,6 @@ function js_delArray(id) {
 }
 
 function js_bcampus_delete(ary) {
-    console.log(ary)
     if (confirm('确定删除么？')){
         $.ajax({
             url: $SCRIPT_ROOT + "admin/basicinfo/campus/detele",

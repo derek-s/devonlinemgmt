@@ -41,7 +41,7 @@
                     <td width="50%">{{ row.Campus }}</td>
                     <td width="35%">
                         <button onclick="javascript:js_bcampus_modfiy('{{ row.ID }}', '{{ row.Campus }}')" type="button" class="btn btn-link inline_button_link">编辑</button> |
-                        <button onclick="javascript:js_delArray_only('{{ row.ID }}')" type="button" class="btn btn-link inline_button_link">删除</button>
+                        <button onclick="javascript:js_delArray_only('{{ row.ID }}', 'campus')" type="button" class="btn btn-link inline_button_link">删除</button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -58,12 +58,16 @@
                 <button id="iopearbutton" class="btn btn-primary">应用</button>
             </div>
             <div class="ipagination">
-                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.basiccampus')}} {%endif%}
+                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.basic_c_search', keyword=request.args.get('keyword') | safe)}} {%endif%}
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
+    $('#transfer').click(function () {
+        var page = $('#transfer_page').val();
+        window.location.href = "{{url_for('adminbg.basic_c_search',keyword=request.args.get('keyword') | safe)}}" + "&page=" + page;
+    })
     $("button#indexsbutton").on('click', function () {
         var keyword = $("input#indexserach").val()
         window.location.href = ("{{ url_for('adminbg.basic_c_search') }}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
