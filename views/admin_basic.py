@@ -144,6 +144,10 @@ def basic_campus_delete():
 
 
 def basic_campus_layer():
+    """
+    楼宇信息修改页面弹窗加载校区名称
+    :return: 查询结果json
+    """
     campus_list = []
     campus_info = {
         "campus_info": campus_list,
@@ -244,3 +248,81 @@ def basic_bulid_add():
                 'message': '校区数据不存在'
             }
             return json.dumps(build_add_status)
+
+def basic_build_delete():
+    delstatus = {
+        'status': '',
+        'messgae': ''
+    }
+    try:
+        build_id = request.values.get("array_id")
+        for one in json.loads(build_id.encode("utf-8")):
+            build_info = DevBuild.query.filter(
+                DevBuild.ID == one
+            )
+            if build_info:
+                build_info.delete()
+        db.session.commit()
+        delstatus['status'] = 1
+        delstatus['message'] = "success"
+        return json.dumps(delstatus)
+    except Exception:
+        delstatus['status'] = 500
+        delstatus['message'] = "Server Error"
+        return json.dumps(delstatus)
+
+
+def basic_build_modfiy():
+    try:
+        build_id = request.values.get("id")
+        build_name = request.values.get("bname")
+        build_info = DevBuild.query.filter(DevBuild.ID == build_id).one()
+        buildname_old = build_info.BuildName
+        Dev_DeviceStatus.query.filter(
+            Dev_DeviceStatus.Location == buildname_old).update(
+            {Dev_DeviceStatus.Location:build_name}
+        )
+        Dev_LVRInfo.query.filter(
+            Dev_LVRInfo.BuildName == buildname_old
+        ).update(
+            {Dev_LVRInfo.BuildName:build_name}
+        )
+        DevBuild.query.filter(
+            DevBuild.BuildName == buildname_old
+        ).update(
+            {DevBuild.BuildName:build_name}
+        )
+        db.session.commit()
+        build_modfiy_status = {
+            'status': 1,
+            'message': 'success'
+        }
+        return json.dumps(build_modfiy_status)
+    except Exception as e:
+        build_modfiy_status = {
+        'status': 500,
+        'message': 'Server Error'
+        }
+        return json.dumps(build_modfiy_status)
+
+
+def basic_buildname_search():
+    request.script_root = url_for('indexview.index', _external=True)
+    page = request.values.get('page', 1, type=int)
+    word = request.values.get('keyword', "", type=str)
+    search = b64decode(unquote(word)).decode('utf-8')
+    select_result = DevBuild.query.filter(
+        DevBuild.BuildName.like("%" + search + "%")
+    )
+    pagination = select_result.paginate(
+        page, per_page=Setting().pagination
+    )
+    count = select_result.count()
+    posts = pagination.items
+    result = {
+        'posts': posts,
+        'count': count,
+        'pagination': pagination,
+        'keyword': search
+    }
+    return result

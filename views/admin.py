@@ -1,18 +1,15 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
-from flask import Blueprint, jsonify, render_template, request, url_for, flash, session, redirect, abort
+from flask import Blueprint, render_template, request, url_for, flash, session, redirect, abort
 from flask_login import login_required, current_user
 from decorators import admin_required
-from models import Dev_Loging, Setting, Dev_Note, Dev_DeviceStatus, Dev_Campus, Dev_LVRInfo, Dev_DeviceInfo, DevDevType
+from models import Dev_Loging, Setting
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
 from sysmanger import optionsupdate
-import arrow
-from ext import db
 from notice import noticeindexlist
 from pevent import peventsindexlist
-import json
 
 from .admin_dbquery import admin_query, admin_query_list, admin_query_serach
 from .admin_lvr import  lvr_manager_index, lvr_manager_ajaxquery
@@ -22,7 +19,7 @@ from .admin_dvr import dvr_search_get, dvr_search_post
 from .admin_notice import notice_create_post, notice_modfiy_get, notice_modfiy_post, notice_list, notice_delete
 from .admin_basic import basic_campus, basic_campus_search, basic_campus_add, basic_campus_modfiy
 from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_list
-from .admin_basic import basic_bulid_add
+from .admin_basic import basic_bulid_add, basic_build_delete, basic_build_modfiy, basic_buildname_search
 adminbg = Blueprint('adminbg', __name__)
 
 
@@ -309,7 +306,7 @@ def basic_c_modfiy():
     return result
 
 
-@adminbg.route("/admin/basicinfo/campus/detele", methods=['POST'])
+@adminbg.route("/admin/basicinfo/campus/delete", methods=['POST'])
 @login_required
 @admin_required
 def basic_c_detele():
@@ -346,6 +343,33 @@ def basic_b_add():
     result = basic_bulid_add()
     return result
 
+@adminbg.route("/admin/basicinfo/build/delete", methods=['POST'])
+@login_required
+@admin_required
+def basic_b_delete():
+    result = basic_build_delete()
+    return result
+
+
+@adminbg.route("/admin/basicinfo/build/modfiy", methods=['POST'])
+@login_required
+@admin_required
+def basic_b_modfiy():
+    return basic_build_modfiy()
+
+
+@adminbg.route("/admin/basicinfo/build/serach")
+@login_required
+@admin_required
+def basic_b_search():
+    result = basic_buildname_search()
+    return render_template(
+        '/admin/basicinfo_B_S.html',
+        datas=result['posts'],
+        count=result['count'],
+        pagination=result['pagination'],
+        keyword=result['keyword']
+    )
 
 @adminbg.route("/admin/usrmanage")
 @login_required

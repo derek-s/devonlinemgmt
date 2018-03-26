@@ -6,16 +6,9 @@
     <div class="ileft">
         <div class="iSheader">
             <h2 class="iheader i_inline">楼栋信息</h2>
-            <label class="i_label i_inline">{{ campus_name }} 楼栋信息</label>
+            <label class="i_label i_inline">{{ keyword }} 的搜索结果</label>
         </div>
-        {% if campus_id != "-1" %}
-        <label class="i_label">添加新楼栋</label>
-        <label class="i_label" for="i_input">楼栋名称</label>
-        <input type="text" id="i_input"/>
-        <button id="i_c_add" type="button" class="btn btn-primary">添加楼栋</button>
-        {% else %}
-        <label class="i_label">全部校区仅提供编辑及删除功能，需要添加请针对校区进行操作。</label>
-        {% endif %}
+        <label class="i_label">搜索仅提供查询和编辑功能，需要添加/修改/删除请针对校区进行操作。</label>
     </div>
     <div class="iright">
         <div id="irightbar">
@@ -44,8 +37,8 @@
                     <td width="30%">{{ row.Campus }}</td>
                     <td width="30%">{{ row.BuildName }}</td>
                     <td width="25%">
-                        <button onclick="javascript:js_bcampus_modfiy('{{ row.ID }}', '{{ row.BuildName }}')" type="button" class="btn btn-link inline_button_link">编辑</button> |
-                        <button onclick="javascript:js_delArray_only('{{ row.ID }}')" type="button" class="btn btn-link inline_button_link">删除</button>
+                        <button onclick="javascript:js_bbuild_modfiy('{{ row.ID }}', '{{ row.BuildName }}')" type="button" class="btn btn-link inline_button_link">编辑</button> |
+                        <button onclick="javascript:js_delArray_only('{{ row.ID }}', 'build')" type="button" class="btn btn-link inline_button_link">删除</button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -59,25 +52,30 @@
                         <option value="delete">删除</option>
                     </select>
                 </div>
-                <button id="iopearbutton" class="btn btn-primary">应用</button>
+                <button onclick="javascript:js_b_batchd()" id="iopearbutton" class="btn btn-primary">应用</button>
             </div>
             <div class="ipagination">
-                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.basic_build', campus_id=request.args.get('campus_id'))}} {%endif%}
+                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.basic_b_search', keyword=request.args.get('keyword')|safe)}} {%endif%}
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
+    $('#transfer').click(function () {
+        var page = $('#transfer_page').val();
+        window.location.href = "{{url_for('adminbg.basic_b_search',keyword=request.args.get('keyword') | safe)}}" + "&page=" + page;
+    })
     $("button#indexsbutton").on('click', function () {
             var keyword = $("input#indexserach").val()
-            window.location.href = ("{{ url_for('adminbg.basic_c_search') }}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
+            window.location.href = ("{{ url_for('adminbg.basic_b_search') }}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
         })
     $("button#i_c_add").on('click', function(){
         $.ajax({
-            url: $SCRIPT_ROOT + "#",
+            url: $SCRIPT_ROOT + "admin/basicinfo/build/add",
             type: "POST",
             data:{
-                campusname: $("input#i_input").val()
+                campus_id: "{{ campus_id }}",
+                buildname: $("input#i_input").val()
             },
             dateType: "json",
             success: function(resp) {
