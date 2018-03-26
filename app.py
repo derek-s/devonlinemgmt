@@ -31,6 +31,10 @@ app.config[
     'SQLALCHEMY_DATABASE_URI'] = "mysql://root:123a+-@192.168.10.105/devonlie"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+#Templates dev Testing Code
+app.jinja_env.auto_reload = True
+
+
 bootstrap = Bootstrap(app)
 db.init_app(app)
 login_manager.init_app(app)
