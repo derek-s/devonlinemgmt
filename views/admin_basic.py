@@ -39,7 +39,7 @@ def basic_campus():
 
 def basic_campus_search():
     request.script_root = url_for('indexview.index', _external=True)
-    page = request.values.get('pagenum', 1, type=int)
+    page = request.values.get('page', 1, type=int)
     word = request.values.get('keyword', "", type=str)
     search = b64decode(unquote(word)).decode('utf-8')
     select_result = Dev_Campus.query.filter(
