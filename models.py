@@ -8,7 +8,8 @@ from flask_login import UserMixin
 class Permission:
     """用户权限常量"""
     domestic = 10
-    administer = 80
+    administer = 70
+    suadminister = 80
 
 
 class User(UserMixin, db.Model):
@@ -20,10 +21,18 @@ class User(UserMixin, db.Model):
     permissions = db.Column("Permissions", db.Integer)
 
     def can(self, permissions):
-        return (self.permissions & Permission.administer) == permissions
+        return (self.permissions & Permission.administer) >= 64
+
+    def cansu(self, permissions):
+        return (self.permissions & Permission.suadminister) == 80
 
     def is_administrator(self):
         return self.can(self.permissions)
+
+    def is_suadmin(self):
+        return self.cansu(self.permissions)
+
+
 
     def __init__(self, username, password, permissions):
         self.username = username
