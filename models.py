@@ -12,7 +12,7 @@ class Permission:
 
 
 class User(UserMixin, db.Model):
-    """用户信息模型 登录用"""
+    """用户信息模型"""
     __tablename__ = "dev_User"
     id = db.Column("ID", db.Integer, primary_key=True)
     username = db.Column("UserName", db.String(24))
