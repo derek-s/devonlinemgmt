@@ -21,6 +21,8 @@ from .admin_basic import basic_campus, basic_campus_search, basic_campus_add, ba
 from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_list
 from .admin_basic import basic_bulid_add, basic_build_delete, basic_build_modfiy, basic_buildname_search, basic_type_index
 from .admin_basic import basic_type_Add, basic_type_modfiy, basic_type_delete, basic_type_search
+from .admin_user import admin_userindex
+
 
 adminbg = Blueprint('adminbg', __name__)
 
@@ -430,7 +432,13 @@ def usrmanage():
     """
     :return: 返回数据查询结果并构建相应页面
     """
-    return render_template('/admin/usrmanage.html')
+    result = admin_userindex()
+    return render_template(
+        '/admin/usrmanage.html',
+        posts=result['posts'],
+        count=result['count'],
+        pagination=result['pagination']
+                           )
 
 
 @adminbg.route("/admin/sysmanage", methods=['GET', 'POST'])
