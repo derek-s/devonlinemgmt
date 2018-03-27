@@ -1,4 +1,5 @@
 {% extends "base.html" %} {% block title %}用户管理|管理后台 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
+{%import '_macros.html' as macros%}
 <div id="admincontent">
     <div id="leftmenu">
         <ul id="sideul" class="nav nav-sidebar">
@@ -15,16 +16,43 @@
     </div>
     <div id="rightcont">
         <h1 class="admintitle">用户管理</h1>
-        <table>
-            <th>序号</th>
-            <th>校区</th>
-            <th>弱电间信息</th>
-            <th>设备信息</th>
-            <th>上联IP</th>
-            <th>上联端口</th>
-            <th>设备型号</th>
-            <th>相关操作</th>
-        </table>
+        <div id="toolbar">
+            <div id="serachbar">
+                <input id="indexserach" class="form-control input-lg input-serach" type="text" name="devinfoserp" placeholder="请输入搜索关键词（支持模糊搜索）">
+                <button id="indexsbutton" class="btn btn-primary">搜 索</button>
+            </div>
+        </div>
+        <div class="adminpanel panel-info">
+                <div class="panel-heading">全部数据</div>
+                <div id="data">
+                    <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
+                        <tr>
+                                <th>序号</th>
+                                <th>用户名</th>
+                                <th>用户等级</th>
+                                <th>操作</th>
+                        </tr>
+                        {% for data in posts %}
+                        <tr class="jsondata">
+                            <td>{{ data.id }}</td>
+                            <td>{{ data.username }}</td>
+                            {% if data.permissions == 80 %}
+                            <td>超级管理员</td>
+                            {% elif data.permissions == 70 %}
+                            <td>管理员</td>
+                            {% elif data.permissions == 10 %}
+                            <td>普通用户</td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+                            <td>更改权限 | 删除用户</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <div>
+                    {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.usrmanage')}} {%endif%}
+                </div>
     </div>
 </div>
 
