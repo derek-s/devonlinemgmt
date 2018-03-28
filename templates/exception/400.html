@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% block title %}无效请求 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
+{% extends "exception/base.html" %}{% block title %}无效请求 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
 <div id="content">
     <h3 class="error">400 - 无效请求</h3>
     <a class="error" href="{{url_for('indexview.index')}}">返回首页</a>
