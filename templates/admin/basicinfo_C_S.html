@@ -55,7 +55,7 @@
                         <option value="delete">删除</option>
                     </select>
                 </div>
-                <button onclick="javascript:js_b_batchd()" id="iopearbutton" class="btn btn-primary">应用</button>
+                <button onclick="javascript:js_C_batchd()" id="iopearbutton" class="btn btn-primary">应用</button>
             </div>
             <div class="ipagination">
                 {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.basic_c_search', keyword=request.args.get('keyword') | safe)}} {%endif%}

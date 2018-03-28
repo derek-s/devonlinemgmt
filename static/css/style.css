@@ -667,3 +667,26 @@ select#ipage {
 .ilayer_modfiy {
     margin: 10px;
 }
+ul.nuserul {
+    list-style: none;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    width: 400px;
+    float: left;
+}
+ul.nuserul > li {
+    list-style: none;
+    display: inline;
+}
+div.nuser {
+    display: block;
+}
+select#iperm {
+    display: block;
+    margin-bottom: 10px;
+}
+.usrbold {
+    font-weight: bold;
+    color: black
+}
