@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}用户管理|管理后台 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
+{% extends "base.html" %}{% block head %}<script src="{{ url_for('static', filename='js/usu.js') }}" type="text/javascript"></script>{% endblock %} {% block title %}用户管理|管理后台 - 设备信息管理系统{% endblock %} {% block content %} {% include "nav.html" %}
 {%import '_macros.html' as macros%}
 <div id="admincontent">
     <div id="leftmenu">
@@ -8,7 +8,9 @@
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.lvrmanager')}}">弱电间信息管理</a></li>
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.dvrmanage')}}">设备信息管理</a></li>
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.basicinfo')}}">基础信息维护</a></li>
-            <li class="sideli"><a class="adminmenu  sideactive" href="{{url_for('adminbg.usrmanage')}}">用户管理</a></li>
+            {% if current_user.is_suadmin() %}
+            <li class="sideli"><a class="adminmenu sideactive" href="{{url_for('adminbg.usrmanage')}}">用户管理</a></li>
+            {% endif %}
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.sysmanage')}}">系统设置</a></li>
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.logviews')}}">操作日志</a></li>
             <li class="sideli"><a class="adminmenu" href="{{url_for('adminbg.notelist')}}">通知公告管理</a></li>
@@ -16,7 +18,40 @@
     </div>
     <div id="rightcont">
         <h1 class="admintitle">用户管理</h1>
+        <a href="/admin/usrcreate" class="btn btn-primary adtitlebutton">创建新用户</a>
         <div id="toolbar">
+            <div class="nuser">
+                <ul class="nuserul">
+                    <li>
+                        {% if not request.args.get('level') or request.args.get('level') == "all"%}
+                        <a class="usrbold" href="{{url_for('adminbg.usrmanage', level='all')}}">全部({{ all_count }})</a> | 
+                        {% else %}
+                        <a href="{{url_for('adminbg.usrmanage', level='all')}}">全部({{ all_count }})</a> |
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if request.args.get('level') == "su"%}
+                        <a class="usrbold" href="{{url_for('adminbg.usrmanage', level='su')}}">超级管理员({{suadmin_count}})</a> | 
+                        {% else %}
+                        <a href="{{url_for('adminbg.usrmanage', level='su')}}">超级管理员({{suadmin_count}})</a> | 
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if request.args.get('level') == "admin"%}
+                        <a class="usrbold" href="{{url_for('adminbg.usrmanage', level='admin')}}">管理员({{admin_count}})</a> | 
+                        {% else %}
+                        <a href="{{url_for('adminbg.usrmanage', level='admin')}}">管理员({{admin_count}})</a> | 
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if request.args.get('level') == "ordman"%}
+                        <a class="usrbold" href="{{url_for('adminbg.usrmanage', level='ordman')}}">普通用户({{user_count}})</a>
+                        {% else %}
+                        <a href="{{url_for('adminbg.usrmanage', level='ordman')}}">普通用户({{user_count}})</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
             <div id="serachbar">
                 <input id="indexserach" class="form-control input-lg input-serach" type="text" name="devinfoserp" placeholder="请输入搜索关键词（支持模糊搜索）">
                 <button id="indexsbutton" class="btn btn-primary">搜 索</button>
@@ -45,16 +80,29 @@
                             {% else %}
                             <td></td>
                             {% endif %}
-                            <td>更改权限 | 删除用户</td>
+                            <td>
+                                <button onclick="javascript:js_perm_modfiy('{{ data.id }}')" type="button" class="btn btn-link inline_button_link">更改权限</button> | 
+                                <button onclick="javascript:js_p_modfiy('{{ data.id }}', '{{ data.username }}')" type="button" class="btn btn-link inline_button_link">修改密码</button> | 
+                                <button onclick="javascript:js_u_delete('{{ data.id }}')" type="button" class="btn btn-link inline_button_link">删除用户</button>
+                            </td>
                         </tr>
                         {% endfor %}
                     </table>
                 </div>
                 <div>
-                    {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.usrmanage')}} {%endif%}
+                    {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.usrmanage', level=request.args.get('level'))}} {%endif%}
                 </div>
     </div>
 </div>
-
-
+<script type="text/javascript">
+    $('#transfer').click(function() {
+            var page = $('#transfer_page').val();
+            window.location.href = "{{url_for('adminbg.usrmanage', level=request.args.get('level'))}}" + "&page=" + page;
+    })
+    $("button#indexsbutton").on('click', function () {
+            var keyword = $("input#indexserach").val()
+            window.location.href = ("{{ url_for('adminbg.usrmanage') }}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
+        })
+    
+</script>
 {% endblock %}
