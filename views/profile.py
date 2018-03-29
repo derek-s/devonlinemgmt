@@ -5,7 +5,7 @@ from flask import (render_template, url_for, request, flash, redirect, session, 
 from flask_login import login_required
 
 from ext import md5s
-from models import Dev_Note, Dev_Loging, User, db, DevPEvents
+from models import Dev_Loging, User, db, DevPEvents
 from log import eventlog
 from forms import ChangePwd
 from notice import noticeindexlist

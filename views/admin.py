@@ -21,7 +21,7 @@ from .admin_basic import basic_campus, basic_campus_search, basic_campus_add, ba
 from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_list
 from .admin_basic import basic_bulid_add, basic_build_delete, basic_build_modfiy, basic_buildname_search, basic_type_index
 from .admin_basic import basic_type_Add, basic_type_modfiy, basic_type_delete, basic_type_search
-from .admin_user import admin_userindex
+from .admin_user import admin_userindex, user_per_modfiy, user_delete, user_pwd_modfiy
 
 
 adminbg = Blueprint('adminbg', __name__)
@@ -424,7 +424,6 @@ def basic_t_search():
     )
 
 
-
 @adminbg.route("/admin/usrmanage")
 @login_required
 @admin_required
@@ -437,9 +436,40 @@ def usrmanage():
         '/admin/usrmanage.html',
         posts=result['posts'],
         count=result['count'],
-        pagination=result['pagination']
+        pagination=result['pagination'],
+        all_count=result['count'],
+        suadmin_count=result['suadmin_count'],
+        admin_count=result['admin_count'],
+        user_count=result['user_count'],
                            )
 
+
+@adminbg.route("/admin/usrmanage/permodfiy", methods=['POST'])
+@login_required
+@admin_required
+def usrpermodfiy():
+    return user_per_modfiy()
+
+
+@adminbg.route("/admin/usrmanage/usrdel", methods=['POST'])
+@login_required
+@admin_required
+def usrdel():
+    return user_delete()
+
+
+@adminbg.route("/admin/usrmanage/pwdmodfiy", methods=['POST'])
+@login_required
+@admin_required
+def usrpwdmodfiy():
+    return user_pwd_modfiy()
+
+
+@adminbg.route("/admin/usrcreate", merhods=['GET', 'POST'])
+@login_required
+@admin_required
+def usecreate():
+    pass
 
 @adminbg.route("/admin/sysmanage", methods=['GET', 'POST'])
 @login_required
@@ -453,7 +483,6 @@ def sysmanage():
     if request.method == 'POST':
         pagesize = request.form.get('syspagen', 1)
         pagesize_index = request.form.get('syspageindex', 1)
-        print pagesize_index, pagesize
         if pagesize.isdigit():
             optionsupdate('pagination', int(pagesize))
             optionsupdate('pagination_index', int(pagesize_index))

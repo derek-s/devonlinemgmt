@@ -29,3 +29,7 @@ class ChangePwd(FlaskForm):
         Length(1, 24)], render_kw={"placeholder": u"新密码", "id": "newpw"})
     confirm = PasswordField('', None, render_kw={"placeholder": u"重复密码", "id": "confirmpw"})
     submit = SubmitField(u'修改密码', None ,render_kw={"class": "btn btn-danger changpwdb"})
+
+
+class CreateUser(FlaskForm):
+    pass
