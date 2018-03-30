@@ -5,6 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from jinja2 import evalcontextfilter, environment
 import hashlib
+import string
+import random
+
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -21,3 +24,11 @@ def md5s(self, value):
     hashm = hashlib.md5()
     hashm.update(value)
     return hashm.hexdigest().upper()
+
+
+def passwdcreate(size=12,chars=string.ascii_lowercase + string.ascii_uppercase + string.digits):
+    """
+    生成随机字符串密码
+    :return: str password
+    """
+    return ''.join(random.choice(chars) for _ in range(size))
