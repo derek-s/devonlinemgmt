@@ -21,7 +21,7 @@ from .admin_basic import basic_campus, basic_campus_search, basic_campus_add, ba
 from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_list
 from .admin_basic import basic_bulid_add, basic_build_delete, basic_build_modfiy, basic_buildname_search, basic_type_index
 from .admin_basic import basic_type_Add, basic_type_modfiy, basic_type_delete, basic_type_search
-from .admin_user import admin_userindex, user_per_modfiy, user_delete, user_pwd_modfiy
+from .admin_user import admin_userindex, user_per_modfiy, user_delete, user_pwd_modfiy, user_create
 
 
 adminbg = Blueprint('adminbg', __name__)
@@ -465,11 +465,12 @@ def usrpwdmodfiy():
     return user_pwd_modfiy()
 
 
-@adminbg.route("/admin/usrcreate", merhods=['GET', 'POST'])
+@adminbg.route("/admin/usrcreate", methods=['GET', 'POST'])
 @login_required
 @admin_required
 def usecreate():
-    pass
+    form = user_create()
+    return render_template("/admin/usercreate.html", form=form)
 
 @adminbg.route("/admin/sysmanage", methods=['GET', 'POST'])
 @login_required

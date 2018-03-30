@@ -5,7 +5,7 @@
 # @Site    : 
 # @File    : admin_user.py
 
-from flask import request, url_for
+from flask import request, url_for, flash, abort, redirect
 from models import User, Setting
 from models import DevBuild
 from base64 import b64decode
@@ -16,6 +16,7 @@ import hashlib
 import string
 import random
 from ext import md5s
+from forms import CreateUser
 
 def admin_userindex():
     page = request.args.get('page', 1 ,type=int)
@@ -140,4 +141,29 @@ def user_pwd_modfiy():
 
 
 def user_create():
-    pass
+    form = CreateUser()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            user = User.query.filter_by(
+                username=form.username.data
+            ).first()
+            if user:
+                flash(u"用户名已存在，请更换用户名")
+            else:
+                permissions = form.permission.data
+                if permissions == 'ptman':
+                    user_permission = 10
+                elif permissions == 'admin':
+                    user_permission = 70
+                elif permissions == 'suadmin':
+                    user_permission = 80
+                else:
+                    abort(500)
+                newuser = User(
+                    username=form.username.data,password=md5s(None, form.password.data),permissions=user_permission
+                )
+                db.session.add(newuser)
+                db.session.commit()
+                flash(u"新用户创建成功")
+                return redirect(url_for('adminbg.usrmanage'))
+    return form
