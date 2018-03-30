@@ -470,7 +470,10 @@ def usrpwdmodfiy():
 @admin_required
 def usecreate():
     form = user_create()
-    return render_template("/admin/usercreate.html", form=form)
+    if form == 0:
+        return redirect(url_for('adminbg.usrmanage'))
+    else:
+        return render_template("/admin/usercreate.html", form=form)
 
 @adminbg.route("/admin/sysmanage", methods=['GET', 'POST'])
 @login_required

@@ -165,5 +165,6 @@ def user_create():
                 db.session.add(newuser)
                 db.session.commit()
                 flash(u"新用户创建成功")
-                return redirect(url_for('adminbg.usrmanage'))
-    return form
+                return 0
+    if request.method == 'GET':
+        return form
