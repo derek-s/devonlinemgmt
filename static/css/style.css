@@ -690,3 +690,6 @@ select#iperm {
     font-weight: bold;
     color: black
 }
+.basicform {
+    line-height: 20px;
+}
