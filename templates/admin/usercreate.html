@@ -19,12 +19,23 @@
     </div>
     <div id="rightcont">
         <h1 class="admintitle">创建新用户</h1>
-
+        {% for cuser_error in get_flashed_messages(category_filter=["user_error"]) %}
+            <div class="alert alert-{{ cuser_error[0] }} alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button> {{ cuser_error }}
+            </div>
+        {% endfor %}
         <form class="form" method="POST">
                 {{ form.csrf_token }}
                 <div>
                     {{ render_field(form.username) }}
-                    {{ render_field(form.password) }}
+                    
+                    <div class="cuser_from">
+                            <div class="cuser_block">
+                                <label class="cuser_label">密码</label>
+                                <input id="pwd" name="pwd" type="text" value="{{ pwd_v }}" readonly>
+                            </div>
+                        </div>
+
                     {{ render_field(form.permission) }}
                 </div>
                 {{ form.submit }}

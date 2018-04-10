@@ -690,6 +690,11 @@ select#iperm {
     font-weight: bold;
     color: black
 }
-.basicform {
-    line-height: 20px;
+.cuser_errors {
+    display: inline-block
+}
+.cuser_label {
+    margin-right: 10px;
+    font-size: 16px;
+    width: 100px;
 }
