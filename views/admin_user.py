@@ -147,8 +147,9 @@ def user_create():
             user = User.query.filter_by(
                 username=form.username.data
             ).first()
+            pwd = request.values.get("pwd")
             if user:
-                flash(u"用户名已存在，请更换用户名")
+                flash(u"用户名已存在，请更换用户名", "user_error")
             else:
                 permissions = form.permission.data
                 if permissions == 'ptman':
@@ -160,7 +161,7 @@ def user_create():
                 else:
                     abort(500)
                 newuser = User(
-                    username=form.username.data,password=md5s(None, form.password.data),permissions=user_permission
+                    username=form.username.data,password=md5s(None, pwd),permissions=user_permission
                 )
                 db.session.add(newuser)
                 db.session.commit()

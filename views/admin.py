@@ -10,6 +10,7 @@ from urllib import unquote
 from sysmanger import optionsupdate
 from notice import noticeindexlist
 from pevent import peventsindexlist
+from ext import passwdcreate
 
 from .admin_dbquery import admin_query, admin_query_list, admin_query_serach
 from .admin_lvr import  lvr_manager_index, lvr_manager_ajaxquery
@@ -476,7 +477,8 @@ def usecreate():
     form = user_create()
     if form == 0:
         return redirect(url_for('adminbg.usrmanage'))
-    return render_template("/admin/usercreate.html", form=form)
+    pwd_v = passwdcreate()
+    return render_template("/admin/usercreate.html", form=form, pwd_v=pwd_v)
 
 
 @adminbg.route("/admin/sysmanage", methods=['GET', 'POST'])
