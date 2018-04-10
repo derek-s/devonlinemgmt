@@ -37,7 +37,7 @@ class CreateUser(FlaskForm):
     username = StringField(
         u'用户名', validators=[
             DataRequired(
-                message=u'用户名不能为空'
+                message=u'用户名不能为空,且长度不得小于4个字符或大于24个字符'
             ),Length(4,24)
         ]
     )

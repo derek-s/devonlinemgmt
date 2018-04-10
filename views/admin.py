@@ -24,6 +24,10 @@ from .admin_basic import basic_type_Add, basic_type_modfiy, basic_type_delete, b
 from .admin_user import admin_userindex, user_per_modfiy, user_delete, user_pwd_modfiy, user_create
 
 
+# test
+from forms import CreateUser
+
+
 adminbg = Blueprint('adminbg', __name__)
 
 
@@ -472,8 +476,8 @@ def usecreate():
     form = user_create()
     if form == 0:
         return redirect(url_for('adminbg.usrmanage'))
-    else:
-        return render_template("/admin/usercreate.html", form=form)
+    return render_template("/admin/usercreate.html", form=form)
+
 
 @adminbg.route("/admin/sysmanage", methods=['GET', 'POST'])
 @login_required
