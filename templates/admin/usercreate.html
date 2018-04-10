@@ -19,18 +19,14 @@
     </div>
     <div id="rightcont">
         <h1 class="admintitle">创建新用户</h1>
-        {% for message in get_flashed_messages(with_categories=True) %}
-        <div class="alert alert-{{ message[0] }}">
-            <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message[1] }}
-        </div>
-        {% endfor %}
+
         <form class="form" method="POST">
-                {{ form.hidden_tag() }}
-                <table>
+                {{ form.csrf_token }}
+                <div>
                     {{ render_field(form.username) }}
                     {{ render_field(form.password) }}
                     {{ render_field(form.permission) }}
-                </table>
+                </div>
                 {{ form.submit }}
             </form>
             

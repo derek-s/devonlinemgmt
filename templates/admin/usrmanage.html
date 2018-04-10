@@ -60,6 +60,11 @@
             </div>
         </div>
         <div class="adminpanel panel-info">
+                {% for message in get_flashed_messages(with_categories=True) %}
+                <div class="alert alert-{{ message[0] }} alert-success">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message[1] }}
+                </div>
+                {% endfor %}
                 <div class="panel-heading">全部数据</div>
                 <div id="data">
                     <table id="devinfolist" class="tabledevinfo table table-striped table-hover">

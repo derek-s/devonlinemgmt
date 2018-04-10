@@ -81,7 +81,7 @@
         <div class="protitle">修改密码</div>
         {% if current_user.username == username %} {% from "_changepwd.html" import render_field %}
         <form class="form" method="POST">
-            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
             <table>
                 {{render_field(form.oldpwd)}} {{render_field(form.newpwd)}} {{render_field(form.confirm)}}
             </table>
