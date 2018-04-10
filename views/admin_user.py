@@ -166,5 +166,4 @@ def user_create():
                 db.session.commit()
                 flash(u"新用户创建成功")
                 return 0
-    if request.method == 'GET':
-        return form
+    return form
