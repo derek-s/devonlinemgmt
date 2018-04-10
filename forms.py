@@ -21,7 +21,7 @@ class LoginForm(FlaskForm):
 
 class ChangePwd(FlaskForm):
     oldpwd = PasswordField('', validators=[
-        DataRequired(message=u'旧密码不能为空'), Length(6, 24)
+        DataRequired(message=u'旧密码不能为空'), Length(6, 24, message=u'长度为6-24个字符')
     ], render_kw={"placeholder": u"旧密码", "id": "oldpw"}
                            )
     newpwd = PasswordField('', validators=[
@@ -37,15 +37,17 @@ class CreateUser(FlaskForm):
     username = StringField(
         u'用户名', validators=[
             DataRequired(
-                message=u'用户名不能为空,且长度不得小于4个字符或大于24个字符'
-            ),Length(4,24)
+                message=u'用户名不能为空'
+            ),Length(4,24, message=u'长度为4-24个字符')
         ]
     )
+    """
     password = StringField(
         u'密码',None, render_kw={
             "value": passwdcreate(),
             "readonly": "readonly"
         })
+    """
     permission = SelectField(
         u'用户权限', choices=[
             ('ptman', u'普通用户'),
