@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/3/21 14:24
 # @Author  : Derek.S
-# @Site    : 
+# @Site    : 设备信息管理
 # @File    : admin_dvr.py
 
 from flask import jsonify, request, url_for
