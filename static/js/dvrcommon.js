@@ -1,5 +1,24 @@
 $(document).ready(
     function() {
+        $("#checkboxall").click(function () {
+            if ($("#checkboxall").prop("checked")) {
+                $("[name='oper']").prop("checked", true)
+            } else {
+                $("[name='oper']").prop("checked", false)
+            }
+        })
+        $("[name='oper']").click(function () {
+            $("[name='oper']").each(function(){
+                console.log(($(this)).text())
+            })
+            if ($("#checkboxall").prop("checked")) {
+                $("#checkboxall").prop("checked", false)
+            }
+            if ($("[name='oper']").prop("checked")) {
+                
+            }
+        })
+        
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
@@ -35,3 +54,19 @@ $(document).ready(
         })
     }
 )
+
+function js_dvr_batchd() {
+    url = self.location.href.split("&")[0].split("?")[0]
+    if ($("select#ipage").val() == "delete") {
+        $("[name='oper']").each(function () {
+            if ($(this).prop('checked')) {
+                console.log("add id")
+            }
+        })
+        console.log("delete id")
+    }else if($("select#ipage").val() == "dvrup"){
+        console.log("dvrup")
+    }else if($("select#ipage").val() == "dvrdown"){
+        console.log("dvrdown")
+    }
+}
