@@ -67,6 +67,7 @@
                 <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
                     <tr>
                         <th>序号</th>
+                        <th><input id="checkboxall" type="checkbox" name="oper_all"></th>
                         <th>设备名称</th>
                         <th>设备类型</th>
                         <th>设备序列号</th>
@@ -77,6 +78,7 @@
                     {% for devinfone in datas %}
                     <tr class="jsondata">
                         <td>{{ devinfone.ID }}</td>
+                        <td><input id="oper-{{ devinfone.ID }}" type="checkbox" name="oper" value="{{ devinfone.ID }}" /></td>
                         <td>{{ devinfone.DeviceName }}</td>
                         <td>{{ devinfone.DeviceCategory }}</td>
                         <td>{{ devinfone.DeviceSN }}</td>
@@ -90,8 +92,21 @@
             <div class="ajaxnetpage">
                 <a id="ajaxntindex" class="btn btn-primary" href="javascript:void(0);">下一页</a>
             </div>
-            <div>
-                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.dvrmanage')}} {%endif%}
+            <div class="listbottombar">
+                <div class="ibtmdowplist">
+                    <div class="dropdown">
+                        <select id="ipage" name="action" id="bulk-action-selector-top">
+                            <option value="-1">批量操作</option>
+                            <option value="dvrup">上架</option>
+                            <option value="dvrdown">下架</option>
+                            <option value="delete">删除</option>
+                        </select>
+                    </div>
+                    <button onclick="javascript:js_dvr_batchd()" id="iopearbutton" class="btn btn-primary">应用</button>
+                </div>
+                <div class="fullsize ipagination">
+                    {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.basic_build', campus_id=request.args.get('campus_id'))}} {%endif%}
+                </div>
             </div>
         </div>
 </div>
@@ -123,7 +138,6 @@
                     trc += tra + "<td>" + eachone.ID + "</td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "管理" + "</td>" + trb
                     hasnext = eachone.next
                 })
-                console.log(hasnext)
                 $("table#devinfolist>tbody tr:last-child").after(trc)
                 if (!hasnext) {
                     $("a#ajaxntindex").remove()
