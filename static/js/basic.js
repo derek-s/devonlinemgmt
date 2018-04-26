@@ -16,6 +16,21 @@ $(document).ready(
                 $("[name='oper']").prop("checked", false)
             }
         })
+        $(document).on("click", '[name="oper"]', function(){
+            var check=0
+            if ($("#checkboxall").prop("checked")) {
+                $("#checkboxall").prop("checked", false)
+            }
+            var inputcount = $("input[name='oper']").length
+            $("input[name='oper']").each(function () {
+                if($(this).prop("checked")){
+                    check += 1
+                }
+                if(inputcount === check){
+                    $("#checkboxall").prop("checked", true)
+                }
+            })
+        })
         id_array = new Array()
     }
 )
