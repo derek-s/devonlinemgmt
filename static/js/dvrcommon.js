@@ -1,3 +1,4 @@
+/// <reference path="C:\\Users\\Derek.S\\AppData\\Roaming\\npm\\node_modules\\@types\\jquery\\index.d.ts"/>
 $(document).ready(
     function() {
         $("#checkboxall").click(function () {
@@ -7,16 +8,20 @@ $(document).ready(
                 $("[name='oper']").prop("checked", false)
             }
         })
-        $("[name='oper']").click(function () {
-            $("[name='oper']").each(function(){
-                console.log(($(this)).text())
-            })
+        $(document).on("click", '[name="oper"]', function(){
+            var check=0
             if ($("#checkboxall").prop("checked")) {
                 $("#checkboxall").prop("checked", false)
             }
-            if ($("[name='oper']").prop("checked")) {
-                
-            }
+            var inputcount = $("input[name='oper']").length
+            $("input[name='oper']").each(function () {
+                if($(this).prop("checked")){
+                    check += 1
+                }
+                if(inputcount === check){
+                    $("#checkboxall").prop("checked", true)
+                }
+            })
         })
         
         $.ajaxSetup({
