@@ -105,7 +105,7 @@
                         <td>{{ devinfone.DeviceSN }}</td>
                         <td>{{ devinfone.DeviceCondition }}</td>
                         <td>{{ devinfone.DeviceID }}</td>
-                        <td>管理</td>
+                        <td><button onclick="" type="button" class="btn btn-link inline_button_link">管理</button></td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -159,7 +159,7 @@
                 var trb = '</tr>'
                 $.each(data, function (one) {
                     eachone = data[one]
-                    trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='"+ eachone.ID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "管理" + "</td>" + trb
+                    trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='"+ eachone.ID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "<button onclick='' type'button' class='btn btn-link inline_button_link'>管理</button>" + "</td>" + trb
                     hasnext = eachone.next
                 })
                 $("table#devinfolist>tbody tr:last-child").after(trc)
