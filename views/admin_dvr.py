@@ -167,3 +167,5 @@ def dvrsearchsql(keyword):
         (Dev_DeviceInfo.DeviceID.like("%" + keyword + "%"), "")[keyword is None]
     ).order_by(Dev_DeviceInfo.ID.asc())
     return search_result
+
+
