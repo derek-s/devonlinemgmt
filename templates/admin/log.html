@@ -16,7 +16,10 @@
         </ul>
     </div>
     <div id="rightcont">
-        <h1 class="admintitle">操作日志</h1>
+        <div id="admintblock">
+            <h1 class="admintitleb">操作日志</h1>
+             <a href="javascript:cleanlog();" class="btn btn-primary adtitlebutton">清空日志</a>
+        </div>
         <div class="adminbar">
             <label class="adminlabel">用户名检索</label><input id="logusers" class="form-control input-lg input-serach">
             <label class="adminlabel">日志类检索</label>
@@ -80,6 +83,30 @@
             $('input').val("");
             $('button#dropdownlogs').html("全部<span class='caret'></span>")
         }
+        function cleanlog(){
+            layer.confirm("确定要清空全部日志么？",{
+            btn:['确定','取消']
+            },
+            function(){
+                $.ajax({
+                    url: $SCRIPT_ROOT + "/admin/log",
+                    type: "post",
+                    data: {
+                        logcode: "all"
+                    },
+                    dataType: "json",
+                    success: function(resp) {
+                        if (resp.status != 200){
+                            alert("操作失败")
+                        } else {
+                            alert("操作成功")
+                            window.location.reload()
+                        }
+                    }
+                })
+            })
+        }
+        
     </script>
 
     {% endblock %}

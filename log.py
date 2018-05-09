@@ -6,7 +6,7 @@ from flask_login import current_user
 import arrow
 from models import Dev_Loging
 from ext import db
-
+import json
 
 def eventlog(log):
     """
@@ -38,3 +38,23 @@ def logonlog(username, log):
     loginfo = Dev_Loging(date, username, ip, log)
     db.session.add(loginfo)
     db.session.commit()
+
+def emptylog():
+    """
+    清空日志
+    :return: 返回操作状态
+    """
+    try:
+        Dev_Loging.query.delete()
+        emptylog_status = {
+            'status': 200,
+            'message': 'Operation Complete'
+        }
+        db.session.commit()
+        eventlog("[清空日志表]")
+    except:
+        emptylog_status = {
+            'status': 500,
+            'message': 'Server Error'
+        }
+    return json.dumps(emptylog_status)
