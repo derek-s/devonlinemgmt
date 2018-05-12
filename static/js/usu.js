@@ -1,5 +1,28 @@
 $(document).ready(
     function () {
+        $("#checkboxall").click(function () {
+            if ($("#checkboxall").prop("checked")) {
+                $("[name='oper']").prop("checked", true)
+            } else {
+                $("[name='oper']").prop("checked", false)
+            }
+        })
+        $(document).on("click", '[name="oper"]', function(){
+            var check=0
+            if ($("#checkboxall").prop("checked")) {
+                $("#checkboxall").prop("checked", false)
+            }
+            var inputcount = $("input[name='oper']").length
+            $("input[name='oper']").each(function () {
+                if($(this).prop("checked")){
+                    check += 1
+                }
+                if(inputcount === check){
+                    $("#checkboxall").prop("checked", true)
+                }
+            })
+        })
+        
         $.ajaxSetup({
             beforeSend: function (xhr, settings) {
                 if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {

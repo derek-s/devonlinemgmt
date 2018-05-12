@@ -70,6 +70,7 @@
                     <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
                         <tr>
                                 <th>序号</th>
+                                <th><input id="checkboxall" type="checkbox" name="oper_all"></th>
                                 <th>用户名</th>
                                 <th>用户等级</th>
                                 <th>操作</th>
@@ -77,6 +78,7 @@
                         {% for data in posts %}
                         <tr class="jsondata">
                             <td>{{ data.id }}</td>
+                            <td><input id="oper-{{ data.id }}" type="checkbox" name="oper" value="{{ data.id }}" /></td>
                             <td>{{ data.username }}</td>
                             {% if data.permissions == 80 %}
                             <td>超级管理员</td>
@@ -96,8 +98,20 @@
                         {% endfor %}
                     </table>
                 </div>
-                <div>
-                    {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.usrmanage', level=request.args.get('level'))}} {%endif%}
+                <div class="listbottombar">
+                        <div class="ibtmdowplist">
+                            <div class="dropdown">
+                                <select id="ipage" name="action" id="bulk-action-selector-top">
+                                    <option value="-1">批量操作</option>
+                                    <option value="delete">删除用户</option>
+                                </select>
+                            </div>
+                            <button onclick="javascript:js_dvr_batchd()" id="iopearbutton" class="btn btn-primary">应用</button>
+                        </div>
+                        <div class="fullsize ipagination">
+                                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.usrmanage', level=request.args.get('level'))}} {%endif%}
+                        </div>
+                    </div>
                 </div>
     </div>
 </div>
