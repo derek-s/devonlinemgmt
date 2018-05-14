@@ -4,6 +4,7 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
+from flask_jsglue import JSGlue
 
 from ext import login_manager, md5s
 from models import *
@@ -18,6 +19,10 @@ from errorhandler import errorview
 SECRET_KEY = '12efc6ca97aefb8e1f6a589c6f334a405bca977bc9cec023f193ee975379e153'
 
 app = Flask(__name__, template_folder="templates")
+
+# add Flask_URL in js code
+jsglue = JSGlue(app)
+
 app.register_blueprint(adminbg)
 app.register_blueprint(ajaxquery)
 app.register_blueprint(loginview)
