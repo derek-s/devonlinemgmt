@@ -23,7 +23,7 @@
         <div id="toolbar">
                 <div id="serachpage">
                         <input id="indexserach" class="form-control input-lg input-serach" type="text" name="devinfoserp" placeholder="请输入搜索关键词（支持模糊搜索）">
-                        <button id="indexsbutton" class="btn btn-primary">搜 索</button>
+                        <button id="indexsbutton" class="btn btn-primary dvr_serach">搜 索</button>
                     </div>
         </div>
         <div class="adminpanel panel-info">
@@ -60,57 +60,12 @@
             </div>
             {% endif %}
             <div class="ajaxnetpage">
-                <a id="ajaxntindex" class="btn btn-primary" href="javascript:void(0);">下一页</a>
+                <a id="ajaxntindex" class="btn btn-primary dvrsajaxnet" href="javascript:void(0);">下一页</a>
             </div>
             <div>
                 {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.dvrsearch', keyword=request.args.get('keyword') | safe)}} {%endif%}
             </div>
         </div>
 </div>
-<script type="text/javascript">
-    $(function() {
-        $("button#indexsbutton").on('click', function () {
-            //搜索
-            var keyword = $("input#indexserach").val()
-            window.open("{{url_for('adminbg.dvrsearch')}}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
-        })
-        $('#transfer').click(function() {
-            var page = $('#transfer_page').val();
-            window.location.href = "{{url_for('adminbg.dvrsearch',keyword=request.args.get('keyword') | safe)}}" + "&page=" + page;
-        })
-        $("a#ajaxntindex").bind('click', function () {
-            //list加载下一页
-            $(this).text("正在加载，请稍后……")
-            var pagenum = $("li#pnactive>a").text()
-            var datacount = $("tr.jsondata").length
-            var word = $.base64.encode('{{ keyword }}')
-            var serach = encodeURIComponent(word, 'utf-8')
-            $.post("{{url_for('adminbg.dvrsearch')}}", {
-                count: datacount,
-                pagenum: pagenum,
-                keyword: serach
-            }, function (data) {
-                var trc = ""
-                var tra = '<tr class="jsondata">'
-                var trb = '</tr>'
-                $.each(data, function (one) {
-                    eachone = data[one]
-                    trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='"+ eachone.ID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "<button onclick='' type'button' class='btn btn-link inline_button_link'>管理</button>" + "</td>" + trb
-                    hasnext = eachone.next
-                })
-                $("table#devinfolist>tbody tr:last-child").after(trc)
-                if (!hasnext) {
-                    $("a#ajaxntindex").remove()
-                } else {
-                    $("a#ajaxntindex").text('下一页')
-                }
-            }).fail(function (status) {
-                if (status.status == '404') {
-                    $("a#ajaxntindex").remove()
-                }
-            })
-        })
-    })
-</script>
 
 {% endblock %}

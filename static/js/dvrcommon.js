@@ -57,6 +57,45 @@ $(document).ready(
             }
             window.open($SCRIPT_ROOT + "admin/dvrmanage/list?devtype=" + devtype + "&devonline=" + devonline)
         })
+        $('#transfer').click(function() {
+            var page = $('#transfer_page').val();
+            window.location.href = "{{url_for('adminbg.dvrsearch',keyword=request.args.get('keyword') | safe)}}" + "&page=" + page;
+        })
+        $("a.dvrsajaxnet").bind('click', function () {
+            //list加载下一页
+            $(this).text("正在加载，请稍后……")
+            var pagenum = $("li#pnactive>a").text()
+            var datacount = $("tr.jsondata").length
+            console.log({{ keyword|tostring }})
+            var word = $.base64.encode('{{ keyword }}')
+            var serach = encodeURIComponent(word, 'utf-8')
+            var posturl = Flask.url_for('adminbg.dvrsearch')
+            console.log(posturl)
+            $.post(posturl, {
+                count: datacount,
+                pagenum: pagenum,
+                keyword: serach
+            }, function (data) {
+                var trc = ""
+                var tra = '<tr class="jsondata">'
+                var trb = '</tr>'
+                $.each(data, function (one) {
+                    eachone = data[one]
+                    trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='"+ eachone.ID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "<button onclick='' type'button' class='btn btn-link inline_button_link'>管理</button>" + "</td>" + trb
+                    hasnext = eachone.next
+                })
+                $("table#devinfolist>tbody tr:last-child").after(trc)
+                if (!hasnext) {
+                    $("a.dvrsajaxnet").remove()
+                } else {
+                    $("a.dvrsajaxnet").text('下一页')
+                }
+            }).fail(function (status) {
+                if (status.status == '404') {
+                    $("a.dvrsajaxnet").remove()
+                }
+            })
+        })
     }
 )
 
