@@ -141,6 +141,7 @@ def dvr_search_post():
     word = request.values.get('keyword', None, type=str)
     search = b64decode(unquote(word)).decode('utf-8')
     serp = dvrsearchsql(search)
+    print(search)
     page_num = ((count / Setting().pagination + pagenum), 0)[count / Setting().pagination == 0]
     paginateion = serp.paginate(
         page_num, per_page=Setting().pagination
