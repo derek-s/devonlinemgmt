@@ -112,11 +112,6 @@
 </div>
 <script type="text/javascript">
     $(function () {
-        $("button#indexsbutton").on('click', function () {
-            //搜索
-            var keyword = $("input#indexserach").val()
-            window.open("{{url_for('adminbg.dvrsearch')}}" + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
-        })
         $('#transfer').click(function () {
             var page = $('#transfer_page').val();
             window.location.href = "{{url_for('adminbg.dvrmanage')}}" + "?page=" + page;

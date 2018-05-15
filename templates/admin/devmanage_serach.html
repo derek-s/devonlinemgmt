@@ -63,9 +63,12 @@
                 <a id="ajaxntindex" class="btn btn-primary dvrsajaxnet" href="javascript:void(0);">下一页</a>
             </div>
             <div>
-                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.dvrsearch', keyword=request.args.get('keyword') | safe)}} {%endif%}
+                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.dvrsearch', keyword=request.args.get('keyword') | safe, transclass=transferclass) }} {%endif%}
             </div>
         </div>
 </div>
-
+<script type="text/javascript">
+    var keyword = "{{ keyword }}"
+    var keyword_url = "{{ request.args.get('keyword') }}"
+</script>
 {% endblock %}
