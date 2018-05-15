@@ -90,7 +90,7 @@
                 </table>
             </div>
             <div class="ajaxnetpage">
-                <a id="ajaxntindex" class="btn btn-primary" href="javascript:void(0);">下一页</a>
+                <a id="ajaxntindex" class="btn btn-primary dvrmanageajax" href="javascript:void(0);">下一页</a>
             </div>
             <div class="listbottombar">
                 <div class="ibtmdowplist">
@@ -105,47 +105,10 @@
                     <button onclick="javascript:js_dvr_batchd()" id="iopearbutton" class="btn btn-primary">应用</button>
                 </div>
                 <div class="fullsize ipagination">
-                    {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.dvrmanage')}} {%endif%}
+                    {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.dvrmanage', transclass=transferclass)}} {%endif%}
                 </div>
             </div>
         </div>
 </div>
-<script type="text/javascript">
-    $(function () {
-        $('#transfer').click(function () {
-            var page = $('#transfer_page').val();
-            window.location.href = "{{url_for('adminbg.dvrmanage')}}" + "?page=" + page;
-        })
-        $("a#ajaxntindex").bind('click', function () {
-            //list加载下一页
-            $(this).text("正在加载，请稍后……")
-            var pagenum = $("li#pnactive>a").text()
-            var datacount = $("tr.jsondata").length
-            $.post("{{ url_for('adminbg.dvrmanage') }}", {
-                count: datacount,
-                pagenum: pagenum
-            }, function (data) {
-                var trc = ""
-                var tra = '<tr class="jsondata">'
-                var trb = '</tr>'
-                $.each(data, function (one) {
-                    eachone = data[one]
-                    trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='"+ eachone.ID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "<button onclick='' type'button' class='btn btn-link inline_button_link'>管理</button>" + "</td>" + trb
-                    hasnext = eachone.next
-                })
-                $("table#devinfolist>tbody tr:last-child").after(trc)
-                if (!hasnext) {
-                    $("a#ajaxntindex").remove()
-                } else {
-                    $("a#ajaxntindex").text('下一页')
-                }
-            }).fail(function (status) {
-                if (status.status == '404') {
-                    $("a#ajaxntindex").remove()
-                }
-            })
-        })
-    })
-</script>
 
 {% endblock %}
