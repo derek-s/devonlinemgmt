@@ -192,3 +192,15 @@ function js_dvr_batchd() {
         console.log("dvrdown")
     }
 }
+
+function js_dvr_create() {
+    layer.open({
+        type:1,
+        skin: 'layui-layer-rim',
+        title:"创建新设备",
+        area: ['500px', '300px'],
+        content: "测试"
+        
+
+    })
+}
