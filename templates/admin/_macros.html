@@ -1,4 +1,4 @@
-{% macro pagination_widget(pagination, endpoint, fragment='', tranclass) %}
+{% macro pagination_widget(pagination, endpoint, fragment='', tranclass='') %}
 <div class="pagenum">
     <label class="incotp">合计 {{ pagination.total }} 条</label>
     <ul class="pagination">
@@ -26,7 +26,7 @@
                 <li class="pull-right">
                     <label for="transfer_page">跳转到:</label>
                     <input type="text" class="text-info" size="3" id="transfer_page">
-                    <button type="button" class="btn btn-primary btn-sm {{tranclass}}" id="transfer1">Go</button>
+                    <button type="button" class="btn btn-primary btn-sm {{tranclass}}" id="transfer">Go</button>
                 </li>
     </ul>
 </div>
