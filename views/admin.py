@@ -195,10 +195,28 @@ def dvrmanage():
             datas=result['datas'],
             count=result['count'],
             pagination=result['pagination'],
-            devtype=result['devtype']
+            devtype=result['devtype'],
+            transferclass="dvrmanage"
         )
     elif request.method == 'POST':
         return dvr_manage_post()
+
+
+@adminbg.route("/admin/dvrmanage/add", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def dvrmanage_add():
+    """
+    :return: 返回数据查询结果并构建相应页面
+    """
+    if request.method == 'GET':
+        return render_template(
+            '/admin/dvrmanage_add.html',
+        )
+    elif request.method == 'POST':
+        return 0
+
+
 
 
 @adminbg.route("/admin/dvrmanage/list", methods=['GET', 'POST'])
@@ -218,13 +236,14 @@ def dvrmanagelist():
             pagination=result['pagination'],
             devtype=result['devtype'],
             devtypebname=result['devtypebname'],
-            devostatus=result['devostatus']
+            devostatus=result['devostatus'],
+            transferclass="dvrlist"
         )
     elif request.method == 'POST':
         return dvr_list_post()
 
 
-@adminbg.route("/admin/dvrmanage/serach", methods=['GET', 'POST'])
+@adminbg.route("/admin/dvrmanage/search", methods=['GET', 'POST'])
 @login_required
 @admin_required
 def dvrsearch():
@@ -239,7 +258,8 @@ def dvrsearch():
             datas=result['datas'],
             count=result['count'],
             pagination=result['pagination'],
-            keyword=result['keyword']
+            keyword=result['keyword'],
+            transferclass="dvrsearch"
         )
     elif request.method == 'POST':
         return dvr_search_post()
