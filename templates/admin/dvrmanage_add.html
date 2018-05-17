@@ -23,6 +23,60 @@
     </script>
 </head>
 <body>
-<button>添加新设备项</button>
+    <div class="devadd_main">
+        <div id="devadd_form">
+            <table id="devadd_table">
+                <tbody>
+                <tr class="devadd_th">
+                    <th>设备名称</th>
+                    <th>设备类型</th>
+                    <th>设备序列号</th>
+                    <th>唯一ID</th>
+                    <th>是否上架</th>
+                    <th>校区</th>
+                    <th>弱电间名称</th>
+                    <th>增加/删除</th>
+                </tr>
+                <tr class="devadd_newline">
+                    <td>
+                        <input type="text">
+                    </td>
+                    <td>
+                        <input type="text">
+                    </td>
+                    <td>
+                        <input type="text">
+                    </td>
+                    <td>
+                        <input type="text">
+                    </td>
+                    <td>
+                        <select name="putaway" id="devadd_putaway">
+                            <option value="y">是</option>
+                            <option value="n">否</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="campus" id="devadd_campus">
+                            <option value="">请选择校区</option>
+                            {%- for campusone in campus %}
+                            <option value="{{ campusone.Campus }}">{{ campusone.Campus }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="putaway" id="devadd_build">
+                            <option value="">请选择弱电间</option>
+                        </select>
+                    </td>
+                    <td>
+                        <a class="devaddspan"><span class="glyphicon glyphicon-plus devaddminus" aria-hidden="true"></span></a>
+                        <a class="devdelspan"><span class="glyphicon glyphicon-minus devaddminus" aria-hidden="true"></span></a>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>
