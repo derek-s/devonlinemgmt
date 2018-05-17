@@ -1,6 +1,6 @@
 /// <reference path="C:\\Users\\Derek.S\\AppData\\Roaming\\npm\\node_modules\\@types\\jquery\\index.d.ts"/>
 $(document).ready(
-    function() {
+    function () {
         $("#checkboxall").click(function () {
             if ($("#checkboxall").prop("checked")) {
                 $("[name='oper']").prop("checked", true)
@@ -8,24 +8,24 @@ $(document).ready(
                 $("[name='oper']").prop("checked", false)
             }
         })
-        $(document).on("click", '[name="oper"]', function(){
-            var check=0
+        $(document).on("click", '[name="oper"]', function () {
+            var check = 0
             if ($("#checkboxall").prop("checked")) {
                 $("#checkboxall").prop("checked", false)
             }
             var inputcount = $("input[name='oper']").length
             $("input[name='oper']").each(function () {
-                if($(this).prop("checked")){
+                if ($(this).prop("checked")) {
                     check += 1
                 }
-                if(inputcount === check){
+                if (inputcount === check) {
                     $("#checkboxall").prop("checked", true)
                 }
             })
         })
-        
+
         $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
+            beforeSend: function (xhr, settings) {
                 if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                     xhr.setRequestHeader("X-CSRFToken", csrf_token)
                 }
@@ -34,25 +34,25 @@ $(document).ready(
         $.base64.utf8encode = true;
         $.base64.utf8decode = true;
         //下拉菜单
-        $('#ddm-types').on('click', function(e) {
+        $('#ddm-types').on('click', function (e) {
             var $target = $(e.target)
             $target.is('a') && $('button#dropdown_devtype').html($target.text() + '<span class="caret"></span>')
             var strbuild = encodeURIComponent($target.text(), "utf-8")
         })
-        $("#ddm-online").on('click', function(e) {
+        $("#ddm-online").on('click', function (e) {
             var $target = $(e.target)
             $target.is('a') && $('button#dropdown_devonline').html($target.text() + '<span class="caret"></span>')
         })
-        $("button#adqbutton").on('click', function(){
+        $("button#adqbutton").on('click', function () {
             var teststr = "5YWo6YOo"
             var devtype = encodeURIComponent($.base64.encode($('#dropdown_devtype').text()), 'utf-8')
             var devonline = encodeURIComponent($.base64.encode($('#dropdown_devonline').text()), 'utf-8')
-            if (devtype == teststr){
+            if (devtype == teststr) {
                 devtype = ""
-                if (devonline == teststr){
+                if (devonline == teststr) {
                     devonline = ""
                 }
-            }else if (devonline == teststr){
+            } else if (devonline == teststr) {
                 devonline = ""
             }
             window.open($SCRIPT_ROOT + "admin/dvrmanage/list?devtype=" + devtype + "&devonline=" + devonline)
@@ -63,13 +63,18 @@ $(document).ready(
             window.open(Flask.url_for('adminbg.dvrsearch') + "?keyword=" + encodeURIComponent($.base64.encode(keyword)))
         })
         //页面跳转
-        $('button.dvrsearch').click(function() {
+        $('button.dvrsearch').click(function () {
             var page = $('#transfer_page').val();
-            window.location.href = Flask.url_for('adminbg.dvrsearch', {keyword: keyword_url}) + "&page=" + page;
+            window.location.href = Flask.url_for('adminbg.dvrsearch', {
+                keyword: keyword_url
+            }) + "&page=" + page;
         })
-        $('button.dvrlist').click(function() {
+        $('button.dvrlist').click(function () {
             var page = $('#transfer_page').val();
-            window.location.href = Flask.url_for('adminbg.dvrmanagelist', {devtype: devtype_info, devonline: devonline_info}) + "&page=" + page;
+            window.location.href = Flask.url_for('adminbg.dvrmanagelist', {
+                devtype: devtype_info,
+                devonline: devonline_info
+            }) + "&page=" + page;
         })
         $('button.dvrmanage').click(function () {
             var page = $('#transfer_page').val();
@@ -117,7 +122,10 @@ $(document).ready(
             var datacount = $("tr.jsondata").length
             var devtype = encodeURIComponent($.base64.encode($('#dropdown_devtype').text()), 'utf-8')
             var devonline = encodeURIComponent($.base64.encode($('#dropdown_devonline').text()), 'utf-8')
-            var posturl = Flask.url_for('adminbg.dvrmanagelist', {devtype: devtype_info, devonline: devonline_info})
+            var posturl = Flask.url_for('adminbg.dvrmanagelist', {
+                devtype: devtype_info,
+                devonline: devonline_info
+            })
             $.post(posturl, {
                 count: datacount,
                 pagenum: pagenum,
@@ -129,7 +137,7 @@ $(document).ready(
                 var trb = '</tr>'
                 $.each(data, function (one) {
                     eachone = data[one]
-                    trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='"+ eachone.ID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "<button onclick='' type'button' class='btn btn-link inline_button_link'>管理</button>" + "</td>" + trb
+                    trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='" + eachone.ID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "<button onclick='' type'button' class='btn btn-link inline_button_link'>管理</button>" + "</td>" + trb
                     hasnext = eachone.next
                 })
                 $("table#devinfolist>tbody tr:last-child").after(trc)
@@ -159,7 +167,7 @@ $(document).ready(
                 var trb = '</tr>'
                 $.each(data, function (one) {
                     eachone = data[one]
-                    trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='"+ eachone.ID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "<button onclick='' type'button' class='btn btn-link inline_button_link'>管理</button>" + "</td>" + trb
+                    trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='" + eachone.ID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "<button onclick='' type'button' class='btn btn-link inline_button_link'>管理</button>" + "</td>" + trb
                     hasnext = eachone.next
                 })
                 $("table#devinfolist>tbody tr:last-child").after(trc)
@@ -175,32 +183,44 @@ $(document).ready(
             })
         })
 
-        $(document).on("click", "a.devaddspan", function(){
+        $(document).on("click", "a.devaddspan", function () {
             var clone = $(this).parent().parent().clone()
             var selectedValue_Campus = $(this).parent().prevAll().children("select#devadd_campus").val()
-            clone.find("option[value = '"+ selectedValue_Campus +"']").attr("selected", "selected")
+            clone.find("option[value = '" + selectedValue_Campus + "']").attr("selected", "selected")
             var selectedValue_Lvrno = $(this).parent().prevAll().children("select#devadd_build").val()
-            clone.find("option[value = '"+ selectedValue_Lvrno +"']").attr("selected", "selected")
+            clone.find("option[value = '" + selectedValue_Lvrno + "']").attr("selected", "selected")
             $("table#devadd_table > tbody").append(clone)
         });
 
-        $(document).on("click", "a.devdelspan", function(){
-            if($("tr.devadd_newline").length == 1){
+        $(document).on("click", "a.devdelspan", function () {
+            if ($("tr.devadd_newline").length == 1) {
                 alert("新增行只有1行时不得删除")
-            }else{
+            } else {
                 $("table#devadd_table > tbody").append(this.parentElement.parentElement.remove())
             }
         });
 
-        $(document).on("change", "select#devadd_campus", function(){
-           var $v = $(this)
-           var $lvr = $v.parent().next().children()
-           if($v.val() == ""){
-            $lvr.append('<option value="">请选择弱电间</option>')
-           }else{
-            $lvr.empty()
-           }
-           js_dvr_querylvr($v.val(), $lvr)
+        $(document).on("change", "select#devadd_campus", function () {
+            var $v = $(this)
+            var $lvr = $v.parent().next().children()
+            if ($v.val() == "") {
+                $lvr.append('<option value="">请选择弱电间</option>')
+            } else {
+                $lvr.empty()
+            }
+            js_dvr_querylvr($v.val(), $lvr)
+        })
+
+        $(document).on("change", "select#devadd_putaway", function () {
+            var $v = $(this)
+            var $selectCB = $v.parent().nextAll()
+            if ($v.val() == "n") {
+                $selectCB.children("select#devadd_campus").attr("disabled", "disabled")
+                $selectCB.children("select#devadd_build").attr("disabled", "disabled")
+            }else {
+                $selectCB.children("select#devadd_campus").removeAttr("disabled")
+                $selectCB.children("select#devadd_build").removeAttr("disabled")
+            }
         })
     }
 )
@@ -214,21 +234,21 @@ function js_dvr_batchd() {
             }
         })
         console.log("delete id")
-    }else if($("select#ipage").val() == "dvrup"){
+    } else if ($("select#ipage").val() == "dvrup") {
         console.log("dvrup")
-    }else if($("select#ipage").val() == "dvrdown"){
+    } else if ($("select#ipage").val() == "dvrdown") {
         console.log("dvrdown")
     }
 }
 
 function js_dvr_create() {
     layer.open({
-        type:1,
+        type: 1,
         skin: 'layui-layer-rim',
-        title:"创建新设备",
+        title: "创建新设备",
         area: ['500px', '300px'],
         content: "测试"
-        
+
 
     })
 }
@@ -249,4 +269,3 @@ function js_dvr_querylvr(campus_name, nextLvrElement) {
         }
     })
 }
-
