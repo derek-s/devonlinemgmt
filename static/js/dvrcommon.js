@@ -174,6 +174,34 @@ $(document).ready(
                 }
             })
         })
+
+        $(document).on("click", "a.devaddspan", function(){
+            var clone = $(this).parent().parent().clone()
+            var selectedValue_Campus = $(this).parent().prevAll().children("select#devadd_campus").val()
+            clone.find("option[value = '"+ selectedValue_Campus +"']").attr("selected", "selected")
+            var selectedValue_Lvrno = $(this).parent().prevAll().children("select#devadd_build").val()
+            clone.find("option[value = '"+ selectedValue_Lvrno +"']").attr("selected", "selected")
+            $("table#devadd_table > tbody").append(clone)
+        });
+
+        $(document).on("click", "a.devdelspan", function(){
+            if($("tr.devadd_newline").length == 1){
+                alert("新增行只有1行时不得删除")
+            }else{
+                $("table#devadd_table > tbody").append(this.parentElement.parentElement.remove())
+            }
+        });
+
+        $(document).on("change", "select#devadd_campus", function(){
+           var $v = $(this)
+           var $lvr = $v.parent().next().children()
+           if($v.val() == ""){
+            $lvr.append('<option value="">请选择弱电间</option>')
+           }else{
+            $lvr.empty()
+           }
+           js_dvr_querylvr($v.val(), $lvr)
+        })
     }
 )
 
@@ -204,3 +232,21 @@ function js_dvr_create() {
 
     })
 }
+
+function js_dvr_querylvr(campus_name, nextLvrElement) {
+    var posturl = Flask.url_for('adminbg.devquerylvr')
+    var campusb64 = encodeURIComponent($.base64.encode(campus_name), 'utf-8')
+    $.post(posturl, {
+        campus: campusb64
+    }, function (data) {
+        $.each(data, function (one) {
+            eachone = data[one]
+            nextLvrElement.append('<option value="' + eachone.LVRNo + '">' + eachone.LVRNo + '</option>')
+        })
+    }).fail(function (status) {
+        if (status.status == '404') {
+            $("a.dvrmanageajax").remove()
+        }
+    })
+}
+
