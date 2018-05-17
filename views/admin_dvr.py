@@ -6,11 +6,11 @@
 # @File    : admin_dvr.py
 
 from flask import jsonify, request, url_for
-from models import Setting, Dev_DeviceInfo, DevDevType
+from models import Setting, Dev_DeviceInfo, DevDevType, Dev_LVRInfo
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
-
+from models import Dev_Campus
 
 def dvr_manage_get():
     page = request.args.get('page', 1, type=int)
@@ -141,7 +141,6 @@ def dvr_search_post():
     word = request.values.get('keyword', None, type=str)
     search = b64decode(unquote(word)).decode('utf-8')
     serp = dvrsearchsql(search)
-    print(search)
     page_num = ((count / Setting().pagination + pagenum), 0)[count / Setting().pagination == 0]
     paginateion = serp.paginate(
         page_num, per_page=Setting().pagination
@@ -170,3 +169,22 @@ def dvrsearchsql(keyword):
     return search_result
 
 
+def dev_getCampus():
+    campus = Dev_Campus.query.all()
+    return campus
+
+def dev_getBuild(campus):
+    campus_decode = b64decode(unquote(campus)).decode('utf-8')
+    result = Dev_LVRInfo.query.filter_by(
+        Campus=campus_decode
+    ).all()
+    lvrno = []
+    lvrno_result = []
+    for each in result:
+        lvrno.append(each.LVRNo)
+    for each_lvrno in lvrno:
+        name = {
+            "LVRNo": each_lvrno
+        }
+        lvrno_result.append(name)
+    return jsonify(lvrno_result)

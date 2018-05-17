@@ -16,7 +16,7 @@ from .admin_dbquery import admin_query, admin_query_list, admin_query_serach
 from .admin_lvr import  lvr_manager_index, lvr_manager_ajaxquery
 from .admin_lvr import lvr_list_get, lvr_list_post, lvr_search_get, lvr_search_post
 from .admin_dvr import dvr_manage_get, dvr_manage_post, dvr_list_get, dvr_list_post
-from .admin_dvr import dvr_search_get, dvr_search_post
+from .admin_dvr import dvr_search_get, dvr_search_post, dev_getCampus, dev_getBuild
 from .admin_notice import notice_create_post, notice_modfiy_get, notice_modfiy_post, notice_list, notice_delete
 from .admin_basic import basic_campus, basic_campus_search, basic_campus_add, basic_campus_modfiy
 from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_list
@@ -202,23 +202,6 @@ def dvrmanage():
         return dvr_manage_post()
 
 
-@adminbg.route("/admin/dvrmanage/add", methods=['GET', 'POST'])
-@login_required
-@admin_required
-def dvrmanage_add():
-    """
-    :return: 返回数据查询结果并构建相应页面
-    """
-    if request.method == 'GET':
-        return render_template(
-            '/admin/dvrmanage_add.html',
-        )
-    elif request.method == 'POST':
-        return 0
-
-
-
-
 @adminbg.route("/admin/dvrmanage/list", methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -264,6 +247,23 @@ def dvrsearch():
     elif request.method == 'POST':
         return dvr_search_post()
 
+
+@adminbg.route("/admin/dvrmanage/add", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def dvrmanage_add():
+    """
+    设备新增页面
+    :return: 返回数据查询结果并构建相应页面
+    """
+    if request.method == 'GET':
+        campus = dev_getCampus()
+        return render_template(
+            '/admin/dvrmanage_add.html',
+            campus=campus
+        )
+    elif request.method == 'POST':
+        return 0
 
 @adminbg.route("/admin/basicinfo")
 @login_required
@@ -648,3 +648,10 @@ def notedel(id):
     notice_delete_result = notice_delete(id)
     return notice_delete_result
 
+@adminbg.route("/admin/_dvrquerylvr", methods=['POST'])
+@login_required
+@admin_required
+def devquerylvr():
+    campus = request.values.get("campus")
+    result = dev_getBuild(campus)
+    return result
