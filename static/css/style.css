@@ -701,3 +701,23 @@ select#iperm {
 .fullsize {
     width: 85% !important;
 }
+.devadd_th > th {
+    text-align: center;
+    padding: 5px 5px;
+}
+#devadd_putaway{
+    width: 60px;
+    text-align: center;
+}
+
+#devadd_campus, #devadd_build {
+    width: 150px;
+    text-align: center;
+}
+.devaddminus {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.devadd_newline > td {
+    padding: 5px 5px;
+}
