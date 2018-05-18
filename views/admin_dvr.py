@@ -173,6 +173,10 @@ def dev_getCampus():
     campus = Dev_Campus.query.all()
     return campus
 
+def dev_getType():
+    type = DevDevType.query.all()
+    return type
+
 def dev_getBuild(campus):
     campus_decode = b64decode(unquote(campus)).decode('utf-8')
     result = Dev_LVRInfo.query.filter_by(

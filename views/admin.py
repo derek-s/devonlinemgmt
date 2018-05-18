@@ -16,7 +16,7 @@ from .admin_dbquery import admin_query, admin_query_list, admin_query_serach
 from .admin_lvr import  lvr_manager_index, lvr_manager_ajaxquery
 from .admin_lvr import lvr_list_get, lvr_list_post, lvr_search_get, lvr_search_post
 from .admin_dvr import dvr_manage_get, dvr_manage_post, dvr_list_get, dvr_list_post
-from .admin_dvr import dvr_search_get, dvr_search_post, dev_getCampus, dev_getBuild
+from .admin_dvr import dvr_search_get, dvr_search_post, dev_getCampus, dev_getBuild, dev_getType
 from .admin_notice import notice_create_post, notice_modfiy_get, notice_modfiy_post, notice_list, notice_delete
 from .admin_basic import basic_campus, basic_campus_search, basic_campus_add, basic_campus_modfiy
 from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_list
@@ -258,9 +258,11 @@ def dvrmanage_add():
     """
     if request.method == 'GET':
         campus = dev_getCampus()
+        dvrtype = dev_getType()
         return render_template(
             '/admin/dvrmanage_add.html',
-            campus=campus
+            campus=campus,
+            type=dvrtype
         )
     elif request.method == 'POST':
         return 0
