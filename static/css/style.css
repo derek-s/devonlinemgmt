@@ -766,18 +766,31 @@ select#iperm {
 #devadd_build[disabled] {
     opacity: 0.6;
 }
+
 .devadd_operation {
     margin-top: 50px;
     margin-bottom: 50px;
-    width:100%;
+    width: 100%;
     display: block
 }
+
 .devadd_addbutton {
     width: 200px;
     display: table;
     margin: 0 auto;
 }
+
 .devadd_main {
     width: 1200px;
     margin: 0 auto;
+}
+
+#devadd_name,
+#devadd_serial,
+#devadd_id,
+#devadd_putaway,
+#devadd_campus,
+#devadd_build,
+#devadd_type {
+    border: 1px solid #ccc
 }
