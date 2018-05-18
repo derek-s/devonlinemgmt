@@ -27,54 +27,63 @@
         <div id="devadd_form">
             <table id="devadd_table">
                 <tbody>
-                <tr class="devadd_th">
-                    <th>设备名称</th>
-                    <th>设备类型</th>
-                    <th>设备序列号</th>
-                    <th>唯一ID</th>
-                    <th>是否上架</th>
-                    <th>校区</th>
-                    <th>弱电间名称</th>
-                    <th>增加/删除</th>
-                </tr>
-                <tr class="devadd_newline">
-                    <td>
-                        <input type="text" id="devadd_name">
-                    </td>
-                    <td>
-                        <input type="text" id="devadd_type">
-                    </td>
-                    <td>
-                        <input type="text" id="devadd_serial">
-                    </td>
-                    <td>
-                        <input type="text" id="devadd_id">
-                    </td>
-                    <td>
-                        <select name="putaway" id="devadd_putaway">
-                            <option value="Y">是</option>
-                            <option value="N">否</option>
-                        </select>
-                    </td>
-                    <td>
-                        <select name="campus" id="devadd_campus">
-                            <option value="">请选择校区</option>
-                            {%- for campusone in campus %}
-                            <option value="{{ campusone.Campus }}">{{ campusone.Campus }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    <td>
-                        <select name="putaway" id="devadd_build">
-                            <option value="">请选择弱电间</option>
-                        </select>
-                    </td>
-                    <td>
-                        <a class="devaddspan"><span class="glyphicon glyphicon-plus devaddminus" aria-hidden="true"></span></a>
-                        <a class="devdelspan"><span class="glyphicon glyphicon-minus devaddminus" aria-hidden="true"></span></a>
-                    </td>
-                </tr>
-            </tbody>
+                    <tr class="devadd_th">
+                        <th>设备名称</th>
+                        <th>设备类型</th>
+                        <th>设备序列号</th>
+                        <th>唯一ID</th>
+                        <th>是否上架</th>
+                        <th>校区</th>
+                        <th>弱电间名称</th>
+                        <th>增加/删除</th>
+                    </tr>
+                    <tr class="devadd_newline">
+                        <td>
+                            <input type="text" id="devadd_name">
+                        </td>
+                        <td>
+                            <select name="type" id="devadd_type">
+                                <option value="devtype_null">请选择设备类型</option>
+                                {%- for typesone in type %}
+                                <option value="{{ typesone.Type }}">{{ typesone.Type }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" id="devadd_serial">
+                        </td>
+                        <td>
+                            <input type="text" id="devadd_id">
+                        </td>
+                        <td>
+                            <select name="putaway" id="devadd_putaway">
+                                <option value="Y">是</option>
+                                <option value="N">否</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="campus" id="devadd_campus">
+                                <option value="campus_null">请选择校区</option>
+                                {%- for campusone in campus %}
+                                <option value="{{ campusone.Campus }}">{{ campusone.Campus }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select name="lvr" id="devadd_build">
+                                <option value="lvr_null">请选择弱电间</option>
+                            </select>
+                        </td>
+                        <td>
+                            <a class="devaddspan">
+                                <span class="glyphicon glyphicon-plus devaddminus" aria-hidden="true"></span>
+                            </a>
+                            <a class="devdelspan">
+                                <span class="glyphicon glyphicon-minus devaddminus" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
         <div class="devadd_operation">
@@ -82,4 +91,25 @@
         </div>
     </div>
 </body>
+<script>
+    $(document).ready(
+        function () {
+            $(document).on("blur", "input", function () {
+                if ($(this).val() == "") {
+                    $(this).val("该项不能为空!")
+                    $(this).attr("style",
+                        "outline:0; border-radius:3px;border-color:red;box-shadow:0 0 8px rgba(255,0,0,0.6)"
+                    );
+                    $(this).focus();
+                } else if ($(this).val() == "该项不能为空!") {
+                    $(this).attr("style",
+                        "outline:0; border-radius:3px;border-color:red;box-shadow:0 0 8px rgba(255,0,0,0.6)"
+                    );
+                    $(this).focus();
+                }
+            })
+        }
+    )
+</script>
+
 </html>
