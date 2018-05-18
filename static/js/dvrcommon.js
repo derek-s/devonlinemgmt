@@ -23,7 +23,6 @@ $(document).ready(
                 }
             })
         })
-
         $.ajaxSetup({
             beforeSend: function (xhr, settings) {
                 if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
@@ -116,7 +115,6 @@ $(document).ready(
         })
 
         $("a.dvrlistajaxnet").bind('click', function () {
-            console.log(1)
             $(this).text("正在加载，请稍后……")
             var pagenum = $("li#pnactive>a").text()
             var datacount = $("tr.jsondata").length
@@ -185,9 +183,14 @@ $(document).ready(
 
         $(document).on("click", "a.devaddspan", function () {
             var clone = $(this).parent().parent().clone()
-            var selectedValue_Campus = $(this).parent().prevAll().children("select#devadd_campus").val()
+            var devadd_td = $(this).parent().prevAll()
+            var selectedValue_putaway = devadd_td.children("select#devadd_putaway").val()
+            clone.find("option[value = '" + selectedValue_putaway + "']").attr("selected", "selected")
+            var selectedValue_Type = devadd_td.children("select#devadd_type").val()
+            clone.find("option[value = '" + selectedValue_Type + "']").attr("selected", "selected")
+            var selectedValue_Campus = devadd_td.children("select#devadd_campus").val()
             clone.find("option[value = '" + selectedValue_Campus + "']").attr("selected", "selected")
-            var selectedValue_Lvrno = $(this).parent().prevAll().children("select#devadd_build").val()
+            var selectedValue_Lvrno = devadd_td.children("select#devadd_build").val()
             clone.find("option[value = '" + selectedValue_Lvrno + "']").attr("selected", "selected")
             $("table#devadd_table > tbody").append(clone)
         });
@@ -214,12 +217,16 @@ $(document).ready(
         $(document).on("change", "select#devadd_putaway", function () {
             var $v = $(this)
             var $selectCB = $v.parent().nextAll()
+            var campus = $selectCB.children("select#devadd_campus")
+            var lvr = $selectCB.children("select#devadd_build")
             if ($v.val() == "N") {
-                $selectCB.children("select#devadd_campus").attr("disabled", "disabled")
-                $selectCB.children("select#devadd_build").attr("disabled", "disabled")
+                campus.attr("disabled", "disabled")
+                lvr.attr("disabled", "disabled")
             }else {
-                $selectCB.children("select#devadd_campus").removeAttr("disabled")
-                $selectCB.children("select#devadd_build").removeAttr("disabled")
+                campus.find("option[value='']").attr("selected", "selected")
+                campus.removeAttr("disabled")
+                lvr.find("option[value='']").attr("selected", "selected")
+                lvr.removeAttr("disabled")
             }
         })
     }
@@ -270,4 +277,30 @@ function js_dvr_querylvr(campus_name, nextLvrElement) {
             $("a.dvrmanageajax").remove()
         }
     })
+}
+
+
+function js_dvr_add() {
+    var dvrinfo = $("tr.devadd_newline")
+    var dvrinfo_datas = []
+    dvrinfo.each(function(){
+        var dvrinfo_data = {}
+        dvrinfo_data["name"] = $(this).find("#devadd_name").val();
+        dvrinfo_data["type"] = $(this).find("#devadd_type").val();
+        dvrinfo_data["serial"] = $(this).find("#devadd_serial").val();
+        dvrinfo_data["id"] = $(this).find("#devadd_id").val();
+        dvrinfo_data["campus"] = $(this).find("#devadd_campus").val();
+        dvrinfo_data["lvr"] = $(this).find("#devadd_build").val();
+        dvrinfo_datas.push(dvrinfo_data)
+    })
+    for (x in dvrinfo_datas){
+        if (dvrinfo_datas[x].lvr === null) {
+            console.log("1")
+            break
+        }
+        if (dvrinfo_datas[x].lvr === null) {
+            console.log("2")
+        }
+    }
+    //console.log(JSON.stringify(dvrinfo_datas))
 }
