@@ -214,7 +214,7 @@ $(document).ready(
         $(document).on("change", "select#devadd_putaway", function () {
             var $v = $(this)
             var $selectCB = $v.parent().nextAll()
-            if ($v.val() == "n") {
+            if ($v.val() == "N") {
                 $selectCB.children("select#devadd_campus").attr("disabled", "disabled")
                 $selectCB.children("select#devadd_build").attr("disabled", "disabled")
             }else {
@@ -242,12 +242,14 @@ function js_dvr_batchd() {
 }
 
 function js_dvr_create() {
+    var url = Flask.url_for('adminbg.dvrmanage_add')
+    console.log(url)
     layer.open({
-        type: 1,
+        type: 2,
         skin: 'layui-layer-rim',
         title: "创建新设备",
-        area: ['500px', '300px'],
-        content: "测试"
+        area: ['1230px', '400px'],
+        content: url
 
 
     })
