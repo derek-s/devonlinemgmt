@@ -266,11 +266,18 @@ function js_dvr_querylvr(campus_name, nextLvrElement) {
     $.post(posturl, {
         campus: campusb64
     }, function (data) {
-        $.each(data, function (one) {
-            eachone = data[one]
-            nextLvrElement.append('<option value="' + eachone.LVRNo + '">' + eachone.LVRNo + '</option>')
-        })
+        if (data.length != 0){
+            $.each(data, function (one) {
+                eachone = data[one]
+                nextLvrElement.append('<option value="'+ eachone.LVRNo +'">'+ eachone.LVRNo +'</option>')
+            })
+        } else if (campus_name == "campus_null"){
+            nextLvrElement.append('<option value="lvr_null">请选择弱电间</option>')
+        } else {
+            nextLvrElement.append('<option value="lvr_null">该校区暂无弱电间信息</option>')
+        }
     }).fail(function (status) {
+        console.log(status)
         if (status.status == '404') {
             $("a.dvrmanageajax").remove()
         }
@@ -283,22 +290,57 @@ function js_dvr_add() {
     var dvrinfo_datas = []
     dvrinfo.each(function(){
         var dvrinfo_data = {}
-        dvrinfo_data["name"] = $(this).find("#devadd_name").val();
-        dvrinfo_data["type"] = $(this).find("#devadd_type").val();
-        dvrinfo_data["serial"] = $(this).find("#devadd_serial").val();
-        dvrinfo_data["id"] = $(this).find("#devadd_id").val();
-        dvrinfo_data["campus"] = $(this).find("#devadd_campus").val();
-        dvrinfo_data["lvr"] = $(this).find("#devadd_build").val();
+        dvrinfo_data["name"] = $(this).find("#devadd_name").val()
+        dvrinfo_data["type"] = $(this).find("#devadd_type").val()
+        dvrinfo_data["serial"] = $(this).find("#devadd_serial").val()
+        dvrinfo_data["id"] = $(this).find("#devadd_id").val()
+        dvrinfo_data["putaway"] = $(this).find("#devadd_putaway").val()
+        dvrinfo_data["campus"] = $(this).find("#devadd_campus").val()
+        dvrinfo_data["lvr"] = $(this).find("#devadd_build").val()
         dvrinfo_datas.push(dvrinfo_data)
     })
+    if(dataCheak(dvrinfo_datas)){
+        console.log(JSON.stringify(dvrinfo_datas))
+    }
+}
+
+function dataCheak(dvrinfo_datas){
     for (x in dvrinfo_datas){
-        if (dvrinfo_datas[x].lvr === null) {
-            console.log("1")
-            break
+        if (isNull(dvrinfo_datas[x].name)) {
+            alert("存在未填写项，请核对数据。")
+            return false
         }
-        if (dvrinfo_datas[x].lvr === null) {
-            console.log("2")
+        if (dvrinfo_datas[x].type == "devtype_null") {
+            alert("存在未选择设备类型数据，请核对。")
+            return false
+        }
+        if (isNull(dvrinfo_datas[x].serial)) {
+            alert("存在未填写项，请核对数据。")
+            return false
+        }
+        if (isNull(dvrinfo_datas[x].id)) {
+            alert("存在未填写项，请核对数据。")
+            return false
+        }
+        if (dvrinfo_datas[x].putaway == "Y") {
+            if(dvrinfo_datas[x].campus == "campus_null"){
+                alert("存在未选择校区数据，请核对。")
+                return false
+            }
+            if(dvrinfo_datas[x].lvr == "lvr_null"){
+                alert("存在未选择弱电间数据，请核对。")
+                return false
+            }
         }
     }
-    console.log(JSON.stringify(dvrinfo_datas))
+    return true
 }
+
+
+
+function isNull( str ){
+    if ( str == "" ) return true
+    var regu = "^[ ]+$"
+    var re = new RegExp(regu)
+    return re.test(str)
+    }
