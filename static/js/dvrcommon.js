@@ -257,8 +257,6 @@ function js_dvr_create() {
         title: "创建新设备",
         area: ['1230px', '400px'],
         content: url
-
-
     })
 }
 
@@ -302,5 +300,5 @@ function js_dvr_add() {
             console.log("2")
         }
     }
-    //console.log(JSON.stringify(dvrinfo_datas))
+    console.log(JSON.stringify(dvrinfo_datas))
 }
