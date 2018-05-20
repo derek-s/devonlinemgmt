@@ -173,9 +173,11 @@ def dev_getCampus():
     campus = Dev_Campus.query.all()
     return campus
 
+
 def dev_getType():
     type = DevDevType.query.all()
     return type
+
 
 def dev_getBuild(campus):
     campus_decode = b64decode(unquote(campus)).decode('utf-8')
@@ -192,3 +194,10 @@ def dev_getBuild(campus):
         }
         lvrno_result.append(name)
     return jsonify(lvrno_result)
+
+
+
+def dvr_add_post():
+    dvrdatas = request.get_json()
+    print(dvrdatas)
+    return 0
