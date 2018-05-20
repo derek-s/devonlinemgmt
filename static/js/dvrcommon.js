@@ -300,7 +300,16 @@ function js_dvr_add() {
         dvrinfo_datas.push(dvrinfo_data)
     })
     if(dataCheak(dvrinfo_datas)){
-        console.log(JSON.stringify(dvrinfo_datas))
+        $.ajax({
+            url: Flask.url_for('adminbg.dvrmanage_add'),
+            type: 'POST',
+            data: JSON.stringify(dvrinfo_datas),
+            dataType: "json",
+            contentType: "application/json",
+            success: function(){
+                console.log(status.status)
+            }
+        })
     }
 }
 
