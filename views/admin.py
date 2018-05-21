@@ -17,7 +17,7 @@ from .admin_lvr import  lvr_manager_index, lvr_manager_ajaxquery
 from .admin_lvr import lvr_list_get, lvr_list_post, lvr_search_get, lvr_search_post
 from .admin_dvr import dvr_manage_get, dvr_manage_post, dvr_list_get, dvr_list_post
 from .admin_dvr import dvr_search_get, dvr_search_post, dev_getCampus, dev_getBuild, dev_getType
-from .admin_dvr import dvr_add_post
+from .admin_dvr import dvr_add_post, dev_getLVR
 from .admin_notice import notice_create_post, notice_modfiy_get, notice_modfiy_post, notice_list, notice_delete
 from .admin_basic import basic_campus, basic_campus_search, basic_campus_add, basic_campus_modfiy
 from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_list
@@ -651,10 +651,21 @@ def notedel(id):
     notice_delete_result = notice_delete(id)
     return notice_delete_result
 
+
+@adminbg.route("/admin/_dvrquerybuild", methods=['POST'])
+@login_required
+@admin_required
+def devquerybuild():
+    campus = request.values.get("campus")
+    result = dev_getBuild(campus)
+    return result
+
+
 @adminbg.route("/admin/_dvrquerylvr", methods=['POST'])
 @login_required
 @admin_required
 def devquerylvr():
     campus = request.values.get("campus")
-    result = dev_getBuild(campus)
+    build = request.values.get("build")
+    result = dev_getLVR(campus, build)
     return result
