@@ -6,7 +6,7 @@
 # @File    : admin_dvr.py
 
 from flask import jsonify, request, url_for
-from models import Setting, Dev_DeviceInfo, DevDevType, Dev_LVRInfo
+from models import Setting, Dev_DeviceInfo, DevDevType, Dev_LVRInfo, DevBuild
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
@@ -181,23 +181,50 @@ def dev_getType():
 
 def dev_getBuild(campus):
     campus_decode = b64decode(unquote(campus)).decode('utf-8')
-    result = Dev_LVRInfo.query.filter_by(
+    result = DevBuild.query.filter_by(
         Campus=campus_decode
     ).all()
-    lvrno = []
-    lvrno_result = []
+    Build = []
+    Build_result = []
     for each in result:
-        lvrno.append(each.LVRNo)
-    for each_lvrno in lvrno:
+        Build.append(each.BuildName)
+    for each_build in Build:
         name = {
-            "LVRNo": each_lvrno
+            "BuildName": each_build
         }
-        lvrno_result.append(name)
-    return jsonify(lvrno_result)
+        Build_result.append(name)
+    return jsonify(Build_result)
 
 
 
 def dvr_add_post():
     dvrdatas = request.get_json()
-    print(dvrdatas)
+    for each_dvrinfo in dvrdatas:
+        devname = each_dvrinfo['name']
+        devtype = each_dvrinfo['type']
+        devserial = each_dvrinfo['serial']
+        devid = each_dvrinfo['id']
+        devputaway = each_dvrinfo['putaway']
+        devcampus = each_dvrinfo['campus']
+        devlvr = each_dvrinfo['lvr']
+        Dev_DeviceInfo()
     return 0
+
+
+def dev_getLVR(campus, build):
+    campus_decode = b64decode(unquote(campus)).decode('utf-8')
+    build_decode = b64decode(unquote(build)).decode('utf-8')
+    result = Dev_LVRInfo.query.filter_by(
+        Campus=campus_decode,
+        BuildName=build_decode
+    ).all()
+    Lvr = []
+    Lvr_result = []
+    for each in result:
+        Lvr.append(each.LVRNo)
+    for each_lvrno in Lvr_result:
+        no = {
+            "LVRNo": each_lvrno
+        }
+        Lvr_result.append(no)
+    return jsonify(Lvr_result)
