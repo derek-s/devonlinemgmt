@@ -27,60 +27,102 @@
         <div id="devadd_form">
             <table id="devadd_table">
                 <tbody>
-                    <tr class="devadd_th">
-                        <th>设备名称</th>
-                        <th>设备类型</th>
-                        <th>设备序列号</th>
-                        <th>唯一ID</th>
-                        <th>是否上架</th>
-                        <th>校区</th>
-                        <th>弱电间名称</th>
-                        <th>增加/删除</th>
-                    </tr>
-                    <tr class="devadd_newline">
-                        <td>
-                            <input type="text" id="devadd_name">
-                        </td>
-                        <td>
-                            <select name="type" id="devadd_type">
-                                <option value="devtype_null">请选择设备类型</option>
-                                {%- for typesone in type %}
-                                <option value="{{ typesone.Type }}">{{ typesone.Type }}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text" id="devadd_serial">
-                        </td>
-                        <td>
-                            <input type="text" id="devadd_id">
-                        </td>
-                        <td>
-                            <select name="putaway" id="devadd_putaway">
-                                <option value="Y">是</option>
-                                <option value="N">否</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="campus" id="devadd_campus">
-                                <option value="campus_null">请选择校区</option>
-                                {%- for campusone in campus %}
-                                <option value="{{ campusone.Campus }}">{{ campusone.Campus }}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <select name="lvr" id="devadd_build">
-                                <option value="lvr_null">请选择弱电间</option>
-                            </select>
-                        </td>
-                        <td>
-                            <a class="devaddspan">
-                                <span class="glyphicon glyphicon-plus devaddminus" aria-hidden="true"></span>
-                            </a>
-                            <a class="devdelspan">
-                                <span class="glyphicon glyphicon-minus devaddminus" aria-hidden="true"></span>
-                            </a>
+                    <tr class="devadd_newtable">
+                        <td class="devadd_newtd">
+                            <table class="devadd_newline">
+                                <tr class="devadd_th">
+                                    <th>行号</th>
+                                    <th>设备名称</th>
+                                    <th>设备类型</th>
+                                    <th>设备序列号</th>
+                                    <th>唯一ID</th>
+                                    <th>是否上架</th>
+                                    <th>增加/删除</th>
+                                </tr>
+                                <tr class="devadd_trinput">
+                                    <td class="td_id">1</td>
+                                    <td>
+                                        <input type="text" id="devadd_name">
+                                    </td>
+                                    <td>
+                                        <select name="type" id="devadd_type">
+                                            <option value="devtype_null">请选择设备类型</option>
+                                            {%- for typesone in type %}
+                                            <option value="{{ typesone.Type }}">{{ typesone.Type }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="devadd_serial">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="devadd_id">
+                                    </td>
+                                    <td>
+                                        <select name="putaway" id="devadd_putaway">
+                                            <option value="Y">是</option>
+                                            <option value="N">否</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <a class="devaddspan">
+                                            <span class="glyphicon glyphicon-plus devaddminus" aria-hidden="true"></span>
+                                        </a>
+                                        <a class="devdelspan">
+                                            <span class="glyphicon glyphicon-minus devaddminus" aria-hidden="true"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr class="devadd_th devtr_hide">
+                                    <th></th>
+                                    <th>校区</th>
+                                    <th>楼宇</th>
+                                    <th>弱电间名称</th>
+                                </tr>
+                                <tr class="devadd_trinput devtr_hide devselect">
+                                    <td></td>
+                                    <td>
+                                        <select name="campus" id="devadd_campus">
+                                            <option value="campus_null">请选择校区</option>
+                                            {%- for campusone in campus %}
+                                            <option value="{{ campusone.Campus }}">{{ campusone.Campus }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="build" id="devadd_build">
+                                            <option value="build_null">请选择楼宇</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="lvr" id="devadd_lvr">
+                                            <option value="lvr_null">请选择弱电间</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="devadd_th devtr_hide">
+                                    <th></th>
+                                    <th>主机名称</th>
+                                    <th>管理地址</th>
+                                    <th>上联IP</th>
+                                    <th>上联端口</th>
+                                </tr>
+                                <tr class="devadd_trinput devtr_hide">
+                                    <td></td>
+                                    <td>
+                                        <input type="text" id="devadd_hostname">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="devadd_addr">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="devadd_upip">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="devadd_upport">
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                 </tbody>

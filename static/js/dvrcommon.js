@@ -182,17 +182,26 @@ $(document).ready(
         })
 
         $(document).on("click", "a.devaddspan", function () {
-            var clone = $(this).parent().parent().clone()
+            var tParent = $(this).parent()
+            var devtype_selete = tParent.siblings().find("#devadd_type")
+            var devputaway_selete = tParent.siblings().find("#devadd_putaway")
+            var cbl_tr = $(this).parents().find(".devselect")
+            var clone = $(this).parents("tr.devadd_newtable").clone()
             var devadd_td = $(this).parent().prevAll()
-            var selectedValue_putaway = devadd_td.children("select#devadd_putaway").val()
+            var td_id = $(".td_id:last")
+            var new_td_id = parseInt(td_id.text()) + 1
+            clone.find("td.td_id").text(new_td_id)
+            var selectedValue_putaway = devputaway_selete.val()
             clone.find("option[value = '" + selectedValue_putaway + "']").attr("selected", "selected")
-            var selectedValue_Type = devadd_td.children("select#devadd_type").val()
+            var selectedValue_Type = devtype_selete.val()
             clone.find("option[value = '" + selectedValue_Type + "']").attr("selected", "selected")
-            var selectedValue_Campus = devadd_td.children("select#devadd_campus").val()
+            var selectedValue_Campus = cbl_tr.find("select#devadd_campus").val()
             clone.find("option[value = '" + selectedValue_Campus + "']").attr("selected", "selected")
-            var selectedValue_Lvrno = devadd_td.children("select#devadd_build").val()
+            var selectedValue_Lvrno = cbl_tr.find("select#devadd_build").val()
+            console.log(selectedValue_Lvrno)
             clone.find("option[value = '" + selectedValue_Lvrno + "']").attr("selected", "selected")
             $("table#devadd_table > tbody").append(clone)
+            
         });
 
         $(document).on("click", "a.devdelspan", function () {
@@ -205,28 +214,64 @@ $(document).ready(
 
         $(document).on("change", "select#devadd_campus", function () {
             var $v = $(this)
+            var $build = $v.parent().next().children()
+            if ($v.val() == "") {
+                $build.append('<option value="">请选择楼宇</option>')
+            } else {
+                $build.empty()
+            }
+            js_dvr_querybuild($v.val(), $build)
+        })
+
+        $(document).on("change", "select#devadd_build", function () {
+            var $v = $(this)
+            var $campus = $v.parent().prev().children()
+            console.log($campus.val())
             var $lvr = $v.parent().next().children()
+            console.log($lvr)
             if ($v.val() == "") {
                 $lvr.append('<option value="">请选择弱电间</option>')
             } else {
                 $lvr.empty()
             }
-            js_dvr_querylvr($v.val(), $lvr)
+            js_dvr_querylvr($campus.val(), $v.val(), $lvr)
         })
 
         $(document).on("change", "select#devadd_putaway", function () {
-            var $v = $(this)
-            var $selectCB = $v.parent().nextAll()
-            var campus = $selectCB.children("select#devadd_campus")
-            var lvr = $selectCB.children("select#devadd_build")
-            if ($v.val() == "N") {
-                campus.attr("disabled", "disabled")
-                lvr.attr("disabled", "disabled")
+            var v = $(this).parent()
+            var twotable = v.parent().siblings(".devtr_hide")
+            var inputtable = v.parent().siblings(".devadd_trinput")
+            var cbl_selete = inputtable.find("select")
+            var haip = inputtable.find("input")
+            if ($(this).val() == "N") {
+                twotable.each(
+                    function(){
+                        $(this).attr("style", "display: table-row") // 显隐
+                    }
+                )
+                cbl_selete.each(function(){
+                    $(this).attr("disabled", "disabled")
+                    $(this).find("option:first").attr("selected", "selected")
+                })
+                haip.each(function(){
+                    $(this).attr("disabled", "disabled")
+                    $(this).removeAttr("style")
+                    
+                })
             }else {
-                campus.find("option[value='']").attr("selected", "selected")
-                campus.removeAttr("disabled")
-                lvr.find("option[value='']").attr("selected", "selected")
-                lvr.removeAttr("disabled")
+                twotable.each(
+                    function(){
+                        $(this).attr("style", "display: table-row")
+                    }
+                )
+                cbl_selete.each(function(){
+                    $(this).removeAttr("disabled", "disabled")
+                    $(this).find("option:first").attr("selected", "selected")
+                })
+                haip.each(function(){
+                    $(this).removeAttr("disabled", "disabled")
+                    $(this).val("")
+                })
             }
         })
     }
@@ -260,29 +305,54 @@ function js_dvr_create() {
     })
 }
 
-function js_dvr_querylvr(campus_name, nextLvrElement) {
-    var posturl = Flask.url_for('adminbg.devquerylvr')
+function js_dvr_querybuild(campus_name, nextBuildElement) {
+    var posturl = Flask.url_for('adminbg.devquerybuild')
     var campusb64 = encodeURIComponent($.base64.encode(campus_name), 'utf-8')
     $.post(posturl, {
         campus: campusb64
     }, function (data) {
         if (data.length != 0){
+            nextBuildElement.append('<option value="build_null">请选择楼宇</option>')
             $.each(data, function (one) {
                 eachone = data[one]
-                nextLvrElement.append('<option value="'+ eachone.LVRNo +'">'+ eachone.LVRNo +'</option>')
+                nextBuildElement.append('<option value="'+ eachone.BuildName +'">'+ eachone.BuildName +'</option>')
             })
         } else if (campus_name == "campus_null"){
-            nextLvrElement.append('<option value="lvr_null">请选择弱电间</option>')
+            nextBuildElement.append('<option value="build_null">请选择楼宇</option>')
         } else {
-            nextLvrElement.append('<option value="lvr_null">该校区暂无弱电间信息</option>')
+            nextBuildElement.append('<option value="build_null">该校区暂无楼宇信息</option>')
         }
     }).fail(function (status) {
         console.log(status)
-        if (status.status == '404') {
-            $("a.dvrmanageajax").remove()
-        }
     })
 }
+
+function js_dvr_querylvr(campus_name, build_name, nextLvrElement) {
+    var posturl = Flask.url_for("adminbg.devquerylvr")
+    var campusb64 = encodeURIComponent($.base64.encode(campus_name), 'utf-8')
+    var buildb64 = encodeURIComponent($.base64.encode(build_name), 'utf-8')
+    $.post(posturl, {
+        campus: campusb64,
+        build: buildb64
+    }, function(data){
+        console.log(data)
+        if (data.length != 0){
+            nextLvrElement.append('<option value="lvr_null">请选择弱电间</option>')
+            $.each(data, function(one){
+                eachone = data[one]
+                nextLvrElement.append('<option value="'+ eachone.LVRNo +'">'+ eachone.LVRNo +'</option>')
+            })
+        } else if (build_name == "build_null"){
+            nextLvrElement.append('<option value="lvr_null">请选择弱电间</option>')
+        } else {
+            nextLvrElement.append('<option value="lvr_null">请选择弱电间</option>')
+        }
+    }).fail(function (status) {
+        console.log(status)
+    })
+
+}
+
 
 
 function js_dvr_add() {

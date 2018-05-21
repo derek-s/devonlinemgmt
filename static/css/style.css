@@ -744,7 +744,8 @@ select#iperm {
 }
 
 #devadd_campus {
-    width: 150px;
+    width: auto;
+    min-width: 200px;
     text-align: center;
 }
 
@@ -763,7 +764,8 @@ select#iperm {
 }
 
 #devadd_campus[disabled],
-#devadd_build[disabled] {
+#devadd_build[disabled],
+#devadd_lvr[disabled] {
     opacity: 0.6;
 }
 
@@ -788,9 +790,32 @@ select#iperm {
 #devadd_name,
 #devadd_serial,
 #devadd_id,
-#devadd_putaway,
 #devadd_campus,
+#devadd_putaway,
 #devadd_build,
-#devadd_type {
-    border: 1px solid #ccc
+#devadd_type,
+#devadd_hostname,
+#devadd_addr,
+#devadd_upip,
+#devadd_upport,
+#devadd_lvr {
+    width: auto;
+    min-width: 200px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+#devadd_putaway {
+    width: 60px !important;
+    min-width: 60px !important;
+}
+.devtr_hide {
+    display: table-row;
+}
+td.td_id{
+    text-align: center
+}
+tr.devadd_newtable{
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
