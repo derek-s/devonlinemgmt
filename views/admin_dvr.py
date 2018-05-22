@@ -221,8 +221,9 @@ def dev_getLVR(campus, build):
     Lvr = []
     Lvr_result = []
     for each in result:
+        print(each.LVRNo)
         Lvr.append(each.LVRNo)
-    for each_lvrno in Lvr_result:
+    for each_lvrno in Lvr:
         no = {
             "LVRNo": each_lvrno
         }
