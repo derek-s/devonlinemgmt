@@ -205,10 +205,10 @@ $(document).ready(
         });
 
         $(document).on("click", "a.devdelspan", function () {
-            if ($("tr.devadd_newline").length == 1) {
+            if ($("td.devadd_newtd").length == 1) {
                 alert("新增行只有1行时不得删除")
             } else {
-                $("table#devadd_table > tbody").append(this.parentElement.parentElement.remove())
+                $(this).parents("td.devadd_newtd").remove()
             }
         });
 
@@ -226,9 +226,7 @@ $(document).ready(
         $(document).on("change", "select#devadd_build", function () {
             var $v = $(this)
             var $campus = $v.parent().prev().children()
-            console.log($campus.val())
             var $lvr = $v.parent().next().children()
-            console.log($lvr)
             if ($v.val() == "") {
                 $lvr.append('<option value="">请选择弱电间</option>')
             } else {
@@ -254,8 +252,10 @@ $(document).ready(
                     $(this).find("option:first").attr("selected", "selected")
                 })
                 haip.each(function(){
+                    $(this).val("")
                     $(this).attr("disabled", "disabled")
                     $(this).removeAttr("style")
+                    $(this).val("")
                     
                 })
             }else {
@@ -335,7 +335,6 @@ function js_dvr_querylvr(campus_name, build_name, nextLvrElement) {
         campus: campusb64,
         build: buildb64
     }, function(data){
-        console.log(data)
         if (data.length != 0){
             nextLvrElement.append('<option value="lvr_null">请选择弱电间</option>')
             $.each(data, function(one){
@@ -345,7 +344,7 @@ function js_dvr_querylvr(campus_name, build_name, nextLvrElement) {
         } else if (build_name == "build_null"){
             nextLvrElement.append('<option value="lvr_null">请选择弱电间</option>')
         } else {
-            nextLvrElement.append('<option value="lvr_null">请选择弱电间</option>')
+            nextLvrElement.append('<option value="lvr_null">该楼暂无弱电间</option>')
         }
     }).fail(function (status) {
         console.log(status)
