@@ -71,7 +71,6 @@ function js_bcampus_modfiy(id, cmpname) {
 
 function js_delArray_only(id, optype) {
     url = self.location.href.split("&")[0].split("?")[0]
-    console.log(url)
     id_del= new Array()
     id_del.push(id)
     if (optype == "campus"){
