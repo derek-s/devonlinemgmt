@@ -53,6 +53,16 @@ class Dev_DeviceStatus(db.Model):
     HigherlinkPort = db.Column("higherlinkPort", db.String(255))
     DeviceModel = db.Column("DeviceModel", db.String(190))
 
+    def __init__(self, Campus, Location, RoomNo, HostName, LAA, HigherlinkIP, HigherlinkPort, DeviceModel):
+        self.Campus = Campus,
+        self.Location = Location,
+        self.RoomNo = RoomNo,
+        self.HostName = HostName,
+        self.LAA = LAA,
+        self.HigherlinkIP = HigherlinkIP,
+        self.HigherlinkPort = HigherlinkPort,
+        self.DeviceModel = DeviceModel
+
     def to_json(self):
         """将查询数据转为json"""
         return {
@@ -77,6 +87,13 @@ class Dev_DeviceInfo(db.Model):
     DeviceSN = db.Column("DeviceSN", db.String(255))
     DeviceCondition = db.Column("DeviceCondition", db.String(255))
     DeviceID = db.Column("DeviceID", db.String(190), index=True)
+
+    def __init__(self, DeviceName, DeviceCategory, DeviceSN, DeveiceCondition, DeviceID):
+        self.DeviceName = DeviceName,
+        self.DeviceCategory = DeviceCategory,
+        self.DeviceCondition = DeveiceCondition,
+        self.DeviceSN = DeviceSN,
+        self.DeviceID = DeviceID
 
     def to_json(self):
         """将查询数据转为json"""
