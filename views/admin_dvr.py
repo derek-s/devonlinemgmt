@@ -6,11 +6,11 @@
 # @File    : admin_dvr.py
 
 from flask import jsonify, request, url_for
-from models import Setting, Dev_DeviceInfo, DevDevType, Dev_LVRInfo, DevBuild
+from models import Setting, Dev_DeviceInfo, DevDevType, Dev_LVRInfo, DevBuild, Dev_DeviceStatus, Dev_Campus
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
-from models import Dev_Campus
+from ext import db
 
 def dvr_manage_get():
     page = request.args.get('page', 1, type=int)
@@ -207,8 +207,23 @@ def dvr_add_post():
         devputaway = each_dvrinfo['putaway']
         devcampus = each_dvrinfo['campus']
         devlvr = each_dvrinfo['lvr']
-        Dev_DeviceInfo()
-    return 0
+        devbuild = each_dvrinfo['build']
+        devhostname = each_dvrinfo['hostname']
+        devaddr = each_dvrinfo['addr']
+        devip = each_dvrinfo['ip']
+        devport =each_dvrinfo['port']
+        devinfo_db = Dev_DeviceInfo(devname, devtype, devserial, devputaway, devid)
+        devstatus_db = Dev_DeviceStatus(devcampus, devbuild, devlvr, devhostname, devaddr, devip, devport, devserial)
+        db.session.add(devinfo_db)
+        if devputaway == "Y":
+            db.session.add(devstatus_db)
+        else:
+            pass
+        db.session.commit()
+    status = {
+        'status': 200
+    }
+    return jsonify(status)
 
 
 def dev_getLVR(campus, build):
@@ -221,7 +236,6 @@ def dev_getLVR(campus, build):
     Lvr = []
     Lvr_result = []
     for each in result:
-        print(each.LVRNo)
         Lvr.append(each.LVRNo)
     for each_lvrno in Lvr:
         no = {
