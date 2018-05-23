@@ -197,9 +197,10 @@ $(document).ready(
             clone.find("option[value = '" + selectedValue_Type + "']").attr("selected", "selected")
             var selectedValue_Campus = cbl_tr.find("select#devadd_campus").val()
             clone.find("option[value = '" + selectedValue_Campus + "']").attr("selected", "selected")
-            var selectedValue_Lvrno = cbl_tr.find("select#devadd_build").val()
-            console.log(selectedValue_Lvrno)
-            clone.find("option[value = '" + selectedValue_Lvrno + "']").attr("selected", "selected")
+            var selectedValue_build = cbl_tr.find("select#devadd_build").val()
+            clone.find("option[value = '" + selectedValue_build + "']").attr("selected", "selected")
+            var selectedValue_lvrno = cbl_tr.find("select#devadd_lvr").val()
+            clone.find("option[value = '" + selectedValue_lvrno + "']").attr("selected", "selected")
             $("table#devadd_table > tbody").append(clone)
             
         });
@@ -244,7 +245,7 @@ $(document).ready(
             if ($(this).val() == "N") {
                 twotable.each(
                     function(){
-                        $(this).attr("style", "display: table-row") // 显隐
+                        $(this).attr("style", "display: none") // 显隐
                     }
                 )
                 cbl_selete.each(function(){
@@ -292,15 +293,13 @@ function js_dvr_batchd() {
         console.log("dvrdown")
     }
 }
-
 function js_dvr_create() {
     var url = Flask.url_for('adminbg.dvrmanage_add')
-    console.log(url)
-    layer.open({
+    layer_add = layer.open({
         type: 2,
         skin: 'layui-layer-rim',
         title: "创建新设备",
-        area: ['1230px', '400px'],
+        area: ['1050px', '500px'],
         content: url
     })
 }
@@ -353,9 +352,8 @@ function js_dvr_querylvr(campus_name, build_name, nextLvrElement) {
 }
 
 
-
 function js_dvr_add() {
-    var dvrinfo = $("tr.devadd_newline")
+    var dvrinfo = $("td.devadd_newtd")
     var dvrinfo_datas = []
     dvrinfo.each(function(){
         var dvrinfo_data = {}
@@ -365,20 +363,32 @@ function js_dvr_add() {
         dvrinfo_data["id"] = $(this).find("#devadd_id").val()
         dvrinfo_data["putaway"] = $(this).find("#devadd_putaway").val()
         dvrinfo_data["campus"] = $(this).find("#devadd_campus").val()
-        dvrinfo_data["lvr"] = $(this).find("#devadd_build").val()
+        dvrinfo_data["build"] = $(this).find("#devadd_build").val()
+        dvrinfo_data["hostname"] = $(this).find("#devadd_hostname").val()
+        dvrinfo_data["addr"] = $(this).find("#devadd_addr").val()
+        dvrinfo_data["ip"] = $(this).find("#devadd_upip").val()
+        dvrinfo_data["port"] = $(this).find("#devadd_upport").val()
+        dvrinfo_data["lvr"] = $(this).find("#devadd_lvr").val()
         dvrinfo_datas.push(dvrinfo_data)
     })
     if(dataCheak(dvrinfo_datas)){
-        $.ajax({
-            url: Flask.url_for('adminbg.dvrmanage_add'),
-            type: 'POST',
-            data: JSON.stringify(dvrinfo_datas),
-            dataType: "json",
-            contentType: "application/json",
-            success: function(){
-                console.log(status.status)
-            }
-        })
+        if(confirm('准备添加数据，是否继续？')){
+            $.ajax({
+                url: Flask.url_for('adminbg.dvrmanage_add'),
+                type: 'POST',
+                data: JSON.stringify(dvrinfo_datas),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data){
+                    if (data.status != 200) {
+                        alert("添加失败")
+                    }else{
+                        alert("添加成功")
+                        window.location.reload()
+                    }
+                }
+            })
+        }
     }
 }
 
@@ -403,6 +413,10 @@ function dataCheak(dvrinfo_datas){
         if (dvrinfo_datas[x].putaway == "Y") {
             if(dvrinfo_datas[x].campus == "campus_null"){
                 alert("存在未选择校区数据，请核对。")
+                return false
+            }
+            if(dvrinfo_datas[x].build == "campus_null"){
+                alert("存在未选择楼宇数据，请核对。")
                 return false
             }
             if(dvrinfo_datas[x].lvr == "lvr_null"){
