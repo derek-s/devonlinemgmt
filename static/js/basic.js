@@ -259,3 +259,4 @@ function js_type_delete(ary, reloadurl) {
         })
     }
 }
+
