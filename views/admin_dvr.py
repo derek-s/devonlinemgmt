@@ -243,3 +243,10 @@ def dev_getLVR(campus, build):
         }
         Lvr_result.append(no)
     return jsonify(Lvr_result)
+
+
+def dev_checkDeveiceid(devid):
+    result = Dev_DeviceInfo.filter_by(
+        Deviceid=devid
+    ).count()
+    print result
