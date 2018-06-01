@@ -24,7 +24,7 @@ from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_lis
 from .admin_basic import basic_bulid_add, basic_build_delete, basic_build_modfiy, basic_buildname_search, basic_type_index
 from .admin_basic import basic_type_Add, basic_type_modfiy, basic_type_delete, basic_type_search
 from .admin_user import admin_userindex, user_per_modfiy, user_delete, user_pwd_modfiy, user_create
-
+from .admin_dvr import dev_checkDeviceid
 
 # test
 from forms import CreateUser
@@ -668,4 +668,14 @@ def devquerylvr():
     campus = request.values.get("campus")
     build = request.values.get("build")
     result = dev_getLVR(campus, build)
+    return result
+
+
+@adminbg.route("/admin/_devquerydid", methods=['POST'])
+@login_required
+@admin_required
+def devquerydid():
+    dvrmanage_add_id = request.values.get("deviceid")
+    print(dvrmanage_add_id)
+    result = dev_checkDeviceid(dvrmanage_add_id)
     return result
