@@ -115,7 +115,7 @@
                                         <input type="text" id="devadd_addr">
                                     </td>
                                     <td>
-                                        <input type="text" id="devadd_upip">
+                                        <input type="text" id="devadd_upip" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="15">
                                     </td>
                                     <td>
                                         <input type="text" id="devadd_upport">
