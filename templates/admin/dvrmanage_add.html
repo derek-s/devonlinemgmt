@@ -151,6 +151,20 @@
                     $(this).removeAttr("style")
                 }
             })
+            $(document).on("blur", "#devadd_id", function() {
+                if ($(this).val() != "该项不能为空!") {
+                    $.ajax({
+                        url: Flask.url_for('adminbg.devquerydid'),
+                        type: 'POST',
+                        data: JSON.stringify($(this).val()),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function(data) {
+                            console.log(data)
+                        }
+                    })
+                }
+            })
         }
     )
 </script>
