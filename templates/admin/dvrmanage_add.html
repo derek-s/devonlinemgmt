@@ -153,6 +153,9 @@
             })
             $(document).on("blur", "#devadd_id", function() {
                 if ($(this).val() != "该项不能为空!") {
+                    var devid_json = {
+                        deviceid: $(this).val()
+                    }
                     $.ajax({
                         url: Flask.url_for('adminbg.devquerydid'),
                         type: 'POST',
