@@ -675,7 +675,6 @@ def devquerylvr():
 @login_required
 @admin_required
 def devquerydid():
-    dvrmanage_add_id = request.values.get("deviceid")
-    print(dvrmanage_add_id)
+    dvrmanage_add_id = request.get_json()
     result = dev_checkDeviceid(dvrmanage_add_id)
     return result
