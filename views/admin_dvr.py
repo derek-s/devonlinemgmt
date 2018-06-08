@@ -246,7 +246,8 @@ def dev_getLVR(campus, build):
 
 
 def dev_checkDeviceid(devid):
-    result = Dev_DeviceInfo.filter_by(
-        Deviceid=devid
+    id = devid['deviceid']
+    result = Dev_DeviceInfo.query.filter_by(
+        DeviceID=id
     ).count()
     print result
