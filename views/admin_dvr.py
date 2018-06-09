@@ -250,4 +250,7 @@ def dev_checkDeviceid(devid):
     result = Dev_DeviceInfo.query.filter_by(
         DeviceID=id
     ).count()
-    print result
+    id_select_result = {
+        "id_select_result": result
+    }
+    return jsonify(id_select_result)
