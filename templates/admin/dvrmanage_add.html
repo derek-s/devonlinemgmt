@@ -163,7 +163,10 @@
                         dataType: "json",
                         contentType: "application/json",
                         success: function(data) {
-                            console.log(data)
+                            if (data.id_select_result != 0) {
+                                alert("ID已存在，请更换ID。")
+                                $(this).focus()
+                            }
                         }
                     })
                 }
