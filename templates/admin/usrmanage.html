@@ -69,7 +69,7 @@
                 <div id="data">
                     <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
                         <tr>
-                                <th>序号</th>
+                                <th>ID</th>
                                 <th><input id="checkboxall" type="checkbox" name="oper_all"></th>
                                 <th>用户名</th>
                                 <th>用户等级</th>
@@ -106,7 +106,7 @@
                                     <option value="delete">删除用户</option>
                                 </select>
                             </div>
-                            <button onclick="javascript:js_dvr_batchd()" id="iopearbutton" class="btn btn-primary">应用</button>
+                            <button onclick="javascript:js_user_batchd()" id="iopearbutton" class="btn btn-primary">应用</button>
                         </div>
                         <div class="fullsize ipagination">
                                 {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.usrmanage', level=request.args.get('level'))}} {%endif%}
