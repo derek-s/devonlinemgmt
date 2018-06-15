@@ -279,7 +279,6 @@ $(document).ready(
 )
 
 function js_dvr_batchd() {
-    url = self.location.href.split("&")[0].split("?")[0]
     if ($("select#ipage").val() == "delete") {
         $("[name='oper']").each(function () {
             if ($(this).prop('checked')) {
@@ -429,10 +428,13 @@ function dataCheak(dvrinfo_datas){
 }
 
 
-
 function isNull( str ){
     if ( str == "" ) return true
     var regu = "^[ ]+$"
     var re = new RegExp(regu)
     return re.test(str)
     }
+
+
+function js_dvr_delDevice( id ) {
+}
