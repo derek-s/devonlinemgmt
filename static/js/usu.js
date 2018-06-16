@@ -129,3 +129,9 @@ function js_p_modfiy(id, name) {
         }
     })
 }
+
+function js_user_batchd() {
+    if ($("select#ipage").val() == "delete") {
+        console.log("1123")
+    }
+}
