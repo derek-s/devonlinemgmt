@@ -30,6 +30,7 @@ $(document).ready(
                 }
             }
         })
+        id_array = new Array()
         $.base64.utf8encode = true;
         $.base64.utf8decode = true;
     }
@@ -72,14 +73,14 @@ function js_perm_modfiy(id){
     })  
 }
 
-function js_u_delete(id) {
+function js_u_delete(idarray) {
     url = self.location.href.split("&")[0].split("?")[0]
     if (confirm('确定删除么？')){
         $.ajax({
             url: $SCRIPT_ROOT + "admin/usrmanage/usrdel",
             type: "post",
             data: {
-                id: id
+                array_id: JSON.stringify(idarray)
             },
             dateType: "json",
             success: function(resp) {
@@ -132,6 +133,22 @@ function js_p_modfiy(id, name) {
 
 function js_user_batchd() {
     if ($("select#ipage").val() == "delete") {
-        console.log("1123")
+        $("[name='oper']").each(function () {
+            if ($(this).prop('checked')) {
+                idarray = js_delArray($(this).val())
+            }
+        })
+        js_u_delete(idarray)
     }
+}
+
+function js_user_delOnly(id) {
+    id_del = new Array()
+    id_del.push(id)
+    js_u_delete(id_del)
+}
+
+function js_delArray(id) {
+    id_array.push(id)
+    return id_array
 }
