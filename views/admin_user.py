@@ -95,23 +95,18 @@ def user_per_modfiy():
 
 
 def user_delete():
-    id = request.values.get('id', -1, type=int)
+    id = request.values.get("array_id")
     try:
-        user_info = User.query.filter(User.id == id)
-        if user_info:
-            user_info.delete()
-            db.session.commit()
-            user_del_status = {
-                'status': 1,
-                'message': 'success'
-                }
-            return json.dumps(user_del_status)
-        else:
-            user_del_status = {
-                'status': 404,
-                'message': '没有这个用户'
-            }
-            return json.dumps(user_del_status)
+        for one in json.loads(id):
+            user_info = User.query.filter(User.id == one)
+            if user_info:
+                user_info.delete()
+        db.session.commit()
+        user_del_status = {
+            'status': 1,
+            'message': 'success'
+                    }
+        return json.dumps(user_del_status)
     except Exception as e:
         user_del_status = {
             'status': 500,
