@@ -92,7 +92,7 @@
                             <td>
                                 <button onclick="javascript:js_perm_modfiy('{{ data.id }}')" type="button" class="btn btn-link inline_button_link">更改权限</button> | 
                                 <button onclick="javascript:js_p_modfiy('{{ data.id }}', '{{ data.username }}')" type="button" class="btn btn-link inline_button_link">修改密码</button> | 
-                                <button onclick="javascript:js_u_delete('{{ data.id }}')" type="button" class="btn btn-link inline_button_link">删除用户</button>
+                                <button onclick="javascript:js_user_delOnly('{{ data.id }}')" type="button" class="btn btn-link inline_button_link">删除用户</button>
                             </td>
                         </tr>
                         {% endfor %}
