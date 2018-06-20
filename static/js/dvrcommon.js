@@ -30,6 +30,7 @@ $(document).ready(
                 }
             }
         })
+        id_array = new Array()
         $.base64.utf8encode = true;
         $.base64.utf8decode = true;
         //下拉菜单
@@ -282,14 +283,24 @@ function js_dvr_batchd() {
     if ($("select#ipage").val() == "delete") {
         $("[name='oper']").each(function () {
             if ($(this).prop('checked')) {
-                console.log("add id")
+                delarray = js_dvr_idarry($(this).val())
             }
         })
-        console.log("delete id")
+        console.log(delarray)
     } else if ($("select#ipage").val() == "dvrup") {
-        console.log("dvrup")
+        $("[name='oper']").each(function () {
+            if ($(this).prop('checked')) {
+                uparray = js_dvr_idarry($(this).val())
+            }
+        })
+        console.log(uparray)
     } else if ($("select#ipage").val() == "dvrdown") {
-        console.log("dvrdown")
+        $("[name='oper']").each(function () {
+            if ($(this).prop('checked')) {
+                downarray = js_dvr_idarry($(this).val())
+            }
+        })
+        console.log(downarray)
     }
 }
 function js_dvr_create() {
@@ -436,5 +447,11 @@ function isNull( str ){
     }
 
 
-function js_dvr_delDevice( id ) {
+function js_dvr_idarry( id ){
+    id_array.push(id)
+    return id_array
+}
+
+function js_dvr_delDevice( idarray ) {
+    
 }
