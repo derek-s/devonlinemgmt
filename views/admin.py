@@ -678,3 +678,9 @@ def devquerydid():
     dvrmanage_add_id = request.get_json()
     result = dev_checkDeviceid(dvrmanage_add_id)
     return result
+
+@adminbg.route("/admin/_devdeldevice", methods=['POST'])
+@login_required
+@admin_required
+def devdeldevice():
+    pass
