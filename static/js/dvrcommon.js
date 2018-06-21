@@ -453,5 +453,5 @@ function js_dvr_idarry( id ){
 }
 
 function js_dvr_delDevice( idarray ) {
-    
+    pass
 }
