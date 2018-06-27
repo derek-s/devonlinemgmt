@@ -394,7 +394,7 @@ function js_dvr_add() {
                         alert("添加失败")
                     }else{
                         alert("添加成功")
-                        window.location.reload()
+                        parent.location.reload()
                     }
                 }
             })
