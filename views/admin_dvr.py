@@ -11,6 +11,7 @@ from log import eventlog
 from base64 import b64decode
 from urllib import unquote
 from ext import db
+import json
 
 def dvr_manage_get():
     page = request.args.get('page', 1, type=int)
@@ -254,3 +255,40 @@ def dev_checkDeviceid(devid):
         "id_select_result": result
     }
     return jsonify(id_select_result)
+
+
+def dev_devup(id):
+    pass
+
+
+def dev_devdown(id):
+    pass
+
+def dev_devdel():
+    try:
+        dev_id = request.values.get("array_id")
+        for one in json.loads(dev_id.encode("utf-8")):
+            device = Dev_DeviceInfo.query.filter(
+                Dev_DeviceInfo.DeviceID == one
+            )
+
+            if device.one().DeviceCondition == "Y":
+                delete_status = {
+                    'status': 2,
+                    'message': '删除前请先下架设备'
+                }
+                return json.dumps(delete_status)
+            else:
+                device.delete()
+                db.session.commit()
+                delete_status = {
+                    'status': 1,
+                    'message': 'success'
+                }
+        return json.dumps(delete_status)
+    except Exception as e:
+        delete_status = {
+            'status': 500,
+            'message': 'error'
+        }
+        return json.dumps(delete_status)
