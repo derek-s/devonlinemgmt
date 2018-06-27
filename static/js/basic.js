@@ -101,6 +101,7 @@ function js_bcampus_delete(ary, reloadurl) {
                 resp = JSON.parse(resp)
                 if (resp.status != 1) {
                     alert("删除失败")
+                    id_array.length = 0
                 }else{
                     alert("删除成功")
                     window.location.href = reloadurl
@@ -124,6 +125,7 @@ function js_bbuils_delete(ary, reloadurl) {
                 resp = JSON.parse(resp)
                 if (resp.status != 1) {
                     alert("删除失败")
+                    id_array.length = 0
                 }else{
                     alert("删除成功")
                     window.location.href = reloadurl
@@ -227,6 +229,7 @@ function js_type_modfiy(id, typename) {
                     resp = JSON.parse(resp)
                     if (resp.status != 1) {
                         alert("修改失败 " + resp.message)
+                        id_array.length = 0
                     }else{
                         alert("修改成功")
                         window.location.reload()
@@ -251,6 +254,7 @@ function js_type_delete(ary, reloadurl) {
                 resp = JSON.parse(resp)
                 if (resp.status != 1) {
                     alert("删除失败")
+                    id_array.length = 0
                 }else{
                     alert("删除成功")
                     window.location.href = reloadurl

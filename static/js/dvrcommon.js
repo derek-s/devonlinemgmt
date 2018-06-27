@@ -286,7 +286,7 @@ function js_dvr_batchd() {
                 delarray = js_dvr_idarry($(this).val())
             }
         })
-        console.log(delarray)
+        js_dvr_delDevice(delarray)
     } else if ($("select#ipage").val() == "dvrup") {
         $("[name='oper']").each(function () {
             if ($(this).prop('checked')) {
@@ -453,5 +453,23 @@ function js_dvr_idarry( id ){
 }
 
 function js_dvr_delDevice( idarray ) {
-    pass
+    if(confirm("确定删除么？")){
+        $.ajax({
+            url: Flask.url_for('adminbg.devdeldevice'),
+            type: "post",
+            data: {
+                array_id: JSON.stringify(idarray)
+            },
+            dataType: "json",
+            success: function(resp) {
+                if (resp.status != 1) {
+                    alert("删除失败 " + resp.message)
+                    id_array.length = 0
+                }else{
+                    alert("删除成功")
+                    window.location.reload()
+                }
+            }
+        })
+    }
 }
