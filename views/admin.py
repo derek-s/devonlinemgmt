@@ -24,7 +24,7 @@ from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_lis
 from .admin_basic import basic_bulid_add, basic_build_delete, basic_build_modfiy, basic_buildname_search, basic_type_index
 from .admin_basic import basic_type_Add, basic_type_modfiy, basic_type_delete, basic_type_search
 from .admin_user import admin_userindex, user_per_modfiy, user_delete, user_pwd_modfiy, user_create
-from .admin_dvr import dev_checkDeviceid, dev_devdel, dev_devup, dev_devdown
+from .admin_dvr import dev_checkDeviceid, dev_devdel, dev_devupordown
 
 # test
 from forms import CreateUser
@@ -679,9 +679,17 @@ def devquerydid():
     result = dev_checkDeviceid(dvrmanage_add_id)
     return result
 
+
 @adminbg.route("/admin/_devdeldevice", methods=['POST'])
 @login_required
 @admin_required
 def devdeldevice():
     result = dev_devdel()
     return result
+
+
+@adminbg.route("/admin/_devputawayop", methods=['POST'])
+@login_required
+@admin_required
+def devputawayop():
+    return dev_devupordown()

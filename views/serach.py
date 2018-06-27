@@ -22,6 +22,7 @@ def serach():
     word = request.args.get('keyword', "", type=str)
     serach = unquote(b64decode(word)).decode('utf-8')
     serp = Dev_DeviceStatus.query.filter(
+        Dev_DeviceStatus.DeviceCondition != "N",
         (Dev_DeviceStatus.Campus.like("%" + serach + "%"), "")[serach is None] |
         (Dev_DeviceStatus.Location.like("%" + serach + "%"), "")[serach is None] |
         (Dev_DeviceStatus.RoomNo.like("%" + serach + "%"), "")[serach is None] |

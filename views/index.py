@@ -22,7 +22,7 @@ def index():
     page = request.args.get('page', 1, type=int)
     request.script_root = url_for('indexview.index', _external=True)
     count = Dev_DeviceStatus.query.count()
-    pagination = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus.desc()).paginate(
+    pagination = Dev_DeviceStatus.query.filter(Dev_DeviceStatus.DeviceCondition != "N").order_by(Dev_DeviceStatus.Campus.desc()).paginate(
         page, per_page=Setting().page_index
     )
     posts = pagination.items
@@ -38,6 +38,7 @@ def indexlist():
     campusname = b64decode(unquote(request.args.get('campusname', "", type=str)))
     buildname = b64decode(unquote(request.args.get('buildname', "", type=str)))
     devinfo = Dev_DeviceStatus.query.filter(
+        Dev_DeviceStatus.DeviceCondition != "N",
         (Dev_DeviceStatus.Campus.like("%" + campusname + "%"), "")[campusname is None],
         (Dev_DeviceStatus.Location.like("%" + buildname + "%"), "")[buildname is None]
     ).order_by(Dev_DeviceStatus.Campus.desc())
