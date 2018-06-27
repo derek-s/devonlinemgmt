@@ -214,7 +214,7 @@ def dvr_add_post():
         devip = each_dvrinfo['ip']
         devport =each_dvrinfo['port']
         devinfo_db = Dev_DeviceInfo(devname, devtype, devserial, devputaway, devid)
-        devstatus_db = Dev_DeviceStatus(devcampus, devbuild, devlvr, devhostname, devaddr, devip, devport, devserial)
+        devstatus_db = Dev_DeviceStatus(devcampus, devbuild, devlvr, devhostname, devaddr, devip, devport, devserial, devputaway)
         db.session.add(devinfo_db)
         if devputaway == "Y":
             db.session.add(devstatus_db)
@@ -257,12 +257,39 @@ def dev_checkDeviceid(devid):
     return jsonify(id_select_result)
 
 
-def dev_devup(id):
-    pass
+def dev_devupordown():
+    try:
+        dev_id = request.values.get("array_id")
+        op = request.values.get("op")
+        if op == "down":
+            for one in json.loads(dev_id.encode("utf-8")):
+                device = Dev_DeviceInfo.query.filter(
+                    Dev_DeviceInfo.DeviceID == one
+                )
+                if device:
+                    device_Condition = device.one().DeviceCondition
+                    print(device_Condition)
+                    if device_Condition != op:
+                        device.update({Dev_DeviceInfo.DeviceCondition: "N"})
+                        Dev_DeviceStatus.query.filter(
+                            Dev_DeviceStatus.DeviceModel == one
+                        ).update({Dev_DeviceStatus.DeviceCondition: "N"})
+                    else:
+                        pass
+                db.session.commit()
+                DCondition_result = {
+                    'status': 1,
+                    'message': 'ok'
+                }
+            return json.dumps(DCondition_result)
+    except Exception as e:
+        print(e)
+        DCondition_result = {
+            'status': 500,
+            'message': 'Server Error'
+        }
+        return json.dumps(DCondition_result)
 
-
-def dev_devdown(id):
-    pass
 
 def dev_devdel():
     try:

@@ -13,7 +13,7 @@ def admin_query():
     request.script_root = url_for('indexview.index', _external=True)
     # request.script_root = url_for('adminbg.query', _external=True)
     count = Dev_DeviceStatus.query.count()
-    pagination = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus.desc()).paginate(
+    pagination = Dev_DeviceStatus.query.filter(Dev_DeviceStatus.DeviceCondition != "N").order_by(Dev_DeviceStatus.Campus.desc()).paginate(
         page, per_page=Setting().pagination
     )
     posts = pagination.items
@@ -33,6 +33,7 @@ def admin_query_list():
     campusname = b64decode(unquote(request.args.get('campusname', "", type=str)))
     buildname = b64decode(unquote(request.args.get('buildname', "", type=str)))
     devinfo = Dev_DeviceStatus.query.filter(
+        Dev_DeviceStatus.DeviceCondition != "N",
         (Dev_DeviceStatus.Campus.like("%" + campusname + "%"), "")[campusname is None],
         (Dev_DeviceStatus.Location.like("%" + buildname + "%"), "")[buildname is None]
     ).order_by(Dev_DeviceStatus.Campus.desc())
@@ -81,6 +82,7 @@ def admin_query_serach():
 
 def qserach(serach):
     serp = Dev_DeviceStatus.query.filter(
+        Dev_DeviceStatus.DeviceCondition != "N",
         (Dev_DeviceStatus.Campus.like("%" + serach + "%"), "")[serach is None] |
         (Dev_DeviceStatus.Location.like("%" + serach + "%"), "")[serach is None] |
         (Dev_DeviceStatus.RoomNo.like("%" + serach + "%"), "")[serach is None] |

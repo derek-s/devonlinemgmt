@@ -21,7 +21,7 @@ def _queryipage():
     count = request.values.get('count', None, type=int)
     pagenum = request.values.get('pagenum', None, type=int)
     page_num = ((count/Setting().page_index+pagenum), 0)[count/Setting().page_index == 0]
-    devinfo = Dev_DeviceStatus.query.order_by(Dev_DeviceStatus.Campus.desc()).paginate(
+    devinfo = Dev_DeviceStatus.query.filter(Dev_DeviceStatus.DeviceCondition != "N").order_by(Dev_DeviceStatus.Campus.desc()).paginate(
         (
             page_num
         ), per_page=Setting().page_index
@@ -128,6 +128,7 @@ def queryilist():
     campusname = unquote(request.values.get('campusname', "", type=str))
     buildname = unquote(request.values.get('buildname', "", type=str))
     devinfo = Dev_DeviceStatus.query.filter(
+        Dev_DeviceStatus.DeviceCondition != "N",
         (Dev_DeviceStatus.Campus.like("%" + campusname + "%"), "")[campusname is None],
         (Dev_DeviceStatus.Location.like("%" + buildname + "%"), "")[buildname is None]
     ).order_by(Dev_DeviceStatus.Campus.desc())
@@ -162,6 +163,7 @@ def queryserach():
     word = request.values.get('keyword', None, type=str)
     serach = b64decode(unquote(word)).decode('utf-8')
     serp = Dev_DeviceStatus.query.filter(
+        Dev_DeviceStatus.DeviceCondition != "N",
         (Dev_DeviceStatus.Campus.like("%" + serach + "%"), "")[serach is None] |
         (Dev_DeviceStatus.Location.like("%" + serach + "%"), "")[serach is None] |
         (Dev_DeviceStatus.RoomNo.like("%" + serach + "%"), "")[serach is None] |
