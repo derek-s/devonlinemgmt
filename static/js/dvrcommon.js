@@ -293,14 +293,14 @@ function js_dvr_batchd() {
                 uparray = js_dvr_idarry($(this).val())
             }
         })
-        console.log(uparray)
+        js_dvr_putaway(uparray, "up")
     } else if ($("select#ipage").val() == "dvrdown") {
         $("[name='oper']").each(function () {
             if ($(this).prop('checked')) {
                 downarray = js_dvr_idarry($(this).val())
             }
         })
-        console.log(downarray)
+        js_dvr_putaway(downarray, "down")
     }
 }
 function js_dvr_create() {
@@ -452,7 +452,7 @@ function js_dvr_idarry( id ){
     return id_array
 }
 
-function js_dvr_delDevice( idarray ) {
+function js_dvr_delDevice( idarray ){
     if(confirm("确定删除么？")){
         $.ajax({
             url: Flask.url_for('adminbg.devdeldevice'),
@@ -467,6 +467,30 @@ function js_dvr_delDevice( idarray ) {
                     id_array.length = 0
                 }else{
                     alert("删除成功")
+                    window.location.reload()
+                }
+            }
+        })
+    }
+}
+
+function js_dvr_putaway( idarray, op ) {
+    if(confirm("确定进行操作么？")){
+        $.ajax({
+            url: Flask.url_for('adminbg.devputawayop'),
+            type: "post",
+            data: {
+                array_id: JSON.stringify(idarray),
+                op: op
+            },
+            dataType: "JSON",
+            success: function(resp) {
+                if(resp.status != 1) {
+                    alert("修改失败 ", + resp.message)
+                    id_array.length = 0
+                }
+                else{
+                    alert("修改成功")
                     window.location.reload()
                 }
             }
