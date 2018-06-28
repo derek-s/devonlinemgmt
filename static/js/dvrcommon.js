@@ -475,7 +475,7 @@ function js_dvr_delDevice( idarray ){
 }
 
 function js_dvr_putaway( idarray, op ) {
-    if(confirm("确定进行操作么？")){
+    if(op == "up"){
         $.ajax({
             url: Flask.url_for('adminbg.devputawayop'),
             type: "post",
@@ -485,15 +485,34 @@ function js_dvr_putaway( idarray, op ) {
             },
             dataType: "JSON",
             success: function(resp) {
-                if(resp.status != 1) {
-                    alert("修改失败 ", + resp.message)
-                    id_array.length = 0
-                }
-                else{
-                    alert("修改成功")
-                    window.location.reload()
-                }
+                console.log(resp)
             }
         })
+        layer.open({
+            title: 'test',
+            content: 'test'
+          });     
+    }else{
+        if(confirm("确定进行操作么？")){
+            $.ajax({
+                url: Flask.url_for('adminbg.devputawayop'),
+                type: "post",
+                data: {
+                    array_id: JSON.stringify(idarray),
+                    op: op
+                },
+                dataType: "JSON",
+                success: function(resp) {
+                    if(resp.status != 1) {
+                        alert("修改失败 ", + resp.message)
+                        id_array.length = 0
+                    }
+                    else{
+                        alert("修改成功")
+                        window.location.reload()
+                    }
+                }
+            })
+        }
     }
 }

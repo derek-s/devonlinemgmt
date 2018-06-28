@@ -257,10 +257,13 @@ def dev_checkDeviceid(devid):
     return jsonify(id_select_result)
 
 
-def dev_devupordown():
+def dev_devup():
+    pass
+
+
+def dev_devdown(op):
     try:
         dev_id = request.values.get("array_id")
-        op = request.values.get("op")
         if op == "down":
             for one in json.loads(dev_id.encode("utf-8")):
                 device = Dev_DeviceInfo.query.filter(
