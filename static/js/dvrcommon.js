@@ -317,6 +317,9 @@ function js_dvr_create() {
 function js_dvr_querybuild(campus_name, nextBuildElement) {
     var posturl = Flask.url_for('adminbg.devquerybuild')
     var campusb64 = encodeURIComponent($.base64.encode(campus_name), 'utf-8')
+    $.ajaxSetup({ 
+        async : false 
+    });   
     $.post(posturl, {
         campus: campusb64
     }, function (data) {
@@ -340,6 +343,9 @@ function js_dvr_querylvr(campus_name, build_name, nextLvrElement) {
     var posturl = Flask.url_for("adminbg.devquerylvr")
     var campusb64 = encodeURIComponent($.base64.encode(campus_name), 'utf-8')
     var buildb64 = encodeURIComponent($.base64.encode(build_name), 'utf-8')
+    $.ajaxSetup({ 
+        async : false 
+    });       
     $.post(posturl, {
         campus: campusb64,
         build: buildb64
@@ -476,30 +482,33 @@ function js_dvr_delDevice( idarray ){
 
 function js_dvr_putaway( idarray, op ) {
     if(op == "up"){
-        $.ajax({
-            url: Flask.url_for('adminbg.devputawayop'),
-            type: "post",
-            data: {
-                array_id: JSON.stringify(idarray),
-                op: op
-            },
-            dataType: "JSON",
-            success: function(resp) {
-                console.log(resp)
-            }
-        })
-        layer.open({
-            title: 'test',
-            content: 'test'
-          });     
-    }else{
-        if(confirm("确定进行操作么？")){
+        if(idarray){
             $.ajax({
-                url: Flask.url_for('adminbg.devputawayop'),
+                url: Flask.url_for('adminbg.devup'),
                 type: "post",
                 data: {
                     array_id: JSON.stringify(idarray),
-                    op: op
+                    op: "get"
+                },
+                dataType: "html",
+                success: function(html) {
+                    layer_devup = layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim',
+                        title: "上架设备",
+                        area: ['1050px', '500px'],
+                        content: html
+                    })
+                }
+            })
+        }
+    }else{
+        if(confirm("确定进行操作么？")){
+            $.ajax({
+                url: Flask.url_for('adminbg.devdown'),
+                type: "post",
+                data: {
+                    array_id: JSON.stringify(idarray),
                 },
                 dataType: "JSON",
                 success: function(resp) {
