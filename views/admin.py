@@ -688,12 +688,24 @@ def devdeldevice():
     return result
 
 
-@adminbg.route("/admin/_devputawayop", methods=['POST'])
+@adminbg.route("/admin/_devup", methods=['POST'])
 @login_required
 @admin_required
-def devputawayop():
+def devup():
     op = request.values.get("op")
-    if op == "down":
-        return dev_devdown(op)
-    elif op == "up":
-        up = dev_devup()
+    result = dev_devup(op)
+    return render_template(
+            "/admin/dvrmanage_up.html",
+            dStatus=result['statusResult'],
+            dInfo=result['infoResult'],
+            campus=result['campus'],
+            type=result['dvrtype']
+            )
+
+
+@adminbg.route("/admin/_devdown", methods=['POST'])
+@login_required
+@admin_required
+def devdown():
+    return dev_devdown()
+

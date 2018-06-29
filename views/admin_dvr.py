@@ -257,34 +257,73 @@ def dev_checkDeviceid(devid):
     return jsonify(id_select_result)
 
 
-def dev_devup():
-    pass
+def dev_devup(op):
+    if op == 'get':
+        try:
+            campus = dev_getCampus()
+            dvrtype = dev_getType()
+            dev_id = request.values.get("array_id")
+            for one in json.loads(dev_id.encode("utf-8")):
+                deviceinStatus = Dev_DeviceStatus.query.filter(
+                    Dev_DeviceStatus.DeviceModel == one
+                )
+                if deviceinStatus.count():
+                    statusResult = deviceinStatus.one()
+                    deviceinInfo = Dev_DeviceInfo.query.filter(
+                        Dev_DeviceInfo.DeviceID == one
+                    ).one()
+                    infoResult = deviceinInfo
+                    result = {
+                        'statusResult': statusResult,
+                        'infoResult': infoResult,
+                        'campus': campus,
+                        'dvrtype': dvrtype
+                    }
+                    return result
+                else:
+                    print("123")
+                    deviceinInfo = Dev_DeviceInfo.query.filter(
+                        Dev_DeviceInfo.DeviceID == one
+                    ).one()
+                    infoResult = deviceinInfo
+                    result = {
+                        'statusResult': '',
+                        'infoResult': infoResult,
+                        'campus': campus,
+                        'dvrtype': dvrtype
+                    }
+                    return result
+        except Exception as e:
+            pass
+    elif op == 'post':
+        devUpData = request.get_json()
+        print(devUpData)
 
 
-def dev_devdown(op):
+
+
+def dev_devdown():
     try:
         dev_id = request.values.get("array_id")
-        if op == "down":
-            for one in json.loads(dev_id.encode("utf-8")):
-                device = Dev_DeviceInfo.query.filter(
-                    Dev_DeviceInfo.DeviceID == one
-                )
-                if device:
-                    device_Condition = device.one().DeviceCondition
-                    print(device_Condition)
-                    if device_Condition != op:
-                        device.update({Dev_DeviceInfo.DeviceCondition: "N"})
-                        Dev_DeviceStatus.query.filter(
-                            Dev_DeviceStatus.DeviceModel == one
-                        ).update({Dev_DeviceStatus.DeviceCondition: "N"})
-                    else:
-                        pass
-                db.session.commit()
-                DCondition_result = {
-                    'status': 1,
-                    'message': 'ok'
-                }
-            return json.dumps(DCondition_result)
+        for one in json.loads(dev_id.encode("utf-8")):
+            device = Dev_DeviceInfo.query.filter(
+                Dev_DeviceInfo.DeviceID == one
+            )
+            if device:
+                device_Condition = device.one().DeviceCondition
+                if device_Condition != "N":
+                    device.update({Dev_DeviceInfo.DeviceCondition: "N"})
+                    Dev_DeviceStatus.query.filter(
+                        Dev_DeviceStatus.DeviceModel == one
+                    ).update({Dev_DeviceStatus.DeviceCondition: "N"})
+                else:
+                    pass
+            db.session.commit()
+            DCondition_result = {
+                'status': 1,
+                'message': 'ok'
+            }
+        return json.dumps(DCondition_result)
     except Exception as e:
         print(e)
         DCondition_result = {
