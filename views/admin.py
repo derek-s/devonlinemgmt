@@ -693,13 +693,12 @@ def devdeldevice():
 @admin_required
 def devup():
     op = request.values.get("op")
-    result = dev_devup(op)
+    result, campus, dvrtype = dev_devup(op)
     return render_template(
             "/admin/dvrmanage_up.html",
-            dStatus=result['statusResult'],
-            dInfo=result['infoResult'],
-            campus=result['campus'],
-            type=result['dvrtype']
+            dbresult=result,
+            campus=campus,
+            type=dvrtype
             )
 
 
