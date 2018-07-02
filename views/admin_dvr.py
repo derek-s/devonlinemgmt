@@ -263,6 +263,7 @@ def dev_devup(op):
             campus = dev_getCampus()
             dvrtype = dev_getType()
             dev_id = request.values.get("array_id")
+            result_array = []
             for one in json.loads(dev_id.encode("utf-8")):
                 deviceinStatus = Dev_DeviceStatus.query.filter(
                     Dev_DeviceStatus.DeviceModel == one
@@ -273,13 +274,12 @@ def dev_devup(op):
                         Dev_DeviceInfo.DeviceID == one
                     ).one()
                     infoResult = deviceinInfo
+                    print(statusResult)
                     result = {
                         'statusResult': statusResult,
-                        'infoResult': infoResult,
-                        'campus': campus,
-                        'dvrtype': dvrtype
+                        'infoResult': infoResult
                     }
-                    return result
+                    result_array.append(result)
                 else:
                     print("123")
                     deviceinInfo = Dev_DeviceInfo.query.filter(
@@ -288,11 +288,11 @@ def dev_devup(op):
                     infoResult = deviceinInfo
                     result = {
                         'statusResult': '',
-                        'infoResult': infoResult,
-                        'campus': campus,
-                        'dvrtype': dvrtype
+                        'infoResult': infoResult
                     }
-                    return result
+                    result_array.append(result)
+            print(result_array)
+            return result_array, campus, dvrtype
         except Exception as e:
             pass
     elif op == 'post':
