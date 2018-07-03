@@ -5,6 +5,9 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
 from flask_jsglue import JSGlue
+from jinja2.ext import do
+from jinja2 import Environment
+
 
 from ext import login_manager, md5s
 from models import *
@@ -36,9 +39,11 @@ app.config[
     'SQLALCHEMY_DATABASE_URI'] = "mysql://root:123a+-@192.168.10.105/devonlie"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-#Templates dev Testing Code
+# Templates dev Testing Code
 app.jinja_env.auto_reload = True
 
+# add do ext
+app.jinja_env.add_extension("jinja2.ext.do")
 
 bootstrap = Bootstrap(app)
 db.init_app(app)
