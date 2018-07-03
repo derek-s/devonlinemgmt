@@ -694,8 +694,6 @@ def devdeldevice():
 def devup():
     op = request.values.get("op")
     result, campus, dvrtype = dev_devup(op)
-    for one in result:
-        print(one["statusResult"].RoomNo)
     return render_template(
             "/admin/dvrmanage_up.html",
             dbresult=result,

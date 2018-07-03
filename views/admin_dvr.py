@@ -274,14 +274,12 @@ def dev_devup(op):
                         Dev_DeviceInfo.DeviceID == one
                     ).one()
                     infoResult = deviceinInfo
-                    print(statusResult)
                     result = {
                         'statusResult': statusResult,
                         'infoResult': infoResult
                     }
                     result_array.append(result)
                 else:
-                    print("123")
                     deviceinInfo = Dev_DeviceInfo.query.filter(
                         Dev_DeviceInfo.DeviceID == one
                     ).one()
@@ -291,7 +289,6 @@ def dev_devup(op):
                         'infoResult': infoResult
                     }
                     result_array.append(result)
-            lenResult = len(result_array)
             return result_array, campus, dvrtype
         except Exception as e:
             pass
