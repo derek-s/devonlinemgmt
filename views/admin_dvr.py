@@ -291,7 +291,7 @@ def dev_devup(op):
                         'infoResult': infoResult
                     }
                     result_array.append(result)
-            print(result_array)
+            lenResult = len(result_array)
             return result_array, campus, dvrtype
         except Exception as e:
             pass
