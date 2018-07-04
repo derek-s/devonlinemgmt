@@ -26,8 +26,8 @@
         <div id="devadd_form">
             <table id="devadd_table">
                 <tbody>
-                    {% set lenOne = 0 %}
                     {% for eachrow in dbresult %}
+                    {% set count = eachrow['count'] %}
                     {% set dInfo = eachrow['infoResult'] %}
                     {% set dStatus = eachrow['statusResult'] %}
                     <tr class="devadd_newtable">
@@ -41,7 +41,7 @@
                                         <th>唯一ID</th>
                                     </tr>
                                     <tr class="devadd_trinput">
-                                        <td class="td_id">{% do lenOne + 1 %}{{lenOne}}</td>
+                                        <td class="td_id">{{ count }}</td>
                                         <td>
                                             <input type="text" id="devadd_name" value="{{ dInfo.DeviceName }}" disabled>
                                         </td>
@@ -59,7 +59,7 @@
                                             <input type="text" id="devadd_serial" value="{{ dInfo.DeviceSN }}" disabled>
                                         </td>
                                         <td>
-                                            <input type="text" id="devadd_id" value="{{ dInfo.DeviceID }}" disabled>
+                                            <input type="text" id="devadd_id" class="dev_id_input" value="{{ dInfo.DeviceID }}" disabled>
                                         </td>
                                     </tr>
                                     <tr class="devadd_th devtr_hide">
@@ -106,16 +106,16 @@
                                     <tr class="devadd_trinput devtr_hide">
                                         <td></td>
                                         <td>
-                                            <input type="text" id="devadd_hostname">
+                                            <input type="text" id="devadd_hostname" value="{{ dStatus.HostName }}">
                                         </td>
                                         <td>
-                                            <input type="text" id="devadd_addr">
+                                            <input type="text" id="devadd_addr" value="{{ dStatus.LAA }}">
                                         </td>
                                         <td>
-                                            <input type="text" id="devadd_upip" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="15">
+                                            <input type="text" id="devadd_upip" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="15" value="{{ dStatus.HigherlinkIP }}">
                                         </td>
                                         <td>
-                                            <input type="text" id="devadd_upport">
+                                            <input type="text" id="devadd_upport" value="{{ dStatus.HigherlinkPort }}">
                                         </td>
                                     </tr>
                                     {% else %}
@@ -166,14 +166,12 @@
                                 </table>
                             </td>
                         </tr>
-                        {% do lenOne + 1 %}
-                        {{ lenOne }}
                         {% endfor %}
                 </tbody>
             </table>
         </div>
         <div class="devadd_operation">
-            <button type="button" class="btn btn-primary devadd_addbutton" onclick="javascirpt:js_dvr_add()">上架设备</button>
+            <button type="button" class="btn btn-primary devadd_addbutton" onclick="javascirpt:js_dvr_putaway(putwayid(), 'up', 'post')">上架设备</button>
         </div>
     </div>
 </body>
@@ -212,5 +210,23 @@
             })
         }
     )
+    function putwayid(){
+        var dev_array = new Array()
+        var putwayup_dev = $("td.devadd_newtd")
+        putwayup_dev.each(function(){
+            var info_data = {}
+            info_data["ID"] = $(this).find("#devadd_id").val()
+            info_data["Putway"] = "Y"
+            info_data["campus"] = $(this).find("#devadd_campus").val()
+            info_data["build"] = $(this).find("#devadd_build").val()
+            info_data["lvr"] = $(this).find("#devadd_lvr").val()
+            info_data["hostname"] = $(this).find("#devadd_hostname").val()
+            info_data["addr"] = $(this).find("#devadd_addr").val()
+            info_data["ip"] = $(this).find("#devadd_upip").val()
+            info_data["port"] = $(this).find("#devadd_upport").val()
+            dev_array.push(info_data)
+        })
+        return dev_array
+    }
 </script>
 </html>
