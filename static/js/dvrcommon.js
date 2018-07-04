@@ -480,27 +480,44 @@ function js_dvr_delDevice( idarray ){
     }
 }
 
-function js_dvr_putaway( idarray, op ) {
+function js_dvr_putaway( idarray, op, gop ) {
     if(op == "up"){
         if(idarray){
-            $.ajax({
-                url: Flask.url_for('adminbg.devup'),
-                type: "post",
-                data: {
-                    array_id: JSON.stringify(idarray),
-                    op: "get"
-                },
-                dataType: "html",
-                success: function(html) {
-                    layer_devup = layer.open({
-                        type: 1,
-                        skin: 'layui-layer-rim',
-                        title: "上架设备",
-                        area: ['1050px', '500px'],
-                        content: html
-                    })
-                }
-            })
+            if(gop == "post"){
+                $.ajax({
+                    url: Flask.url_for('adminbg.devup'),
+                    type: "post",
+                    data: {
+                        array_id: JSON.stringify(idarray),
+                        op: "post"
+                    },
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(resp) {
+                        console.log(resp)
+                    }
+                })
+            }
+            else{
+                $.ajax({
+                    url: Flask.url_for('adminbg.devup'),
+                    type: "post",
+                    data: {
+                        array_id: JSON.stringify(idarray),
+                        op: "get"
+                    },
+                    dataType: "html",
+                    success: function(html) {
+                        layer_devup = layer.open({
+                            type: 1,
+                            skin: 'layui-layer-rim',
+                            title: "上架设备",
+                            area: ['1050px', '500px'],
+                            content: html
+                        })
+                    }
+                })
+            }
         }
     }else{
         if(confirm("确定进行操作么？")){
