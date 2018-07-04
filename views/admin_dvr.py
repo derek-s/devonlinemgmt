@@ -259,6 +259,7 @@ def dev_checkDeviceid(devid):
 
 def dev_devup(op):
     if op == 'get':
+        count = 0
         try:
             campus = dev_getCampus()
             dvrtype = dev_getType()
@@ -269,22 +270,29 @@ def dev_devup(op):
                     Dev_DeviceStatus.DeviceModel == one
                 )
                 if deviceinStatus.count():
+
                     statusResult = deviceinStatus.one()
+                    if statusResult.DeviceCondition == "Y":
+                        continue
                     deviceinInfo = Dev_DeviceInfo.query.filter(
                         Dev_DeviceInfo.DeviceID == one
                     ).one()
                     infoResult = deviceinInfo
+                    count += 1
                     result = {
+                        'count': count,
                         'statusResult': statusResult,
                         'infoResult': infoResult
                     }
                     result_array.append(result)
                 else:
+                    count += 1
                     deviceinInfo = Dev_DeviceInfo.query.filter(
                         Dev_DeviceInfo.DeviceID == one
                     ).one()
                     infoResult = deviceinInfo
                     result = {
+                        'count': count,
                         'statusResult': '',
                         'infoResult': infoResult
                     }
