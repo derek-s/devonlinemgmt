@@ -692,20 +692,19 @@ def devdeldevice():
 @login_required
 @admin_required
 def devup():
-    op = request.values.get("op")
     op_json = request.get_json()
-    print(op_json)
-    if op == "get":
-        result, campus, dvrtype = dev_devup(op)
+    if op_json["op"] == "get":
+        result, campus, dvrtype = dev_devup(op_json)
         return render_template(
                 "/admin/dvrmanage_up.html",
                 dbresult=result,
                 campus=campus,
                 type=dvrtype
                 )
-    elif op == "post":
-        print("1234")
-        print(request.get_json())
+    elif op_json["op"] == "post":
+        result = dev_devup(op_json)
+        return result
+
 
 
 @adminbg.route("/admin/_devdown", methods=['POST'])

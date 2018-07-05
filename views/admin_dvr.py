@@ -257,20 +257,19 @@ def dev_checkDeviceid(devid):
     return jsonify(id_select_result)
 
 
-def dev_devup(op):
-    if op == 'get':
+def dev_devup(jsondata):
+    if jsondata["op"] == 'get':
         count = 0
         try:
             campus = dev_getCampus()
             dvrtype = dev_getType()
-            dev_id = request.values.get("array_id")
+            dev_id = jsondata["idarray"]
             result_array = []
-            for one in json.loads(dev_id.encode("utf-8")):
+            for one in dev_id:
                 deviceinStatus = Dev_DeviceStatus.query.filter(
                     Dev_DeviceStatus.DeviceModel == one
                 )
                 if deviceinStatus.count():
-
                     statusResult = deviceinStatus.one()
                     if statusResult.DeviceCondition == "Y":
                         continue
@@ -300,11 +299,68 @@ def dev_devup(op):
             return result_array, campus, dvrtype
         except Exception as e:
             pass
-    elif op == 'post':
-        devUpData = request.get_json()
-        print(devUpData)
-
-
+    elif jsondata["op"] == 'post':
+        idarray = jsondata["idarray"]
+        result = {
+            "status": 0,
+            "message": "Error"
+        }
+        for each_dev in idarray:
+            dev_id = each_dev["id"]
+            DevS_Campus = each_dev["campus"]
+            DevS_Location = each_dev["build"]
+            DevS_RoomNo = each_dev["lvr"]
+            DevS_HostName = each_dev["hostname"]
+            DevS_LAA = each_dev["addr"]
+            DevS_IP = each_dev["ip"]
+            DevS_Port = each_dev["port"]
+            DevS_ID = dev_id
+            deviceinStatus = Dev_DeviceStatus.query.filter(
+                Dev_DeviceStatus.DeviceModel == dev_id
+            )
+            if deviceinStatus.count():
+                deviceinStatus.update({
+                    Dev_DeviceStatus.Campus: DevS_Campus,
+                    Dev_DeviceStatus.Location: DevS_Location,
+                    Dev_DeviceStatus.RoomNo: DevS_RoomNo,
+                    Dev_DeviceStatus.HostName: DevS_HostName,
+                    Dev_DeviceStatus.LAA: DevS_LAA,
+                    Dev_DeviceStatus.HigherlinkIP: DevS_IP,
+                    Dev_DeviceStatus.HigherlinkPort: DevS_Port,
+                    Dev_DeviceStatus.DeviceCondition: "Y"
+                })
+                deviceinInfo = Dev_DeviceInfo.query.filter(
+                    Dev_DeviceInfo.DeviceID == dev_id
+                )
+                deviceinInfo.update({Dev_DeviceInfo.DeviceCondition: "Y"})
+                db.session.commit()
+                result = {
+                    'status': 1,
+                    'message': "ok"
+                }
+            else:
+                DevS_DB = Dev_DeviceStatus(
+                    DevS_Campus,
+                    DevS_Location,
+                    DevS_RoomNo,
+                    DevS_HostName,
+                    DevS_LAA,
+                    DevS_IP,
+                    DevS_Port,
+                    DevS_ID,
+                    "Y"
+                )
+                deviceinInfo = Dev_DeviceInfo.query.filter(
+                    Dev_DeviceInfo.DeviceID == dev_id
+                )
+                deviceinInfo.update({Dev_DeviceInfo.DeviceCondition: "Y"})
+                db.session.add(DevS_DB)
+                db.session.commit()
+                result = {
+                    'status': 1,
+                    'message': "ok"
+                }
+        return json.dumps(result)
 
 
 def dev_devdown():
