@@ -171,7 +171,7 @@
             </table>
         </div>
         <div class="devadd_operation">
-            <button type="button" class="btn btn-primary devadd_addbutton" onclick="javascirpt:js_dvr_putaway(putwayid(), 'up', 'post')">上架设备</button>
+            <button type="button" class="btn btn-primary devadd_addbutton" onclick="javascirpt:putwayid()">上架设备</button>
         </div>
     </div>
 </body>
@@ -210,24 +210,5 @@
             })
         }
     )
-    
-    function putwayid(){
-        var dev_array = new Array()
-        var putwayup_dev = $("td.devadd_newtd")
-        putwayup_dev.each(function(){
-            var info_data = {}
-            info_data["ID"] = $(this).find("#devadd_id").val()
-            info_data["Putway"] = "Y"
-            info_data["campus"] = $(this).find("#devadd_campus").val()
-            info_data["build"] = $(this).find("#devadd_build").val()
-            info_data["lvr"] = $(this).find("#devadd_lvr").val()
-            info_data["hostname"] = $(this).find("#devadd_hostname").val()
-            info_data["addr"] = $(this).find("#devadd_addr").val()
-            info_data["ip"] = $(this).find("#devadd_upip").val()
-            info_data["port"] = $(this).find("#devadd_upport").val()
-            dev_array.push(info_data)
-        })
-        return dev_array
-    }
 </script>
 </html>

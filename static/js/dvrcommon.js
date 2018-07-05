@@ -410,6 +410,7 @@ function js_dvr_add() {
 
 function dataCheak(dvrinfo_datas){
     for (x in dvrinfo_datas){
+        console.log(dvrinfo_datas[x])
         if (isNull(dvrinfo_datas[x].name)) {
             alert("存在未填写项，请核对数据。")
             return false
@@ -480,32 +481,44 @@ function js_dvr_delDevice( idarray ){
     }
 }
 
-function js_dvr_putaway( idarray, op, gop ) {
+function js_dvr_putaway(idarray, op, gop) {
     if(op == "up"){
         if(idarray){
             if(gop == "post"){
-                $.ajax({
-                    url: Flask.url_for('adminbg.devup'),
-                    type: "post",
-                    data: {
-                        array_id: JSON.stringify(idarray),
-                        op: "post"
-                    },
-                    dataType: "json",
-                    contentType: "application/json",
-                    success: function(resp) {
-                        console.log(resp)
+                var postarray = {
+                    "op": "post",
+                    "idarray": idarray
+                }
+                if(dataCheak(idarray)){
+                    if(confirm("确定上架么？")){
+                        $.ajax({
+                            url: Flask.url_for('adminbg.devup'),
+                            type: "post",
+                            data: JSON.stringify(postarray),
+                            contentType: "application/json",
+                            dataType: "json",
+                            success: function(resp) {
+                                if(resp.status == 1){
+                                    alert("上架成功")
+                                    window.location.reload()
+                                }else{
+                                    alert("上架失败")
+                                }
+                            }
+                        })
                     }
-                })
+                }
             }
             else{
+                var postarray = {
+                    "op": "get",
+                    "idarray": idarray
+                }
                 $.ajax({
                     url: Flask.url_for('adminbg.devup'),
                     type: "post",
-                    data: {
-                        array_id: JSON.stringify(idarray),
-                        op: "get"
-                    },
+                    data: JSON.stringify(postarray),
+                    contentType: "application/json",
                     dataType: "html",
                     success: function(html) {
                         layer_devup = layer.open({
@@ -541,4 +554,26 @@ function js_dvr_putaway( idarray, op, gop ) {
             })
         }
     }
+}
+
+function putwayid(){
+    var dev_array = new Array()
+    var putwayup_dev = $("td.devadd_newtd")
+    putwayup_dev.each(function(){
+        var dvrinfo_data = {}
+        dvrinfo_data["name"] = $(this).find("#devadd_name").val()
+        dvrinfo_data["type"] = $(this).find("#devadd_type").val()
+        dvrinfo_data["serial"] = $(this).find("#devadd_serial").val()
+        dvrinfo_data["id"] = $(this).find("#devadd_id").val()
+        dvrinfo_data["putaway"] = "Y"
+        dvrinfo_data["campus"] = $(this).find("#devadd_campus").val()
+        dvrinfo_data["build"] = $(this).find("#devadd_build").val()
+        dvrinfo_data["hostname"] = $(this).find("#devadd_hostname").val()
+        dvrinfo_data["addr"] = $(this).find("#devadd_addr").val()
+        dvrinfo_data["ip"] = $(this).find("#devadd_upip").val()
+        dvrinfo_data["port"] = $(this).find("#devadd_upport").val()
+        dvrinfo_data["lvr"] = $(this).find("#devadd_lvr").val()
+        dev_array.push(dvrinfo_data)
+    })
+    js_dvr_putaway(dev_array, "up", "post")
 }
