@@ -578,7 +578,6 @@ function putwayid(){
     js_dvr_putaway(dev_array, "up", "post")
 }
 
-
 function mdevice(idarray, op){
     if(op == "get"){
         if(idarray){
