@@ -422,3 +422,6 @@ def dev_devdel():
             'message': 'error'
         }
         return json.dumps(delete_status)
+
+def dev_m():
+    pass
