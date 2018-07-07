@@ -577,3 +577,32 @@ function putwayid(){
     })
     js_dvr_putaway(dev_array, "up", "post")
 }
+
+
+function mdevice(idarray, op){
+    if(op == "get"){
+        if(idarray){
+            var postarray = {
+                "op": "get",
+                "idarray": idarray
+            }
+            $.ajax({
+                url: Flask.url_for('adminbg.devmanage'),
+                type: "post",
+                data: JSON.stringify(postarray),
+                contentType: "application/json",
+                dataType: "html",
+                success: function(html) {
+                    layer_devup = layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim',
+                        title: "管理设备",
+                        area: ['1050px', '500px'],
+                        content: html
+                    })
+                }
+            })
+        }
+    }
+
+}
