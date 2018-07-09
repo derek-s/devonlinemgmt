@@ -724,3 +724,5 @@ def devmanage():
             "/admin/dvrmanage_m.html",
             dbresult=result
         )
+
+
