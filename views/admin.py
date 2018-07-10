@@ -719,10 +719,11 @@ def devdown():
 def devmanage():
     op_json = request.get_json()
     if op_json["op"] == "get":
-        result = dev_m(op_json)
+        devinfo, devtype = dev_m(op_json)
         return render_template(
             "/admin/dvrmanage_m.html",
-            dbresult=result
+            dbresult=devinfo,
+            type=devtype
         )
 
 
