@@ -47,6 +47,8 @@
                                                 {%- for typesone in type %}
                                                 {% if dbresult.DeviceCategory == typesone.Type %}
                                                 <option value="{{ typesone.Type }}" selected = "selected">{{ typesone.Type }}</option>
+                                                {% else %}
+                                                <option value="{{ typesone.Type }}">{{ typesone.Type }}</option>
                                                 {% endif %}
                                                 {% endfor %}
                                             </select>
@@ -65,7 +67,7 @@
             </table>
         </div>
         <div class="devadd_operation">
-            <button type="button" class="btn btn-primary devadd_addbutton" onclick="javascirpt:putwayid()">上架设备</button>
+            <button type="button" class="btn btn-primary devadd_addbutton" onclick="">修改设备信息</button>
         </div>
     </div>
 </body>
@@ -86,20 +88,6 @@
                     $(this).focus();
                 } else {
                     $(this).removeAttr("style")
-                }
-            })
-            $(".lvr > option").each(function(){
-                if($(this).attr("selected")){
-                    var lvrval = $(this).val()
-                    var lvr = $(this).parents("select#devadd_lvr")
-                    var build = $(this).parents("td").prevAll("td").children(".build")
-                    var buildval = build.val()
-                    var camp = $(this).parents("td").prevAll("td").children(".campus")
-                    var campval = camp.val()
-                    build.trigger("change", 100)
-                    lvr.find("option[value='" + lvrval + "']").attr("selected", "selected")
-                    camp.trigger("change", 100)
-                    build.find("option[value='" + buildval + "']").attr("selected", "selected")
                 }
             })
         }
