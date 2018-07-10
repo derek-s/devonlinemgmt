@@ -26,10 +26,6 @@
         <div id="devadd_form">
             <table id="devadd_table">
                 <tbody>
-                    {% for eachrow in dbresult %}
-                    {% set count = eachrow['count'] %}
-                    {% set dInfo = eachrow['infoResult'] %}
-                    {% set dStatus = eachrow['statusResult'] %}
                     <tr class="devadd_newtable">
                             <td class="devadd_newtd">
                                 <table class="devadd_newline">
@@ -41,132 +37,30 @@
                                         <th>唯一ID</th>
                                     </tr>
                                     <tr class="devadd_trinput">
-                                        <td class="td_id">{{ count }}</td>
+                                        <td class="td_id">1</td>
                                         <td>
-                                            <input type="text" id="devadd_name" value="{{ dInfo.DeviceName }}">
+                                            <input type="text" id="devadd_name" value="{{ dbresult.DeviceName }}">
                                         </td>
                                         <td>
                                             <select name="type" id="devadd_type">
                                                     <option value="devtype_null">请选择设备类型</option>
                                                 {%- for typesone in type %}
-                                                {% if dInfo.DeviceCategory == typesone.Type %}
+                                                {% if dbresult.DeviceCategory == typesone.Type %}
                                                 <option value="{{ typesone.Type }}" selected = "selected">{{ typesone.Type }}</option>
                                                 {% endif %}
                                                 {% endfor %}
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" id="devadd_serial" value="{{ dInfo.DeviceSN }}">
+                                            <input type="text" id="devadd_serial" value="{{ dbresult.DeviceSN }}">
                                         </td>
                                         <td>
-                                            <input type="text" id="devadd_id" class="dev_id_input" value="{{ dInfo.DeviceID }}">
+                                            <input type="text" id="devadd_id" class="dev_id_input" value="{{ dbresult.DeviceID }}">
                                         </td>
                                     </tr>
-                                    <tr class="devadd_th devtr_hide">
-                                        <th></th>
-                                        <th>校区</th>
-                                        <th>楼宇</th>
-                                        <th>弱电间名称</th>
-                                    </tr>
-                                    {% if dStatus %}
-                                    <tr class="devadd_trinput devtr_hide devselect">
-                                        <td></td>
-                                        <td>
-                                            <select name="campus" id="devadd_campus" class="campus" disabled>
-                                                <option value="campus_null">请选择校区</option>
-                                                {%- for campusone in campus %}
-                                                {% if dStatus.Campus == campusone.Campus%}
-                                                <option value="{{ campusone.Campus }}" selected>{{ campusone.Campus }}</option>
-                                                {% else %}
-                                                <option value="{{ campusone.Campus }}">{{ campusone.Campus }}</option>
-                                                {% endif %}
-                                                {% endfor %}
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select name="build" id="devadd_build" class="build" disabled>
-                                                <option value="build_null">请选择楼宇</option>
-                                                <option value="{{ dStatus.Location }}" selected>{{ dStatus.Location }}</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select name="lvr" id="devadd_lvr" class="lvr" disabled>
-                                                <option value="lvr_null">请选择弱电间</option>
-                                                <option value="{{ dStatus.RoomNo }}" selected>{{ dStatus.RoomNo }}</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr class="devadd_th devtr_hide">
-                                        <th></th>
-                                        <th>主机名称</th>
-                                        <th>管理地址</th>
-                                        <th>上联IP</th>
-                                        <th>上联端口</th>
-                                    </tr>
-                                    <tr class="devadd_trinput devtr_hide">
-                                        <td></td>
-                                        <td>
-                                            <input type="text" id="devadd_hostname" value="{{ dStatus.HostName }}" disabled>
-                                        </td>
-                                        <td>
-                                            <input type="text" id="devadd_addr" value="{{ dStatus.LAA }}" disabled>
-                                        </td>
-                                        <td>
-                                            <input type="text" id="devadd_upip" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="15" value="{{ dStatus.HigherlinkIP }}" disabled>
-                                        </td>
-                                        <td>
-                                            <input type="text" id="devadd_upport" value="{{ dStatus.HigherlinkPort }}" disabled>
-                                        </td>
-                                    </tr>
-                                    {% else %}
-                                    <tr class="devadd_trinput devtr_hide devselect">
-                                            <td></td>
-                                            <td>
-                                                <select name="campus" id="devadd_campus" class="campus">
-                                                    <option value="campus_null">请选择校区</option>
-                                                    {%- for campusone in campus %}
-                                                    <option value="{{ campusone.Campus }}">{{ campusone.Campus }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select name="build" id="devadd_build" class="build">
-                                                    <option value="build_null">请选择楼宇</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select name="lvr" id="devadd_lvr" class="lvr">
-                                                    <option value="lvr_null">请选择弱电间</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr class="devadd_th devtr_hide">
-                                            <th></th>
-                                            <th>主机名称</th>
-                                            <th>管理地址</th>
-                                            <th>上联IP</th>
-                                            <th>上联端口</th>
-                                        </tr>
-                                        <tr class="devadd_trinput devtr_hide">
-                                            <td></td>
-                                            <td>
-                                                <input type="text" id="devadd_hostname">
-                                            </td>
-                                            <td>
-                                                <input type="text" id="devadd_addr">
-                                            </td>
-                                            <td>
-                                                <input type="text" id="devadd_upip" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="15">
-                                            </td>
-                                            <td>
-                                                <input type="text" id="devadd_upport">
-                                            </td>
-                                        </tr>
-                                        {% endif %}
                                 </table>
                             </td>
                         </tr>
-                        {% endfor %}
                 </tbody>
             </table>
         </div>
