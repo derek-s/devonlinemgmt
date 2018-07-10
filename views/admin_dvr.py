@@ -425,14 +425,15 @@ def dev_devdel():
 
 def dev_m(jsondata):
     id_array = jsondata['idarray']
-    result = ""
+    infoResult = ""
     try:
         for each_id in id_array:
             device = Dev_DeviceInfo.query.filter(
                 Dev_DeviceInfo.DeviceID == each_id
             )
             if device.count():
-                result = device
-        return result
+                infoResult = device.one()
+
+        return infoResult, dev_getType()
     except Exception as e:
         pass
