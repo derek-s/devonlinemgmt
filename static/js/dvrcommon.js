@@ -596,7 +596,7 @@ function mdevice(idarray, op){
                         type: 1,
                         skin: 'layui-layer-rim',
                         title: "管理设备",
-                        area: ['1050px', '500px'],
+                        area: ['1050px', '250px'],
                         content: html
                     })
                 }
