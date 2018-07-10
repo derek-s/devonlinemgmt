@@ -423,5 +423,16 @@ def dev_devdel():
         }
         return json.dumps(delete_status)
 
-def dev_m():
-    pass
+def dev_m(jsondata):
+    id_array = jsondata['idarray']
+    result = ""
+    try:
+        for each_id in id_array:
+            device = Dev_DeviceInfo.query.filter(
+                Dev_DeviceInfo.DeviceID == each_id
+            )
+            if device.count():
+                result = device
+        return result
+    except Exception as e:
+        pass
