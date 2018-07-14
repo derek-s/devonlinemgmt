@@ -532,7 +532,7 @@ function js_dvr_putaway(idarray, op, gop) {
                 })
             }
         }
-    }else{
+    }else if(op == "down"){
         if(confirm("确定进行操作么？")){
             $.ajax({
                 url: Flask.url_for('adminbg.devdown'),
@@ -599,6 +599,34 @@ function mdevice(idarray, op){
                         area: ['1050px', '250px'],
                         content: html
                     })
+                }
+            })
+        }
+    }
+    else if(op == "post"){
+        if(idarray){
+            var dev_array = new Array()
+            var modify_dev = $("td.devadd_newtd")
+            modify_dev.each(function(){
+                var dvrinfo_data = {}
+                dvrinfo_data["name"] = $(this).find("#devadd_name").val()
+                dvrinfo_data["type"] = $(this).find("#devadd_type").val()
+                dvrinfo_data["serial"] = $(this).find("#devadd_serial").val()
+                dvrinfo_data["id"] = $(this).find("#devadd_id").val()
+                dev_array.push(dvrinfo_data)
+            })
+            var postarray = {
+                "op": "post",
+                "idarray": dev_array
+            }
+            $.ajax({
+                url: Flask.url_for('adminbg.devmanage'),
+                type: "post",
+                data: JSON.stringify(postarray),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(resp) {
+                   console.log(resp)
                 }
             })
         }
