@@ -24,7 +24,7 @@ from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_lis
 from .admin_basic import basic_bulid_add, basic_build_delete, basic_build_modfiy, basic_buildname_search, basic_type_index
 from .admin_basic import basic_type_Add, basic_type_modfiy, basic_type_delete, basic_type_search
 from .admin_user import admin_userindex, user_per_modfiy, user_delete, user_pwd_modfiy, user_create
-from .admin_dvr import dev_checkDeviceid, dev_devdel, dev_devup, dev_devdown, dev_m
+from .admin_dvr import dev_checkDeviceid, dev_devdel, dev_devup, dev_devdown, dev_m, dev_m_post
 
 # test
 from forms import CreateUser
@@ -725,5 +725,8 @@ def devmanage():
             dbresult=devinfo,
             type=devtype
         )
+    elif op_json["op"] == "post":
+        result = dev_m_post(op_json)
+        return result
 
 

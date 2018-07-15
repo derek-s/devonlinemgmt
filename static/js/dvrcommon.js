@@ -579,6 +579,7 @@ function putwayid(){
 }
 
 function mdevice(idarray, op){
+    id = idarray[0]
     if(op == "get"){
         if(idarray){
             var postarray = {
@@ -604,6 +605,7 @@ function mdevice(idarray, op){
         }
     }
     else if(op == "post"){
+        if(confirm("确定修改设备信息么？"))
         if(idarray){
             var dev_array = new Array()
             var modify_dev = $("td.devadd_newtd")
@@ -617,6 +619,7 @@ function mdevice(idarray, op){
             })
             var postarray = {
                 "op": "post",
+                "id": id,
                 "idarray": dev_array
             }
             $.ajax({
@@ -626,7 +629,13 @@ function mdevice(idarray, op){
                 contentType: "application/json",
                 dataType: "json",
                 success: function(resp) {
-                   console.log(resp)
+                   if(resp.status != 1){
+                       alert("修改失败")
+                   }
+                   else{
+                       alert("修改成功")
+                       window.location.reload()
+                   }
                 }
             })
         }

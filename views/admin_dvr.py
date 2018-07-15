@@ -437,3 +437,49 @@ def dev_m(jsondata):
         return infoResult, dev_getType()
     except Exception as e:
         pass
+
+
+def dev_m_post(jsondata):
+    id_array = jsondata['idarray'][0]
+    id = jsondata["id"]
+    print(id)
+    newid = id_array["id"]
+    name = id_array["name"]
+    serial = id_array["serial"]
+    type = id_array["type"]
+    print(id, newid, name, serial, type)
+    try:
+        device = Dev_DeviceInfo.query.filter(
+            Dev_DeviceInfo.DeviceID == id
+        )
+
+        if device.count():
+            device.update({
+                Dev_DeviceInfo.DeviceName: name,
+                Dev_DeviceInfo.DeviceID: newid,
+                Dev_DeviceInfo.DeviceSN: serial,
+                Dev_DeviceInfo.DeviceCategory: type
+            })
+
+        device_status = Dev_DeviceStatus.query.filter(
+            Dev_DeviceStatus.DeviceModel == id
+        )
+        
+        if device_status.count():
+            device_status.update({
+                Dev_DeviceStatus.DeviceModel: newid
+            })
+
+        db.session.commit()
+        result = {
+            'status': 1,
+            'message': "ok"
+        }
+        return json.dumps(result)
+    except Exception as e:
+        print(e)
+        result = {
+            'status': 0,
+            'message': "Error"
+        }
+        return json.dumps(result)
