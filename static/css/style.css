@@ -781,12 +781,15 @@ select#iperm {
     display: table;
     margin: 0 auto;
 }
-
 .devadd_main {
-    width: 1021px;
+    width: 1025px;
+}
+.lvradd_main {
+    width: 1200px;
+}
+.devadd_main, .lvradd_main {
     margin: 0 auto;
 }
-
 #devadd_name,
 #devadd_serial,
 #devadd_id,
@@ -818,4 +821,25 @@ td.td_id{
 tr.devadd_newtable{
     margin-top: 10px;
     margin-bottom: 10px;
+}
+#lvradd_name,
+#lvradd_campus,
+#lvradd_build,
+#lvradd_buildnum,
+#lvradd_floornum,
+#lvradd_roomnum,
+#lvradd_equnum {
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#lvradd_campus, #lvradd_build {
+    width: 200px;
+}
+#lvradd_buildnum, #lvradd_floornum, #lvradd_roomnum {
+    width: 120px
+}
+#lvradd_equnum {
+    width: 55px;
 }
