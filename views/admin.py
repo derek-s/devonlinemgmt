@@ -730,3 +730,12 @@ def devmanage():
         return result
 
 
+@adminbg.route("/admin/lvrcreate", methods=['GET'])
+@login_required
+@admin_required
+def lvradd():
+    return render_template(
+        "/admin/lvrcreate.html",
+        campus=dev_getCampus()
+    )
+
