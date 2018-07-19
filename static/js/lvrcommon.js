@@ -10,6 +10,7 @@ $(document).ready(
         })
         $.base64.utf8encode = true;
         $.base64.utf8decode = true;
+        id_array = new Array()
 
         $(document).on("change", "select#lvradd_campus", function () {
             var $v = $(this)
@@ -114,3 +115,119 @@ function js_dvr_querybuild(campus_name, nextBuildElement) {
     })
 }
 
+
+function js_lvr_create() {
+    var url = Flask.url_for('adminbg.lvradd')
+    layer_add = layer.open({
+        type: 2,
+        skin: 'layui-layer-rim',
+        title: "创建新弱电间",
+        area: ['1200px', '500px'],
+        content: url
+    })
+}
+
+function js_lvr_addajax() {
+    var lvrinfo = $("td.devadd_newtd")
+    var lvrinfo_datas = []
+    lvrinfo.each(function(){
+        var lvrinfo_data = {}
+        lvrinfo_data["name"] = $(this).find("#lvradd_name").val()
+        lvrinfo_data["campus"] = $(this).find("#lvradd_campus").val()
+        lvrinfo_data["build"] = $(this).find("#lvradd_build").val()
+        lvrinfo_data["buildnum"] = $(this).find("#lvradd_buildnum").val()
+        lvrinfo_data["floornum"] = $(this).find("#lvradd_floornum").val()
+        lvrinfo_data["roomnum"] = $(this).find("#lvradd_roomnum").val()
+        lvrinfo_data["equnum"] = $(this).find("#lvradd_equnum").val()
+        lvrinfo_datas.push(lvrinfo_data)
+    })
+    if(dataCheak(lvrinfo_datas)){
+        if(confirm('准备添加数据，是否继续？')){
+            $.ajax({
+                url: Flask.url_for('adminbg.lvradd'),
+                type: 'POST',
+                data: JSON.stringify(lvrinfo_datas),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data){
+                    if (data.status != 200) {
+                        alert("添加失败")
+                    }else{
+                        alert("添加成功")
+                        parent.location.reload()
+                    }
+                }
+            })
+        }
+    }
+}
+
+function dataCheak(lvrinfo_datas){
+    for (x in lvrinfo_datas){
+        if (isNull(lvrinfo_datas[x].name)) {
+            alert("存在未填写项，请核对数据。")
+            return false
+        }
+        if(lvrinfo_datas[x].campus == "campus_null"){
+            alert("存在未选择校区数据，请核对。")
+            return false
+        }
+        if(lvrinfo_datas[x].build == "build_null"){
+            alert("存在未选择楼宇数据，请核对。")
+            return false
+        }
+        if (isNull(lvrinfo_datas[x].buildname)) {
+            alert("存在未填写项，请核对数据。")
+            return false
+        }
+        if (isNull(lvrinfo_datas[x].floornum)) {
+            alert("存在未填写项，请核对数据。")
+            return false
+        }
+        if (isNull(lvrinfo_datas[x].roomnum)) {
+            alert("存在未填写项，请核对数据。")
+            return false
+        }
+        if (isNull(lvrinfo_datas[x].equnum)) {
+            alert("存在未填写项，请核对数据。")
+            return false
+        }
+    }
+    return true
+}
+
+function isNull( str ){
+    if ( str == "" ) return true
+    var regu = "^[ ]+$"
+    var re = new RegExp(regu)
+    return re.test(str)
+    }
+
+
+function js_lvr_idarry( id ){
+    id_array.push(id)
+    return id_array
+}
+
+
+function js_lvr_delDevice( idarray ){
+    if(confirm("确定删除么？")){
+        $.ajax({
+            url: Flask.url_for('adminbg.devdeldevice'),
+            type: "post",
+            data: {
+                array_id: JSON.stringify(idarray)
+            },
+            dataType: "json",
+            success: function(resp) {
+                if (resp.status != 1) {
+                    alert("删除失败 " + resp.message)
+                    id_array.length = 0
+                }else{
+                    alert("删除成功")
+                    window.location.reload()
+                }
+            }
+        })
+    }
+}

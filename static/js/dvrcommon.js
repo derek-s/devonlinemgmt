@@ -410,7 +410,6 @@ function js_dvr_add() {
 
 function dataCheak(dvrinfo_datas){
     for (x in dvrinfo_datas){
-        console.log(dvrinfo_datas[x])
         if (isNull(dvrinfo_datas[x].name)) {
             alert("存在未填写项，请核对数据。")
             return false
