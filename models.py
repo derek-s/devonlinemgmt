@@ -122,6 +122,16 @@ class Dev_LVRInfo(db.Model):
     Cabinet = db.Column("Cabinet", db.String(255))
     LVRNo = db.Column("LVRNo", db.String(190), index=True)
 
+
+    def __init__(self, Campus, BuildName, BuildNo, FloorNo, RoomNo, Cabinet, LVRNo):
+        self.Campus = Campus,
+        self.BuildName = BuildName,
+        self.BuildNo = BuildNo,
+        self.FloorNo = FloorNo,
+        self.RoomNo = RoomNo,
+        self.Cabinet = Cabinet,
+        self.LVRNo = LVRNo
+
     def to_json(self):
         """将查询数据转为json"""
         return {
