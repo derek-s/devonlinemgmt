@@ -10,7 +10,8 @@ from models import Setting, Dev_Campus, Dev_LVRInfo
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
-
+from ext import db
+import json
 
 def lvr_manager_index():
     request.script_root = url_for('indexview.index', _external=True)
@@ -176,3 +177,26 @@ def lvrsearchsql(search):
         (Dev_LVRInfo.LVRNo.like("%" + search + "%"), "")[search is None]
     ).order_by(Dev_LVRInfo.Campus.desc())
     return serp
+
+
+def newlvradd(jsondata):
+    """
+    新弱电间添加
+    :return: 返回操作码
+    """
+    for each_lvrinfo in jsondata:
+        lvrname = each_lvrinfo["name"]
+        lvrcampus = each_lvrinfo["campus"]
+        lvrbuild = each_lvrinfo["build"]
+        lvrbnum = each_lvrinfo["buildnum"]
+        lvrfnum = each_lvrinfo["floornum"]
+        lvrrnum = each_lvrinfo["roomnum"]
+        lvrequnum = each_lvrinfo["equnum"]
+        lvrinfo_db = Dev_LVRInfo(lvrcampus, lvrbuild, lvrbnum, lvrfnum, lvrrnum, lvrequnum, lvrname)
+        db.session.add(lvrinfo_db)
+        db.session.commit()
+    status = {
+        'status': 200,
+        'mes': "Error"
+    }
+    return jsonify(status)
