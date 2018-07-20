@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    {{ JSGlue.include() }}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='layer/layer.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='laydate/laydate.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/jquery.loadTemplate.min.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/lvrcommon.js') }}" type="text/javascript"></script>
+    <script type=text/javascript>
+        var $SCRIPT_ROOT = {{request.script_root | tojson | safe}};
+        var $PATH_ROOT = {{request.path | tojson | safe}}
+        var csrf_token = "{{ csrf_token() }}"
+    </script>
+</head>
+
+<body>
+    <div class="lvradd_main">
+        <div id="devadd_form">
+            <table id="lvradd_table">
+                <tbody>
+                    <tr class="devadd_newtable">
+                        <td class="devadd_newtd">
+                            <table class="devadd_newline">
+                                <tr class="devadd_th">
+                                    <th>行号</th>
+                                    <th>弱电间编号</th>
+                                    <th>校区</th>
+                                    <th>楼宇名称</th>
+                                    <th>楼号</th>
+                                    <th>层号</th>
+                                    <th>房间号</th>
+                                    <th>机柜数量</th>
+                                </tr>
+                                <tr class="lvradd_trinput">
+                                    <td class="td_id">1</td>
+                                    <td>
+                                        <input type="text" id="lvradd_name">
+                                    </td>
+                                    <td>
+                                        <select name="campus" id="lvradd_campus">
+                                            <option value="campus_null">请选择校区</option>
+                                            {%- for campusone in campus %}
+                                            <option value="{{ campusone.Campus }}">{{ campusone.Campus }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="build" id="lvradd_build">
+                                            <option value="build_null">请选择楼宇</option>
+                                            {%- for buildone in builds %}
+                                            <option value="{{ buildone.BuildName }}">{{ buildone.BuildName }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="lvradd_buildnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="lvradd_floornum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="lvradd_roomnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="lvradd_equnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="devadd_operation">
+            <button type="button" class="btn btn-primary devadd_addbutton" onclick="javascirpt:js_lvr_majax()">修改弱电间</button>
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(
+        function () {
+            $(document).on("blur", "input", function () {
+                if ($(this).val() == "") {
+                    $(this).val("该项不能为空!")
+                    $(this).attr("style",
+                        "outline:0; border-radius:3px;border-color:red;box-shadow:0 0 8px rgba(255,0,0,0.6)"
+                    );
+                    $(this).focus();
+                } else if ($(this).val() == "该项不能为空!") {
+                    $(this).attr("style",
+                        "outline:0; border-radius:3px;border-color:red;box-shadow:0 0 8px rgba(255,0,0,0.6)"
+                    );
+                    $(this).focus();
+                } else {
+                    $(this).removeAttr("style")
+                }
+            })
+            $(document).on("blur", "#devadd_id", function () {
+                if ($(this).val() != "该项不能为空!") {
+                    var devid_json = {
+                        "deviceid": $(this).val()
+                    }
+                    $.ajax({
+                        url: Flask.url_for('adminbg.devquerydid'),
+                        type: 'POST',
+                        data: JSON.stringify(devid_json),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (data) {
+                            if (data.id_select_result != 0) {
+                                alert("ID已存在，请更换ID。")
+                            }
+                        }
+                    })
+                }
+            })
+        }
+    )
+</script>
+
+</html>
