@@ -231,3 +231,14 @@ function js_lvr_delDevice( idarray ){
         })
     }
 }
+
+function js_lvr_modify() {
+    var url = Flask.url_for('adminbg.lvrmodify')
+    layer_add = layer.open({
+        type: 2,
+        skin: 'layui-layer-rim',
+        title: "修改弱电间信息",
+        area: ['1200px', '500px'],
+        content: url
+    })
+}
