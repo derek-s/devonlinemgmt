@@ -442,12 +442,10 @@ def dev_m(jsondata):
 def dev_m_post(jsondata):
     id_array = jsondata['idarray'][0]
     id = jsondata["id"]
-    print(id)
     newid = id_array["id"]
     name = id_array["name"]
     serial = id_array["serial"]
     type = id_array["type"]
-    print(id, newid, name, serial, type)
     try:
         device = Dev_DeviceInfo.query.filter(
             Dev_DeviceInfo.DeviceID == id
@@ -477,7 +475,6 @@ def dev_m_post(jsondata):
         }
         return json.dumps(result)
     except Exception as e:
-        print(e)
         result = {
             'status': 0,
             'message': "Error"
