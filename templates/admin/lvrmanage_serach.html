@@ -76,7 +76,8 @@
                         <td>{{ data.RoomNo }}</td>
                         <td>{{ data.Cabinet }}</td>
                         <td>{{ data.LVRNo }}</td>
-                        <td>管理</td>
+                        <td><button onclick="javascript:js_lvr_modify(js_lvr_idarry('{{ data.LVRNo }}'), 'get')" type="button" class="btn btn-link inline_button_link">管理</button> | 
+                        <button onclick="javascript:#" type="button" class="btn btn-link inline_button_link">删除</button></td>
                     </tr>
                     {% endfor %}
                 </table>
