@@ -43,35 +43,43 @@
                                 <tr class="lvradd_trinput">
                                     <td class="td_id">1</td>
                                     <td>
-                                        <input type="text" id="lvradd_name">
+                                        <input type="text" id="lvradd_name" value="{{ dbresult.LVRNo }}">
                                     </td>
                                     <td>
                                         <select name="campus" id="lvradd_campus">
                                             <option value="campus_null">请选择校区</option>
                                             {%- for campusone in campus %}
+                                            {% if dbresult.Campus == campusone.Campus %}
+                                            <option value="{{ campusone.Campus }}" selected = "selected">{{ campusone.Campus }}</option>
+                                            {% else %}
                                             <option value="{{ campusone.Campus }}">{{ campusone.Campus }}</option>
+                                            {% endif %}
                                             {% endfor %}
                                         </select>
                                     </td>
                                     <td>
                                         <select name="build" id="lvradd_build">
                                             <option value="build_null">请选择楼宇</option>
-                                            {%- for buildone in builds %}
-                                            <option value="{{ buildone.BuildName }}">{{ buildone.BuildName }}</option>
+                                            {%- for buildone in build %}
+                                            {% if dbresult.BuildName == buildone %}
+                                            <option value="{{ buildone }}" selected = "selected">{{ buildone }}</option>
+                                            {% else %}
+                                            <option value="{{ buildone }}">{{ buildone }}</option>
+                                            {% endif %}
                                             {% endfor %}
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" id="lvradd_buildnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')">
+                                        <input type="text" id="lvradd_buildnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" value="{{ dbresult.BuildNo }}">
                                     </td>
                                     <td>
-                                        <input type="text" id="lvradd_floornum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')">
+                                        <input type="text" id="lvradd_floornum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" value="{{ dbresult.FloorNo }}">
                                     </td>
                                     <td>
-                                        <input type="text" id="lvradd_roomnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')">
+                                        <input type="text" id="lvradd_roomnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" value="{{ dbresult.RoomNo }}">
                                     </td>
                                     <td>
-                                        <input type="text" id="lvradd_equnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')">
+                                        <input type="text" id="lvradd_equnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" value="{{ dbresult.Cabinet }}">
                                     </td>
                                 </tr>
                             </table>
