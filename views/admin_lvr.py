@@ -6,7 +6,7 @@
 # @File    : admin_lvr.py
 
 from flask import jsonify, request, url_for
-from models import Setting, Dev_Campus, Dev_LVRInfo
+from models import Setting, Dev_Campus, Dev_LVRInfo, DevBuild
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
@@ -200,3 +200,30 @@ def newlvradd(jsondata):
         'mes': "Error"
     }
     return jsonify(status)
+
+
+def lvrm_post_get(jsondata):
+    """
+    弱电间修改功能
+    :return: op==get时返回模板页面,op==post时返回操作结果,json格式
+    """
+    id_json = jsondata['idarray'][0]
+    id = jsondata["id"]
+    op = jsondata["op"]
+    Build = []
+    try:
+        if op == "get":
+            lvr = Dev_LVRInfo.query.filter(
+                Dev_LVRInfo.LVRNo == id
+            )
+            dbresult = lvr.one()
+            if lvr.count():
+                campus = dbresult.Campus.encode("utf-8")
+                buildresult = DevBuild.query.filter_by(
+                    Campus = campus
+                ).all()
+                for eachbuild in buildresult:
+                    Build.append(eachbuild.BuildName)
+                return dbresult, Build
+    except Exception as e:
+        return 0
