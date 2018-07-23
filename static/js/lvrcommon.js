@@ -232,13 +232,70 @@ function js_lvr_delDevice( idarray ){
     }
 }
 
-function js_lvr_modify() {
-    var url = Flask.url_for('adminbg.lvrmodify')
-    layer_add = layer.open({
-        type: 2,
-        skin: 'layui-layer-rim',
-        title: "修改弱电间信息",
-        area: ['1200px', '500px'],
-        content: url
-    })
+function js_lvr_modify(idarray, op){
+    id = idarray[0]
+    if(op == "get"){
+        if(idarray){
+            var postarray = {
+                "op": "get",
+                "id": id,
+                "idarray": idarray
+            }
+            $.ajax({
+                url: Flask.url_for('adminbg.lvrmodify'),
+                type: "post",
+                data: JSON.stringify(postarray),
+                contentType: "application/json",
+                dataType: "html",
+                success: function(html) {
+                    layer_devup = layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim',
+                        title: "修改设备",
+                        area: ['1200px', '500px'],
+                        content: html
+                    })
+                }
+            })
+        }
+    }
+    else if(op == "post"){
+        if(confirm("确定修改设备信息么？")){
+            if(idarray){
+                var dev_array = new Array()
+                var modify_dev = $("td.devadd_newtd")
+                modify_dev.each(function(){
+                    var dvrinfo_data = {}
+                    dvrinfo_data["name"] = $(this).find("#devadd_name").val()
+                    dvrinfo_data["type"] = $(this).find("#devadd_type").val()
+                    dvrinfo_data["serial"] = $(this).find("#devadd_serial").val()
+                    dvrinfo_data["id"] = $(this).find("#devadd_id").val()
+                    dev_array.push(dvrinfo_data)
+                })
+                var postarray = {
+                    "op": "post",
+                    "id": id,
+                    "idarray": dev_array
+                }
+                $.ajax({
+                    url: Flask.url_for('adminbg.devmanage'),
+                    type: "post",
+                    data: JSON.stringify(postarray),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function(resp) {
+                       if(resp.status != 1){
+                           alert("修改失败")
+                       }
+                       else{
+                           alert("修改成功")
+                           window.location.reload()
+                       }
+                    }
+                })
+            }
+
+        }
+    }
+
 }
