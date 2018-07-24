@@ -13,6 +13,9 @@ from urllib import unquote
 from ext import db
 import json
 
+import traceback
+
+
 def dvr_manage_get():
     page = request.args.get('page', 1, type=int)
     request.script_root = url_for('indexview.index', _external=True)
@@ -298,7 +301,12 @@ def dev_devup(jsondata):
                     result_array.append(result)
             return result_array, campus, dvrtype
         except Exception as e:
-            pass
+            print(e)
+            result = {
+                "status": 404,
+                "message": "Error"
+            }
+            return json.dumps(result)
     elif jsondata["op"] == 'post':
         idarray = jsondata["idarray"]
         result = {
