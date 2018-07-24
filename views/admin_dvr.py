@@ -371,14 +371,15 @@ def dev_devdown():
                 Dev_DeviceInfo.DeviceID == one
             )
             if device:
-                device_Condition = device.one().DeviceCondition
-                if device_Condition != "N":
-                    device.update({Dev_DeviceInfo.DeviceCondition: "N"})
-                    Dev_DeviceStatus.query.filter(
-                        Dev_DeviceStatus.DeviceModel == one
-                    ).update({Dev_DeviceStatus.DeviceCondition: "N"})
-                else:
-                    pass
+                for each_Row in device:
+                    device_Condition = each_Row.DeviceCondition
+                    if device_Condition != "N":
+                        device.update({Dev_DeviceInfo.DeviceCondition: "N"})
+                        Dev_DeviceStatus.query.filter(
+                            Dev_DeviceStatus.DeviceModel == one
+                        ).update({Dev_DeviceStatus.DeviceCondition: "N"})
+                    else:
+                        pass
             db.session.commit()
             DCondition_result = {
                 'status': 1,
