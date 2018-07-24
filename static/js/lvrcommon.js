@@ -210,25 +210,29 @@ function js_lvr_idarry( id ){
 }
 
 
-function js_lvr_delDevice( idarray ){
+function js_lvr_delLVRroom( idarray ){
     if(confirm("确定删除么？")){
-        $.ajax({
-            url: Flask.url_for('adminbg.devdeldevice'),
-            type: "post",
-            data: {
-                array_id: JSON.stringify(idarray)
-            },
-            dataType: "json",
-            success: function(resp) {
-                if (resp.status != 1) {
-                    alert("删除失败 " + resp.message)
-                    id_array.length = 0
-                }else{
-                    alert("删除成功")
-                    window.location.reload()
-                }
+        if(idarray){
+            var jsondata = {
+                "lvrno": idarray
             }
-        })
+            $.ajax({
+                url: Flask.url_for('adminbg.lvrdel'),
+                type: "post",
+                data: JSON.stringify(jsondata),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(resp) {
+                    if (resp.status != 1) {
+                        alert("删除失败 " + resp.message)
+                        id_array.length = 0
+                    }else{
+                        alert("删除成功")
+                        window.location.reload()
+                    }
+                }
+            })
+        }
     }
 }
 

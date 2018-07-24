@@ -80,7 +80,7 @@ $(document).ready(
             window.location.href = Flask.url_for('adminbg.dvrmanage') + "?page=" + page;
         })
         $("a.dvrsajaxnet").bind('click', function () {
-            //list加载下一页
+            //搜索加载下一页
             $(this).text("正在加载，请稍后……")
             var pagenum = $("li#pnactive>a").text()
             var datacount = $("tr.jsondata").length
@@ -98,7 +98,11 @@ $(document).ready(
                 var trb = '</tr>'
                 $.each(data, function (one) {
                     eachone = data[one]
-                    trc += tra + "<td>" + eachone.ID + "</td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "<button onclick='' type'button' class='btn btn-link inline_button_link'>管理</button>" + "</td>" + trb
+                    if(eachone.DeviceCondition == "Y"){
+                        trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='" + eachone.DeviceID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + `<button onclick="mdevice(js_dvr_idarry('` + eachone.DeviceID + `'), 'get')" type='button' class='btn btn-link inline_button_link'>管理</button> | <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('`+ eachone.DeviceID +`'), 'up')" type='button' class='btn btn-link inline_button_link' disabled>上架</button> | <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('`+ eachone.DeviceID +`'), 'down')" type='button' class='btn btn-link inline_button_link'>下架</button> | <button onclick="javascript:js_dvr_delDevice(js_dvr_idarry('`+ eachone.DeviceID +`'))" type='button' class='btn btn-link inline_button_link' disabled>删除</button></td>` + trb
+                    }else{
+                        trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='" + eachone.DeviceID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + `<button onclick="mdevice(js_dvr_idarry('` + eachone.DeviceID + `'), 'get')" type='button' class='btn btn-link inline_button_link'>管理</button> | <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('`+ eachone.DeviceID +`'), 'up')" type='button' class='btn btn-link inline_button_link'>上架</button> | <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('`+ eachone.DeviceID +`'), 'down')" type='button' class='btn btn-link inline_button_link' disabled>下架</button> | <button onclick="javascript:js_dvr_delDevice(js_dvr_idarry('`+ eachone.DeviceID +`'))" type='button' class='btn btn-link inline_button_link'>删除</button></td>` + trb
+                    }
                     hasnext = eachone.next
                 })
                 $("table#devinfolist>tbody tr:last-child").after(trc)
@@ -115,6 +119,7 @@ $(document).ready(
         })
 
         $("a.dvrlistajaxnet").bind('click', function () {
+            //list页面ajax加载下一页
             $(this).text("正在加载，请稍后……")
             var pagenum = $("li#pnactive>a").text()
             var datacount = $("tr.jsondata").length
@@ -135,7 +140,11 @@ $(document).ready(
                 var trb = '</tr>'
                 $.each(data, function (one) {
                     eachone = data[one]
-                    trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='" + eachone.ID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "<button onclick='' type'button' class='btn btn-link inline_button_link'>管理</button>" + "</td>" + trb
+                    if(eachone.DeviceCondition == "Y"){
+                        trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='" + eachone.DeviceID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + `<button onclick="mdevice(js_dvr_idarry('` + eachone.DeviceID + `'), 'get')" type='button' class='btn btn-link inline_button_link'>管理</button> | <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('`+ eachone.DeviceID +`'), 'up')" type='button' class='btn btn-link inline_button_link' disabled>上架</button> | <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('`+ eachone.DeviceID +`'), 'down')" type='button' class='btn btn-link inline_button_link'>下架</button> | <button onclick="javascript:js_dvr_delDevice(js_dvr_idarry('`+ eachone.DeviceID +`'))" type='button' class='btn btn-link inline_button_link' disabled>删除</button></td>` + trb
+                    }else{
+                        trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='" + eachone.DeviceID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + `<button onclick="mdevice(js_dvr_idarry('` + eachone.DeviceID + `'), 'get')" type='button' class='btn btn-link inline_button_link'>管理</button> | <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('`+ eachone.DeviceID +`'), 'up')" type='button' class='btn btn-link inline_button_link'>上架</button> | <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('`+ eachone.DeviceID +`'), 'down')" type='button' class='btn btn-link inline_button_link' disabled>下架</button> | <button onclick="javascript:js_dvr_delDevice(js_dvr_idarry('`+ eachone.DeviceID +`'))" type='button' class='btn btn-link inline_button_link'>删除</button></td>` + trb
+                    }
                     hasnext = eachone.next
                 })
                 $("table#devinfolist>tbody tr:last-child").after(trc)
@@ -151,7 +160,7 @@ $(document).ready(
             })
         })
         $("a.dvrmanageajax").bind('click', function () {
-            //list加载下一页
+            //管理功能页面加载下一页
             $(this).text("正在加载，请稍后……")
             var pagenum = $("li#pnactive>a").text()
             var datacount = $("tr.jsondata").length
@@ -165,7 +174,11 @@ $(document).ready(
                 var trb = '</tr>'
                 $.each(data, function (one) {
                     eachone = data[one]
-                    trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='" + eachone.ID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + "<button onclick='' type'button' class='btn btn-link inline_button_link'>管理</button>" + "</td>" + trb
+                    if(eachone.DeviceCondition == "Y"){
+                        trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='" + eachone.DeviceID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + `<button onclick="mdevice(js_dvr_idarry('` + eachone.DeviceID + `'), 'get')" type='button' class='btn btn-link inline_button_link'>管理</button> | <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('`+ eachone.DeviceID +`'), 'up')" type='button' class='btn btn-link inline_button_link' disabled>上架</button> | <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('`+ eachone.DeviceID +`'), 'down')" type='button' class='btn btn-link inline_button_link'>下架</button> | <button onclick="javascript:js_dvr_delDevice(js_dvr_idarry('`+ eachone.DeviceID +`'))" type='button' class='btn btn-link inline_button_link' disabled>删除</button></td>` + trb
+                    }else{
+                        trc += tra + "<td>" + eachone.ID + "</td><td><input id='oper-" + eachone.ID + "' type='checkbox' name='oper' value='" + eachone.DeviceID + "' /></td><td>" + eachone.DeviceName + "</td><td>" + eachone.DeviceCategory + "</td><td>" + eachone.DeviceSN + "</td><td>" + eachone.DeviceCondition + "</td><td>" + eachone.DeviceID + "</td><td>" + `<button onclick="mdevice(js_dvr_idarry('` + eachone.DeviceID + `'), 'get')" type='button' class='btn btn-link inline_button_link'>管理</button> | <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('`+ eachone.DeviceID +`'), 'up')" type='button' class='btn btn-link inline_button_link'>上架</button> | <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('`+ eachone.DeviceID +`'), 'down')" type='button' class='btn btn-link inline_button_link' disabled>下架</button> | <button onclick="javascript:js_dvr_delDevice(js_dvr_idarry('`+ eachone.DeviceID +`'))" type='button' class='btn btn-link inline_button_link'>删除</button></td>` + trb
+                    }
                     hasnext = eachone.next
                 })
                 $("table#devinfolist>tbody tr:last-child").after(trc)
@@ -289,14 +302,15 @@ function js_dvr_batchd() {
     } else if ($("select#ipage").val() == "dvrup") {
         $("[name='oper']").each(function () {
             if ($(this).prop('checked')) {
-                uparray = js_dvr_idarry($(this).val())
+                uparray = js_dvr_idarry($(this).val(), "up")
             }
+            
         })
         js_dvr_putaway(uparray, "up")
     } else if ($("select#ipage").val() == "dvrdown") {
         $("[name='oper']").each(function () {
             if ($(this).prop('checked')) {
-                downarray = js_dvr_idarry($(this).val())
+                downarray = js_dvr_idarry($(this).val(), "down")
             }
         })
         js_dvr_putaway(downarray, "down")
@@ -627,13 +641,13 @@ function mdevice(idarray, op){
                     contentType: "application/json",
                     dataType: "json",
                     success: function(resp) {
-                       if(resp.status != 1){
-                           alert("修改失败")
-                       }
-                       else{
-                           alert("修改成功")
-                           window.location.reload()
-                       }
+                        if(resp.status != 1){
+                            alert("修改失败")
+                        }
+                        else{
+                            alert("修改成功")
+                            window.location.reload()
+                        }
                     }
                 })
             }
