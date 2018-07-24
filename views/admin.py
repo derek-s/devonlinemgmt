@@ -754,11 +754,13 @@ def lvradd():
 @admin_required
 def lvrmodify():
     jsondata = request.get_json()
-    dbresult, build = lvrm_post_get(jsondata)
     if jsondata["op"] == "get":
-
+        dbresult, build = lvrm_post_get(jsondata)
         return render_template(
             "/admin/lvr_m.html",
             dbresult=dbresult,
             build=build,
             campus=dev_getCampus())
+    elif jsondata["op"] == "post":
+        result = lvrm_post_get(jsondata)
+        return result

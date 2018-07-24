@@ -6,12 +6,13 @@
 # @File    : admin_lvr.py
 
 from flask import jsonify, request, url_for
-from models import Setting, Dev_Campus, Dev_LVRInfo, DevBuild
+from models import Setting, Dev_Campus, Dev_LVRInfo, DevBuild, Dev_DeviceStatus
 from log import eventlog
 from base64 import b64decode
 from urllib import unquote
 from ext import db
 import json
+import traceback
 
 def lvr_manager_index():
     request.script_root = url_for('indexview.index', _external=True)
@@ -225,5 +226,59 @@ def lvrm_post_get(jsondata):
                 for eachbuild in buildresult:
                     Build.append(eachbuild.BuildName)
                 return dbresult, Build
+        elif op == "post":
+            lvrNo = jsondata["id"]
+            newLvrNo = id_json["lvrno"]
+            campus = id_json["campus"]
+            build = id_json["build"]
+            buildNo = id_json["buildNo"]
+            floorNo = id_json["floorNo"]
+            roomNo = id_json["roomNo"]
+            cabinet = id_json["equnum"]
+            try:
+                print("1234")
+                lvr = Dev_LVRInfo.query.filter(
+                    Dev_LVRInfo.LVRNo == lvrNo
+                )
+                if lvr.count():
+                    lvr.update({
+                        Dev_LVRInfo.Campus: campus,
+                        Dev_LVRInfo.BuildName: build,
+                        Dev_LVRInfo.LVRNo: newLvrNo,
+                        Dev_LVRInfo.BuildNo: buildNo,
+                        Dev_LVRInfo.FloorNo: floorNo,
+                        Dev_LVRInfo.RoomNo: roomNo,
+                        Dev_LVRInfo.Cabinet: cabinet
+                    })
+
+                devStatus = Dev_DeviceStatus.query.filter(
+                    Dev_DeviceStatus.RoomNo == lvrNo
+                )
+
+                if devStatus.count():
+                    devStatus.update({
+                        Dev_DeviceStatus.RoomNo: newLvrNo
+                    })
+                db.session.commit()
+                result = {
+                    "status": 1,
+                    "message": "ok"
+                }
+                return json.dumps(result)
+            except Exception as e:
+                print(e)
+                result = {
+                    "status": 500,
+                    "message": e
+                }
+                return json.dumps(result)
+        else:
+            result = {
+                "status": 500,
+                "message": "Error"
+            }
+            return json.dumps(result)
     except Exception as e:
-        return 0
+        print(e)
+        traceback.print_exc()
+        pass
