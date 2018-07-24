@@ -262,35 +262,39 @@ function js_lvr_modify(idarray, op){
     else if(op == "post"){
         if(confirm("确定修改设备信息么？")){
             if(idarray){
-                var dev_array = new Array()
-                var modify_dev = $("td.devadd_newtd")
-                modify_dev.each(function(){
-                    var dvrinfo_data = {}
-                    dvrinfo_data["name"] = $(this).find("#devadd_name").val()
-                    dvrinfo_data["type"] = $(this).find("#devadd_type").val()
-                    dvrinfo_data["serial"] = $(this).find("#devadd_serial").val()
-                    dvrinfo_data["id"] = $(this).find("#devadd_id").val()
-                    dev_array.push(dvrinfo_data)
+                var lvr_array = new Array()
+                var modify_lvr = $("td.devadd_newtd")
+                modify_lvr.each(function(){
+                    var lvrinfo_data = {}
+                    lvrinfo_data["lvrno"] = $(this).find("#lvradd_name").val()
+                    lvrinfo_data["campus"] = $(this).find("#lvradd_campus").val()
+                    lvrinfo_data["build"] = $(this).find("#lvradd_build").val()
+                    lvrinfo_data["buildNo"] = $(this).find("#lvradd_buildnum").val()
+                    lvrinfo_data["floorNo"] = $(this).find("#lvradd_floornum").val()
+                    lvrinfo_data["roomNo"] = $(this).find("#lvradd_roomnum").val()
+                    lvrinfo_data["equnum"] = $(this).find("#lvradd_equnum").val()
+                    lvr_array.push(lvrinfo_data)
                 })
                 var postarray = {
                     "op": "post",
                     "id": id,
-                    "idarray": dev_array
+                    "idarray": lvr_array
                 }
                 $.ajax({
-                    url: Flask.url_for('adminbg.devmanage'),
+                    url: Flask.url_for('adminbg.lvrmodify'),
                     type: "post",
                     data: JSON.stringify(postarray),
                     contentType: "application/json",
                     dataType: "json",
                     success: function(resp) {
-                       if(resp.status != 1){
-                           alert("修改失败")
-                       }
-                       else{
-                           alert("修改成功")
-                           window.location.reload()
-                       }
+                        console.log(resp)
+                        if(resp.status != 1){
+                            alert("修改失败")
+                        }
+                        else{
+                            alert("修改成功")
+                            window.location.reload()
+                        }
                     }
                 })
             }
