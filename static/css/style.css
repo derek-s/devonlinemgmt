@@ -843,3 +843,6 @@ tr.devadd_newtable{
 #lvradd_equnum {
     width: 55px;
 }
+select:disabled {
+    background-color: rgb(235,235,228)
+}
