@@ -106,7 +106,7 @@
                         <td>{{ devinfone.DeviceCondition }}</td>
                         <td>{{ devinfone.DeviceID }}</td>
                         <td>
-                            <button onclick="" type="button" class="btn btn-link inline_button_link">管理</button> | 
+                            <button onclick="javascript:mdevice(js_dvr_idarry('{{ devinfone.DeviceID }}'), 'get')" type="button" class="btn btn-link inline_button_link">管理</button> | 
                             {% if devinfone.DeviceCondition == "Y"%}
                             <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('{{ devinfone.DeviceID }}'), 'up')" type="button" class="btn btn-link inline_button_link" disabled>上架</button> |
                             <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('{{ devinfone.DeviceID }}'), 'down')" type="button" class="btn btn-link inline_button_link">下架</button> | 

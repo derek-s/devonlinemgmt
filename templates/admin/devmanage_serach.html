@@ -38,6 +38,7 @@
                 <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
                     <tr>
                         <th>序号</th>
+                        <th><input id="checkboxall" type="checkbox" name="oper_all"></th>
                         <th>设备名称</th>
                         <th>设备类型</th>
                         <th>设备序列号</th>
@@ -48,13 +49,14 @@
                     {% for devinfone in datas %}
                     <tr class="jsondata">
                         <td>{{ devinfone.ID }}</td>
+                        <td><input id="oper-{{ devinfone.ID }}" type="checkbox" name="oper" value="{{ devinfone.DeviceID }}" /></td>
                         <td>{{ devinfone.DeviceName }}</td>
                         <td>{{ devinfone.DeviceCategory }}</td>
                         <td>{{ devinfone.DeviceSN }}</td>
                         <td>{{ devinfone.DeviceCondition }}</td>
                         <td>{{ devinfone.DeviceID }}</td>
                         <td>
-                                <button onclick="" type="button" class="btn btn-link inline_button_link">管理</button> | 
+                                <button onclick="javascript:mdevice(js_dvr_idarry('{{ devinfone.DeviceID }}'), 'get')" type="button" class="btn btn-link inline_button_link">管理</button> | 
                                 {% if devinfone.DeviceCondition == "Y"%}
                                 <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('{{ devinfone.DeviceID }}'), 'up')" type="button" class="btn btn-link inline_button_link" disabled>上架</button> |
                                 <button onclick="javascript:js_dvr_putaway(js_dvr_idarry('{{ devinfone.DeviceID }}'), 'down')" type="button" class="btn btn-link inline_button_link">下架</button> | 
@@ -73,8 +75,21 @@
             <div class="ajaxnetpage">
                 <a id="ajaxntindex" class="btn btn-primary dvrsajaxnet" href="javascript:void(0);">下一页</a>
             </div>
-            <div>
-                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.dvrsearch', keyword=request.args.get('keyword') | safe, transclass=transferclass) }} {%endif%}
+            <div class="listbottombar">
+                <div class="ibtmdowplist">
+                    <div class="dropdown">
+                        <select id="ipage" name="action" id="bulk-action-selector-top">
+                            <option value="-1">批量操作</option>
+                            <option value="dvrup">上架</option>
+                            <option value="dvrdown">下架</option>
+                            <option value="delete">删除</option>
+                        </select>
+                    </div>
+                    <button onclick="javascript:js_dvr_batchd()" id="iopearbutton" class="btn btn-primary">应用</button>
+                </div>
+                <div class="fullsize ipagination">
+                    {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.dvrsearch', keyword=request.args.get('keyword') | safe, transclass=transferclass) }} {%endif%}
+                </div>
             </div>
         </div>
 </div>
