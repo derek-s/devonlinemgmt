@@ -282,3 +282,40 @@ def lvrm_post_get(jsondata):
         print(e)
         traceback.print_exc()
         pass
+
+
+def lvr_delroom(jsondata):
+    """
+    删除弱电间
+    :param jsondata: 弱电间编号json
+    :return: 删除结果
+    """
+    lvrNoArray = jsondata["lvrno"]
+    try:
+        for each_lvrno in lvrNoArray:
+            lvr_devStatus = Dev_DeviceStatus.query.filter(
+                Dev_DeviceStatus.RoomNo == each_lvrno
+            )
+            if lvr_devStatus.count():
+                result = {
+                    "status": 500,
+                    "message": each_lvrno.encode("utf-8") + " 弱电间存在未下架设备，禁止删除。"
+                }
+                return json.dumps(result)
+            else:
+                lvr = Dev_LVRInfo.query.filter(
+                    Dev_LVRInfo.LVRNo == each_lvrno
+                )
+                lvr.delete()
+                db.session.commit()
+                result = {
+                    "status": 1,
+                    "message": "success"
+                }
+                return json.dumps(result)
+    except Exception as e:
+        delete_status = {
+            'status': 500,
+            'message': 'error'
+        }
+        return json.dumps(delete_status)
