@@ -121,16 +121,17 @@ class Dev_LVRInfo(db.Model):
     RoomNo = db.Column("RoomNo", db.String(255))
     Cabinet = db.Column("Cabinet", db.String(255))
     LVRNo = db.Column("LVRNo", db.String(190), index=True)
+    deviceNum = db.Column("deviceNum", db.Integer)
 
-
-    def __init__(self, Campus, BuildName, BuildNo, FloorNo, RoomNo, Cabinet, LVRNo):
+    def __init__(self, Campus, BuildName, BuildNo, FloorNo, RoomNo, Cabinet, LVRNo, deviceNum):
         self.Campus = Campus,
         self.BuildName = BuildName,
         self.BuildNo = BuildNo,
         self.FloorNo = FloorNo,
         self.RoomNo = RoomNo,
         self.Cabinet = Cabinet,
-        self.LVRNo = LVRNo
+        self.LVRNo = LVRNo,
+        self.deviceNum = deviceNum
 
     def to_json(self):
         """将查询数据转为json"""
@@ -142,7 +143,8 @@ class Dev_LVRInfo(db.Model):
             'FloorNo': self.FloorNo,
             'RoomNo': self.RoomNo,
             'Cabinet': self.Cabinet,
-            'LVRNo': self.LVRNo
+            'LVRNo': self.LVRNo,
+            'deviceNum': self.deviceNum
         }
 
     def bn_to_json(self):
