@@ -323,6 +323,7 @@ ul.errors {
 label.adminlabel {
     vertical-align: middle;
     margin-right: 5px;
+    margin-bottom: 20px;
 }
 
 #logtable {
@@ -353,7 +354,7 @@ h1.admintitle {
     display: none;
 }
 
-#syspagn {
+#syspagn, #syspage_index {
     margin-bottom: 30px;
 }
 
@@ -845,4 +846,12 @@ tr.devadd_newtable{
 }
 select:disabled {
     background-color: rgb(235,235,228)
+}
+h2.admintitle {
+    font-size: 18px;
+    margin: 20px 0 20px 0
+}
+.block_line {
+    border: 1px solid #eee;
+    margin: 15px 0 15px 0;
 }
