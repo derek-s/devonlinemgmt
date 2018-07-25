@@ -23,7 +23,6 @@ $(document).ready(
             var strbuild = encodeURIComponent($target.text(), "utf-8")
             if ($target.text() == '全部') {
                 strbuild = "";
-                console.log("1")
                 $("button#dropdownBuild").attr('disabled',true); 
             }else{
                 $.post($SCRIPT_ROOT + '_querybuild', {

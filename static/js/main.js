@@ -43,6 +43,19 @@ $(document).on("click", "button#transferlogs", function() {
     js_ajaxlog(page, uname, catname, datas)
 });
 
+
+$(document).on("click", "button#refreshLVRNum", function() {
+    $.post($SCRIPT_ROOT + "_refreshLVRNum", {},function(data){
+        if(data.status == 0){
+            alert("刷新完毕")
+        }
+        else{
+            alert("错误，请联系管理员")
+        }
+    }, dataType="json")
+});
+
+
 function js_ajaxlog(page, uname, catname, datas) {
     var loading = layer.load(2, {
         shade: [0.3, '#fff']
