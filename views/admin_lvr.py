@@ -45,6 +45,7 @@ def lvr_manager_ajaxquery():
     }
     for lvrx in lvrinfo.items:
         jsonlist = lvrx.to_json()
+        print(jsonlist)
         jsonlist.update(hasnext)
         lvrinfotemp.append(jsonlist)
     eventlog(
@@ -208,70 +209,78 @@ def lvrm_post_get(jsondata):
     弱电间修改功能
     :return: op==get时返回模板页面,op==post时返回操作结果,json格式
     """
-    id_json = jsondata['idarray'][0]
-    id = jsondata["id"]
+    id_json = jsondata['idarray']
     op = jsondata["op"]
     Build = []
+    result_array = []
     try:
         if op == "get":
-            lvr = Dev_LVRInfo.query.filter(
-                Dev_LVRInfo.LVRNo == id
-            )
-            dbresult = lvr.one()
-            if lvr.count():
-                campus = dbresult.Campus.encode("utf-8")
-                buildresult = DevBuild.query.filter_by(
-                    Campus = campus
-                ).all()
-                for eachbuild in buildresult:
-                    Build.append(eachbuild.BuildName)
-                return dbresult, Build
-        elif op == "post":
-            lvrNo = jsondata["id"]
-            newLvrNo = id_json["lvrno"]
-            campus = id_json["campus"]
-            build = id_json["build"]
-            buildNo = id_json["buildNo"]
-            floorNo = id_json["floorNo"]
-            roomNo = id_json["roomNo"]
-            cabinet = id_json["equnum"]
-            try:
-                print("1234")
+            count = 0
+            for one in id_json:
                 lvr = Dev_LVRInfo.query.filter(
-                    Dev_LVRInfo.LVRNo == lvrNo
+                    Dev_LVRInfo.LVRNo == one
                 )
+                dbresult = lvr.one()
+                LVRInfoResult = dbresult
+                count += 1
                 if lvr.count():
-                    lvr.update({
-                        Dev_LVRInfo.Campus: campus,
-                        Dev_LVRInfo.BuildName: build,
-                        Dev_LVRInfo.LVRNo: newLvrNo,
-                        Dev_LVRInfo.BuildNo: buildNo,
-                        Dev_LVRInfo.FloorNo: floorNo,
-                        Dev_LVRInfo.RoomNo: roomNo,
-                        Dev_LVRInfo.Cabinet: cabinet
-                    })
+                    campus = dbresult.Campus.encode("utf-8")
+                    buildresult = DevBuild.query.filter_by(
+                        Campus = campus
+                    ).all()
+                    for eachbuild in buildresult:
+                        Build.append(eachbuild.BuildName)
+                    result = {
+                        'count': count,
+                        'dbresult': LVRInfoResult,
+                        'Build': Build
+                    }
+                    result_array.append(result)
+            return result_array
+        elif op == "post":
+            for one in id_json:
+                oldNo = one["oldNo"]
+                newLvrNo = one["lvrno"]
+                campus = one["campus"]
+                build = one["build"]
+                buildNo = one["buildNo"]
+                floorNo = one["floorNo"]
+                roomNo = one["roomNo"]
+                cabinet = one["equnum"]
+                try:
+                    lvr = Dev_LVRInfo.query.filter(
+                        Dev_LVRInfo.LVRNo == oldNo
+                    )
+                    if lvr.count():
+                        lvr.update({
+                            Dev_LVRInfo.Campus: campus,
+                            Dev_LVRInfo.BuildName: build,
+                            Dev_LVRInfo.LVRNo: newLvrNo,
+                            Dev_LVRInfo.BuildNo: buildNo,
+                            Dev_LVRInfo.FloorNo: floorNo,
+                            Dev_LVRInfo.RoomNo: roomNo,
+                            Dev_LVRInfo.Cabinet: cabinet
+                        })
 
-                devStatus = Dev_DeviceStatus.query.filter(
-                    Dev_DeviceStatus.RoomNo == lvrNo
-                )
+                    devStatus = Dev_DeviceStatus.query.filter(
+                        Dev_DeviceStatus.RoomNo == oldNo
+                    )
 
-                if devStatus.count():
-                    devStatus.update({
-                        Dev_DeviceStatus.RoomNo: newLvrNo
-                    })
-                db.session.commit()
-                result = {
-                    "status": 1,
-                    "message": "ok"
-                }
-                return json.dumps(result)
-            except Exception as e:
-                print(e)
-                result = {
-                    "status": 500,
-                    "message": e
-                }
-                return json.dumps(result)
+                    if devStatus.count():
+                        devStatus.update({
+                            Dev_DeviceStatus.RoomNo: newLvrNo
+                        })
+                    db.session.commit()
+                    result = {
+                        "status": 1,
+                        "message": "ok"
+                    }
+                except Exception as e:
+                    result = {
+                        "status": 500,
+                        "message": e
+                    }
+            return json.dumps(result)
         else:
             result = {
                 "status": 500,
@@ -279,7 +288,6 @@ def lvrm_post_get(jsondata):
             }
             return json.dumps(result)
     except Exception as e:
-        print(e)
         traceback.print_exc()
         pass
 
@@ -319,3 +327,32 @@ def lvr_delroom(jsondata):
             'message': 'error'
         }
         return json.dumps(delete_status)
+
+
+def lvrNo_Checak(lvrno):
+    """
+    弱电间ID占用查询
+    :param lvrno:  弱电间编号
+    :return: 是否占用
+    """
+    no = lvrno["deviceid"]
+    oldid = lvrno["oldid"]
+    if no != oldid:
+        print(no)
+        ChcekStatus = Dev_LVRInfo.query.filter(
+            Dev_LVRInfo.LVRNo == no
+        )
+        if ChcekStatus.count():
+            result = {
+                "ID_Result": 1
+            }
+        else:
+            result = {
+                "ID_Result": 0
+            }
+        return json.dumps(result)
+    else:
+        result = {
+            "ID_Result": 0
+        }
+        return json.dumps(result)

@@ -15,7 +15,7 @@ from ext import passwdcreate
 from .admin_dbquery import admin_query, admin_query_list, admin_query_serach
 from .admin_lvr import  lvr_manager_index, lvr_manager_ajaxquery, newlvradd
 from .admin_lvr import lvr_list_get, lvr_list_post, lvr_search_get, lvr_search_post
-from .admin_lvr import lvrm_post_get, lvr_delroom
+from .admin_lvr import lvrm_post_get, lvr_delroom, lvrNo_Checak
 from .admin_dvr import dvr_manage_get, dvr_manage_post, dvr_list_get, dvr_list_post
 from .admin_dvr import dvr_search_get, dvr_search_post, dev_getCampus, dev_getBuild, dev_getType
 from .admin_dvr import dvr_add_post, dev_getLVR
@@ -755,11 +755,10 @@ def lvradd():
 def lvrmodify():
     jsondata = request.get_json()
     if jsondata["op"] == "get":
-        dbresult, build = lvrm_post_get(jsondata)
+        dbresult = lvrm_post_get(jsondata)
         return render_template(
             "/admin/lvr_m.html",
             dbresult=dbresult,
-            build=build,
             campus=dev_getCampus())
     elif jsondata["op"] == "post":
         result = lvrm_post_get(jsondata)
@@ -772,3 +771,11 @@ def lvrmodify():
 def lvrdel():
     jsondata = request.get_json()
     return lvr_delroom(jsondata)
+
+
+@adminbg.route("/admin/_lvridcheck", methods=["POST"])
+@login_required
+@admin_required
+def lidcheack():
+    jsondata = request.get_json()
+    return lvrNo_Checak(jsondata)
