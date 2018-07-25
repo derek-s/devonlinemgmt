@@ -1,6 +1,28 @@
 /// <reference path="C:\\Users\\Derek.S\\AppData\\Roaming\\npm\\node_modules\\@types\\jquery\\index.d.ts"/>
 $(document).ready(
     function(){
+        $("#checkboxall").click(function () {
+            if ($("#checkboxall").prop("checked")) {
+                $("[name='oper']").prop("checked", true)
+            } else {
+                $("[name='oper']").prop("checked", false)
+            }
+        })
+        $(document).on("click", '[name="oper"]', function () {
+            var check = 0
+            if ($("#checkboxall").prop("checked")) {
+                $("#checkboxall").prop("checked", false)
+            }
+            var inputcount = $("input[name='oper']").length
+            $("input[name='oper']").each(function () {
+                if ($(this).prop("checked")) {
+                    check += 1
+                }
+                if (inputcount === check) {
+                    $("#checkboxall").prop("checked", true)
+                }
+            })
+        })
         $.ajaxSetup({
             beforeSend: function (xhr, settings) {
                 if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
@@ -266,23 +288,9 @@ function js_lvr_modify(idarray, op){
     else if(op == "post"){
         if(confirm("确定修改设备信息么？")){
             if(idarray){
-                var lvr_array = new Array()
-                var modify_lvr = $("td.devadd_newtd")
-                modify_lvr.each(function(){
-                    var lvrinfo_data = {}
-                    lvrinfo_data["lvrno"] = $(this).find("#lvradd_name").val()
-                    lvrinfo_data["campus"] = $(this).find("#lvradd_campus").val()
-                    lvrinfo_data["build"] = $(this).find("#lvradd_build").val()
-                    lvrinfo_data["buildNo"] = $(this).find("#lvradd_buildnum").val()
-                    lvrinfo_data["floorNo"] = $(this).find("#lvradd_floornum").val()
-                    lvrinfo_data["roomNo"] = $(this).find("#lvradd_roomnum").val()
-                    lvrinfo_data["equnum"] = $(this).find("#lvradd_equnum").val()
-                    lvr_array.push(lvrinfo_data)
-                })
                 var postarray = {
                     "op": "post",
-                    "id": id,
-                    "idarray": lvr_array
+                    "idarray": idarray
                 }
                 $.ajax({
                     url: Flask.url_for('adminbg.lvrmodify'),
@@ -306,4 +314,40 @@ function js_lvr_modify(idarray, op){
         }
     }
 
+}
+
+function js_lvr_batchd() {
+    if ($("select#ipage").val() == "delete") {
+        $("[name='oper']").each(function () {
+            if ($(this).prop('checked')) {
+                delarray = js_lvr_idarry($(this).val())
+            }
+        })
+        js_lvr_delLVRroom(delarray)
+    } else if ($("select#ipage").val() == "lvrmod") {
+        $("[name='oper']").each(function () {
+            if ($(this).prop('checked')) {
+                uparray = js_lvr_idarry($(this).val())
+            }
+        })
+        js_lvr_modify(uparray, "get")
+    }
+}
+
+function lvrid(){
+    var lvr_array = new Array()
+    var getLvrID = $("td.devadd_newtd")
+    getLvrID.each(function(){
+        var lvrinfo_data = {}
+        lvrinfo_data["oldNo"] = $(this).find("#OldLvrNo").val()
+        lvrinfo_data["lvrno"] = $(this).find("#lvradd_name").val()
+        lvrinfo_data["campus"] = $(this).find("#lvradd_campus").val()
+        lvrinfo_data["build"] = $(this).find("#lvradd_build").val()
+        lvrinfo_data["buildNo"] = $(this).find("#lvradd_buildnum").val()
+        lvrinfo_data["floorNo"] = $(this).find("#lvradd_floornum").val()
+        lvrinfo_data["roomNo"] = $(this).find("#lvradd_roomnum").val()
+        lvrinfo_data["equnum"] = $(this).find("#lvradd_equnum").val()
+        lvr_array.push(lvrinfo_data)
+    })
+    js_lvr_modify(lvr_array, "post")
 }
