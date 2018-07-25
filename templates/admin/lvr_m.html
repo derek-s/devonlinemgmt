@@ -27,6 +27,10 @@
         <div id="devadd_form">
             <table id="lvradd_table">
                 <tbody>
+                    {% for eachrow in dbresult %}
+                    {% set count = eachrow['count'] %}
+                    {% set LInfo = eachrow['dbresult'] %}
+                    {% set build = eachrow['Build'] %}
                     <tr class="devadd_newtable">
                         <td class="devadd_newtd">
                             <table class="devadd_newline">
@@ -41,15 +45,16 @@
                                     <th>机柜数量</th>
                                 </tr>
                                 <tr class="lvradd_trinput">
-                                    <td class="td_id">1</td>
+                                    <td class="td_id">{{ count }}</td>
                                     <td>
-                                        <input type="text" id="lvradd_name" value="{{ dbresult.LVRNo }}">
+                                        <input type="text" id="OldLvrNo" value="{{ LInfo.LVRNo }}" disabled style="display: none">
+                                        <input type="text" id="lvradd_name" value="{{ LInfo.LVRNo }}">
                                     </td>
                                     <td>
                                         <select name="campus" id="lvradd_campus">
                                             <option value="campus_null">请选择校区</option>
                                             {%- for campusone in campus %}
-                                            {% if dbresult.Campus == campusone.Campus %}
+                                            {% if LInfo.Campus == campusone.Campus %}
                                             <option value="{{ campusone.Campus }}" selected = "selected">{{ campusone.Campus }}</option>
                                             {% else %}
                                             <option value="{{ campusone.Campus }}">{{ campusone.Campus }}</option>
@@ -61,7 +66,7 @@
                                         <select name="build" id="lvradd_build">
                                             <option value="build_null">请选择楼宇</option>
                                             {%- for buildone in build %}
-                                            {% if dbresult.BuildName == buildone %}
+                                            {% if LInfo.BuildName == buildone %}
                                             <option value="{{ buildone }}" selected = "selected">{{ buildone }}</option>
                                             {% else %}
                                             <option value="{{ buildone }}">{{ buildone }}</option>
@@ -70,26 +75,27 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" id="lvradd_buildnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" value="{{ dbresult.BuildNo }}">
+                                        <input type="text" id="lvradd_buildnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" value="{{ LInfo.BuildNo }}">
                                     </td>
                                     <td>
-                                        <input type="text" id="lvradd_floornum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" value="{{ dbresult.FloorNo }}">
+                                        <input type="text" id="lvradd_floornum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" value="{{ LInfo.FloorNo }}">
                                     </td>
                                     <td>
-                                        <input type="text" id="lvradd_roomnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" value="{{ dbresult.RoomNo }}">
+                                        <input type="text" id="lvradd_roomnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" value="{{ LInfo.RoomNo }}">
                                     </td>
                                     <td>
-                                        <input type="text" id="lvradd_equnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" value="{{ dbresult.Cabinet }}">
+                                        <input type="text" id="lvradd_equnum" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" value="{{ LInfo.Cabinet }}">
                                     </td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
         <div class="devadd_operation">
-            <button type="button" class="btn btn-primary devadd_addbutton" onclick="javascirpt:js_lvr_modify(js_lvr_idarry('{{ dbresult.LVRNo }}'), 'post')">修改弱电间</button>
+            <button type="button" class="btn btn-primary devadd_addbutton" onclick="javascirpt:lvrid()">修改弱电间</button>
         </div>
     </div>
 </body>
@@ -112,19 +118,21 @@
                     $(this).removeAttr("style")
                 }
             })
-            $(document).on("blur", "#devadd_id", function () {
+            $(document).on("blur", "#lvradd_name", function () {
                 if ($(this).val() != "该项不能为空!") {
+                    var old_id = $(this).prev().val()
                     var devid_json = {
-                        "deviceid": $(this).val()
+                        "deviceid": $(this).val(),
+                        "oldid": old_id
                     }
                     $.ajax({
-                        url: Flask.url_for('adminbg.devquerydid'),
+                        url: Flask.url_for('adminbg.lidcheack'),
                         type: 'POST',
                         data: JSON.stringify(devid_json),
                         dataType: "json",
                         contentType: "application/json",
                         success: function (data) {
-                            if (data.id_select_result != 0) {
+                            if (data.ID_Result != 0) {
                                 alert("ID已存在，请更换ID。")
                             }
                         }
