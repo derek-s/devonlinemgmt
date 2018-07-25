@@ -12,6 +12,7 @@ from base64 import b64decode
 from urllib import unquote
 from ext import db
 import json
+from .admin_lvr import LVRNumRefresh
 
 import traceback
 
@@ -227,6 +228,7 @@ def dvr_add_post():
     status = {
         'status': 200
     }
+    LVRNumRefresh()
     return jsonify(status)
 
 
@@ -368,6 +370,7 @@ def dev_devup(jsondata):
                     'status': 1,
                     'message': "ok"
                 }
+        LVRNumRefresh()
         return json.dumps(result)
 
 
@@ -393,6 +396,7 @@ def dev_devdown():
                 'status': 1,
                 'message': 'ok'
             }
+        LVRNumRefresh()
         return json.dumps(DCondition_result)
     except Exception as e:
         print(e)
@@ -424,6 +428,7 @@ def dev_devdel():
                     'status': 1,
                     'message': 'success'
                 }
+        LVRNumRefresh()
         return json.dumps(delete_status)
     except Exception as e:
         delete_status = {
@@ -442,7 +447,6 @@ def dev_m(jsondata):
             )
             if device.count():
                 infoResult = device.one()
-
         return infoResult, dev_getType()
     except Exception as e:
         pass
@@ -482,6 +486,7 @@ def dev_m_post(jsondata):
             'status': 1,
             'message': "ok"
         }
+        LVRNumRefresh()
         return json.dumps(result)
     except Exception as e:
         result = {

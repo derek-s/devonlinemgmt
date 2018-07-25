@@ -201,6 +201,7 @@ def newlvradd(jsondata):
         'status': 200,
         'mes': "Error"
     }
+    LVRNumRefresh()
     return jsonify(status)
 
 
@@ -280,12 +281,14 @@ def lvrm_post_get(jsondata):
                         "status": 500,
                         "message": e
                     }
+            LVRNumRefresh()
             return json.dumps(result)
         else:
             result = {
                 "status": 500,
                 "message": "Error"
             }
+            LVRNumRefresh()
             return json.dumps(result)
     except Exception as e:
         traceback.print_exc()
@@ -320,6 +323,7 @@ def lvr_delroom(jsondata):
                     "status": 1,
                     "message": "success"
                 }
+                LVRNumRefresh()
                 return json.dumps(result)
     except Exception as e:
         delete_status = {
@@ -356,3 +360,21 @@ def lvrNo_Checak(lvrno):
             "ID_Result": 0
         }
         return json.dumps(result)
+
+def LVRNumRefresh():
+    lvr = Dev_LVRInfo.query.filter().all()
+    for each_lvr in lvr:
+        Device_Num = Dev_DeviceStatus.query.filter(
+            Dev_DeviceStatus.RoomNo == each_lvr.LVRNo
+        ).count()
+        LVRNum = Dev_LVRInfo.query.filter(
+            Dev_LVRInfo.LVRNo == each_lvr.LVRNo
+        )
+        LVRNum.update({
+            Dev_LVRInfo.deviceNum: Device_Num
+        })
+        db.session.commit()
+    result = {
+        "status": 0
+    }
+    return json.dumps(result)
