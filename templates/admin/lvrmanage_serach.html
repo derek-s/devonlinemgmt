@@ -57,6 +57,7 @@
                 <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
                     <tr>
                         <th>ID</th>
+                        <th><input id="checkboxall" type="checkbox" name="oper_all"></th>
                         <th>校区</th>
                         <th>楼宇名称</th>
                         <th>楼号</th>
@@ -64,11 +65,13 @@
                         <th>房间号</th>
                         <th>机柜数量</th>
                         <th>弱电间编号</th>
+                        <th>设备数量</th>
                         <th>操作</th>
                     </tr>
                     {% for data in posts %}
                     <tr class="jsondata">
                         <td>{{ data.ID }}</td>
+                        <td><input id="oper-{{ data.ID }}" type="checkbox" name="oper" value="{{ data.LVRNo }}" /></td>
                         <td>{{ data.Campus }}</td>
                         <td>{{ data.BuildName }}</td>
                         <td>{{ data.BuildNo }}</td>
@@ -76,6 +79,7 @@
                         <td>{{ data.RoomNo }}</td>
                         <td>{{ data.Cabinet }}</td>
                         <td>{{ data.LVRNo }}</td>
+                        <td>{{ data.deviceNum }}</td>
                         <td><button onclick="javascript:js_lvr_modify(js_lvr_idarry('{{ data.LVRNo }}'), 'get')" type="button" class="btn btn-link inline_button_link">管理</button> | 
                             <button onclick="javascript:js_lvr_delLVRroom(js_lvr_idarry('{{ data.LVRNo }}'))" type="button" class="btn btn-link inline_button_link">删除</button></td>
                     </tr>
@@ -85,8 +89,20 @@
             <div class="ajaxnetpage">
                 <a id="ajaxntindex" class="btn btn-primary" href="javascript:void(0);">下一页</a>
             </div>
-            <div>
-                {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.querylvrserach', keyword=request.args.get('keyword') | safe)}} {%endif%}
+            <div class="listbottombar">
+                <div class="ibtmdowplist">
+                    <div class="dropdown">
+                        <select id="ipage" name="action" id="bulk-action-selector-top">
+                            <option value="-1">批量操作</option>
+                            <option value="lvrmod">管理</option>
+                            <option value="delete">删除</option>
+                        </select>
+                    </div>
+                    <button onclick="javascript:js_lvr_batchd()" id="iopearbutton" class="btn btn-primary">应用</button>
+                </div>
+                <div class="fullsize ipagination">
+                    {%if pagination%} {{macros.pagination_widget(pagination,'adminbg.querylvrserach', keyword=request.args.get('keyword') | safe)}} {%endif%}
+                </div>
             </div>
             {% endif %}
         </div>
@@ -118,7 +134,8 @@
                             var trb = '</tr>'
                             $.each(data, function (one) {
                                 eachone = data[one]
-                                trc += tra + "<td>" + eachone.ID + "</td><td>" + eachone.Campus + "</td><td>" + eachone.BuildName + "</td><td>" + eachone.BuildNo + "</td><td>" + eachone.FloorNo + "</td><td>" + eachone.RoomNo + "</td><td>" + eachone.Cabinet + "</td><td>" + eachone.LVRNo + "</td><td>" + "管理" + "</td>" + trb
+                                trc += tra + "<td>" + eachone.ID + "</td>" + `<td><input id="oper-`+ eachone.ID +`" type="checkbox" name="oper" value="`+ eachone.LVRNo +`" /></td>` + "<td>" + eachone.Campus + "</td><td>" + eachone.BuildName + "</td><td>" + eachone.BuildNo + "</td><td>" + eachone.FloorNo + "</td><td>" + eachone.RoomNo + "</td><td>" + eachone.Cabinet + "</td><td>" + eachone.LVRNo + "</td><td>" + eachone.deviceNum + `<td><button onclick="javascript:js_lvr_modify(js_lvr_idarry('`+ eachone.LVRNo +`'), 'get')" type="button" class="btn btn-link inline_button_link">管理</button> | 
+                            <button onclick="javascript:js_lvr_delLVRroom(js_lvr_idarry('`+ eachone.LVRNo +`'))" type="button" class="btn btn-link inline_button_link">删除</button></td>` + trb
                                 hasnext = eachone.next
                             })
                             $("table#devinfolist>tbody tr:last-child").after(trc)
