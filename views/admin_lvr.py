@@ -33,6 +33,7 @@ def lvr_manager_index():
         'pagination': pagination,
         'campus': campus
     }
+    eventlog("[访问弱电间管理页面]")
     return result
 
 
@@ -225,6 +226,7 @@ def newlvradd(jsondata):
         'status': 200,
         'mes': "Error"
     }
+    eventlog("[新建弱电间]")
     LVRNumRefresh()
     return jsonify(status)
 
@@ -305,6 +307,7 @@ def lvrm_post_get(jsondata):
                         "status": 500,
                         "message": e
                     }
+            eventlog("[修改弱电间信息] " + str(oldNo))
             LVRNumRefresh()
             return json.dumps(result)
         else:
@@ -312,10 +315,8 @@ def lvrm_post_get(jsondata):
                 "status": 500,
                 "message": "Error"
             }
-            LVRNumRefresh()
             return json.dumps(result)
     except Exception as e:
-        traceback.print_exc()
         pass
 
 
@@ -347,6 +348,7 @@ def lvr_delroom(jsondata):
                     "status": 1,
                     "message": "success"
                 }
+                eventlog("[删除弱电间] " + str(each_lvrno))
                 LVRNumRefresh()
                 return json.dumps(result)
     except Exception as e:

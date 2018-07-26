@@ -12,6 +12,7 @@ from base64 import b64decode
 from urllib import unquote
 from ext import db
 import json
+from log import eventlog
 
 
 def basic_campus():
@@ -19,6 +20,7 @@ def basic_campus():
     校区信息页面
     :return:
     """
+    eventlog("[访问基础信息-校区页面]")
     page = request.args.get('page', 1, type=int)
     request.script_root = url_for('indexview.index', _external=True)
     count = Dev_Campus.query.count()
@@ -39,6 +41,7 @@ def basic_campus_search():
     校区搜索页面
     :return:
     """
+    eventlog("[访问校区搜索页面]")
     request.script_root = url_for('indexview.index', _external=True)
     page = request.values.get('page', 1, type=int)
     word = request.values.get('keyword', "", type=str)
@@ -65,6 +68,7 @@ def basic_campus_add():
     增加校区功能
     :return:
     """
+    eventlog("[添加校区]")
     campusname = request.values.get("campusname")
     if campusname == "":
         campus_add_status = {
@@ -99,9 +103,9 @@ def basic_campus_add():
 def basic_campus_modfiy():
     """
     修改校区名称
-    :param id: 校区id
     :return:  修改结果
     """
+
     try:
         campus_id = request.values.get("id")
         campus_new = request.values.get("cname")
@@ -116,6 +120,7 @@ def basic_campus_modfiy():
             'status': 1,
             'message': 'success'
         }
+        eventlog("[修改校区名称] " + str(campus_id))
         return json.dumps(campus_modfiy_status)
     except Exception as e:
         campus_modfiy_status = {
@@ -145,6 +150,7 @@ def basic_campus_delete():
         db.session.commit()
         delstatus['status'] = 1
         delstatus['message'] = "success"
+        eventlog("[删除校区]" + str(campus_id))
         return json.dumps(delstatus)
     except Exception:
         delstatus['status'] = 500
@@ -184,6 +190,7 @@ def basic_build_list():
     """
     page = request.args.get('page', 1, type=int)
     campus_id = request.args.get('campus_id', "-1", type=str)
+    eventlog("[校区分类搜索] " + str(campus_id))
     request.script_root = url_for('indexview.index', _external=True)
     if campus_id == "-1":
         build_count = DevBuild.query.count()
@@ -225,6 +232,7 @@ def basic_bulid_add():
     增加楼栋
     :return:
     """
+    eventlog("[添加楼栋]")
     campus_id = request.values.get("campus_id")
     bulidname = request.values.get("buildname")
     if bulidname == "":
@@ -286,6 +294,7 @@ def basic_build_delete():
         db.session.commit()
         delstatus['status'] = 1
         delstatus['message'] = "success"
+        eventlog("[删除楼栋 ]" + str(build_id))
         return json.dumps(delstatus)
     except Exception:
         delstatus['status'] = 500
@@ -322,6 +331,7 @@ def basic_build_modfiy():
             'status': 1,
             'message': 'success'
         }
+        eventlog("[修改楼栋信息]" + str(build_id))
         return json.dumps(build_modfiy_status)
     except Exception as e:
         build_modfiy_status = {
@@ -354,6 +364,7 @@ def basic_buildname_search():
         'pagination': pagination,
         'keyword': search
     }
+    eventlog("[搜索楼栋]")
     return result
 
 
@@ -362,6 +373,7 @@ def basic_type_index():
     设备类型
     :return:
     """
+    eventlog("[访问设备类型页面]")
     request.script_root = url_for('indexview.index', _external=True)
     page = request.values.get('page', 1, type=int)
     count = DevDevType.query.count()
@@ -379,9 +391,10 @@ def basic_type_index():
 
 def basic_type_Add():
     """
-    增加设备信息
+    增加设备类型
     :return:
     """
+    eventlog("[增加设备类型]")
     typename = request.values.get("typename")
     if typename == "":
         type_add_status = {
@@ -434,6 +447,7 @@ def basic_type_modfiy():
             'status': 1,
             'message': 'success'
         }
+        eventlog("[修改设备类型] " + str(type_id))
         return json.dumps(type_modfiy_status)
     except Exception as e:
         type_modfiy_status = {
@@ -461,6 +475,7 @@ def basic_type_delete():
             'status': 1,
             'message': 'success'
         }
+        eventlog("[删除设备类型] " + str(type_id))
         return json.dumps(delete_status)
     except Exception as e:
         delete_status = {
@@ -493,4 +508,5 @@ def basic_type_search():
         'pagination': pagination,
         'keyword': search
     }
+    eventlog("[设备类型搜索] " + str(search))
     return result

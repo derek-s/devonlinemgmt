@@ -34,6 +34,7 @@ def dvr_manage_get():
         'pagination': pagination,
         'devtype': devtype
     }
+    eventlog("[访问设管理页面]")
     return result
 
 
@@ -87,6 +88,7 @@ def dvr_list_get():
         'devtypebname': devtype.decode('utf-8'),
         'devostatus': devonline
     }
+    eventlog("[访问设备管理分类查询页面] " + str(devtype) + str(devonline))
     return result
 
 
@@ -273,6 +275,7 @@ def dvr_add_post():
         'status': 200
     }
     LVRNumRefresh()
+    eventlog("[新增设备]")
     return jsonify(status)
 
 
@@ -430,6 +433,7 @@ def dev_devup(jsondata):
                     'status': 1,
                     'message': "ok"
                 }
+        eventlog("[上架设备] " + str(dev_id))
         LVRNumRefresh()
         return json.dumps(result)
 
@@ -460,6 +464,7 @@ def dev_devdown():
                 'status': 1,
                 'message': 'ok'
             }
+        eventlog("[下架设备] " + str(dev_id))
         LVRNumRefresh()
         return json.dumps(DCondition_result)
     except Exception as e:
@@ -496,6 +501,7 @@ def dev_devdel():
                     'status': 1,
                     'message': 'success'
                 }
+        eventlog("[删除设备] " + str(dev_id))
         LVRNumRefresh()
         return json.dumps(delete_status)
     except Exception as e:
@@ -564,6 +570,7 @@ def dev_m_post(jsondata):
             'status': 1,
             'message': "ok"
         }
+        eventlog("[修改设备信息] " + str(id))
         LVRNumRefresh()
         return json.dumps(result)
     except Exception as e:
@@ -602,6 +609,7 @@ def LVR_Device_Info(LVRNo):
             Device_JSON["DeviceModel"] = each_Device_INFO.DeviceModel
             Device_JSON["DeviceCondition"] = each_Device_INFO.DeviceCondition
             Device_Array.append(Device_JSON)
+        eventlog("[根据弱电间编号查询设备信息] " + str(LVRNo))
         return json.dumps(Device_Array)
     except Exception as e:
         pass

@@ -7,16 +7,11 @@
 
 from flask import request, url_for, flash, abort, redirect
 from models import User, Setting
-from models import DevBuild
-from base64 import b64decode
-from urllib import unquote
 from ext import db
 import json
-import hashlib
-import string
-import random
 from ext import md5s
 from forms import CreateUser
+from log import eventlog
 
 def admin_userindex():
     """
@@ -63,6 +58,7 @@ def admin_userindex():
         'admin_count': admin_count,
         'user_count': ord_count
     }
+    eventlog("[访问用户信息页面]")
     return result
 
 
@@ -93,6 +89,7 @@ def user_per_modfiy():
                 'status': 1,
                 'message': 'success'
             }
+            eventlog("[用户信息修改]")
             return json.dumps(per_modfiy_status)
     except Exception as e:
         per_modfiy_status = {
@@ -113,11 +110,13 @@ def user_delete():
             user_info = User.query.filter(User.id == one)
             if user_info:
                 user_info.delete()
+                eventlog("[尝试删除用户] " + str(one))
         db.session.commit()
         user_del_status = {
             'status': 1,
             'message': 'success'
                     }
+        eventlog("[删除用户成功]")
         return json.dumps(user_del_status)
     except Exception as e:
         user_del_status = {
@@ -142,6 +141,7 @@ def user_pwd_modfiy():
             'status': 1,
             'message': 'success'
         }
+        eventlog("[修改密码] " + str(id))
         return json.dumps(su_pwd_status)
     else:
         su_pwd_status = {
@@ -181,5 +181,6 @@ def user_create():
                 db.session.add(newuser)
                 db.session.commit()
                 flash(u"新用户创建成功")
+                eventlog("[创建用户]")
                 return 0
     return form
