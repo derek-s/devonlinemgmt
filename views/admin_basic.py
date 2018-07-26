@@ -15,6 +15,10 @@ import json
 
 
 def basic_campus():
+    """
+    校区信息页面
+    :return:
+    """
     page = request.args.get('page', 1, type=int)
     request.script_root = url_for('indexview.index', _external=True)
     count = Dev_Campus.query.count()
@@ -31,6 +35,10 @@ def basic_campus():
 
 
 def basic_campus_search():
+    """
+    校区搜索页面
+    :return:
+    """
     request.script_root = url_for('indexview.index', _external=True)
     page = request.values.get('page', 1, type=int)
     word = request.values.get('keyword', "", type=str)
@@ -53,6 +61,10 @@ def basic_campus_search():
 
 
 def basic_campus_add():
+    """
+    增加校区功能
+    :return:
+    """
     campusname = request.values.get("campusname")
     if campusname == "":
         campus_add_status = {
@@ -114,6 +126,10 @@ def basic_campus_modfiy():
 
 
 def basic_campus_delete():
+    """
+    删除校区功能
+    :return:
+    """
     delstatus = {
         'status': '',
         'message': ''
@@ -162,6 +178,10 @@ def basic_campus_layer():
 
 
 def basic_build_list():
+    """
+    楼栋分类搜索
+    :return:
+    """
     page = request.args.get('page', 1, type=int)
     campus_id = request.args.get('campus_id', "-1", type=str)
     request.script_root = url_for('indexview.index', _external=True)
@@ -201,6 +221,10 @@ def basic_build_list():
 
 
 def basic_bulid_add():
+    """
+    增加楼栋
+    :return:
+    """
     campus_id = request.values.get("campus_id")
     bulidname = request.values.get("buildname")
     if bulidname == "":
@@ -243,6 +267,10 @@ def basic_bulid_add():
             return json.dumps(build_add_status)
 
 def basic_build_delete():
+    """
+    删除楼栋
+    :return:
+    """
     delstatus = {
         'status': '',
         'messgae': ''
@@ -266,6 +294,10 @@ def basic_build_delete():
 
 
 def basic_build_modfiy():
+    """
+    修改楼栋信息
+    :return:
+    """
     try:
         build_id = request.values.get("id")
         build_name = request.values.get("bname")
@@ -300,6 +332,10 @@ def basic_build_modfiy():
 
 
 def basic_buildname_search():
+    """
+    楼栋名称搜索
+    :return:
+    """
     request.script_root = url_for('indexview.index', _external=True)
     page = request.values.get('page', 1, type=int)
     word = request.values.get('keyword', "", type=str)
@@ -322,6 +358,10 @@ def basic_buildname_search():
 
 
 def basic_type_index():
+    """
+    设备类型
+    :return:
+    """
     request.script_root = url_for('indexview.index', _external=True)
     page = request.values.get('page', 1, type=int)
     count = DevDevType.query.count()
@@ -338,6 +378,10 @@ def basic_type_index():
 
 
 def basic_type_Add():
+    """
+    增加设备信息
+    :return:
+    """
     typename = request.values.get("typename")
     if typename == "":
         type_add_status = {
@@ -370,6 +414,10 @@ def basic_type_Add():
 
 
 def basic_type_modfiy():
+    """
+    修改设备类型
+    :return:
+    """
     try:
         type_id = request.values.get("id")
         type_new = request.values.get("tname")
@@ -396,6 +444,10 @@ def basic_type_modfiy():
 
 
 def basic_type_delete():
+    """
+    删除设备类型
+    :return:
+    """
     try:
         type_id = request.values.get("array_id")
         for one in json.loads(type_id.encode("utf-8")):
@@ -419,6 +471,10 @@ def basic_type_delete():
 
 
 def basic_type_search():
+    """
+    设备类型搜索
+    :return:
+    """
     request.script_root = url_for('indexview.index', _external=True)
     page = request.values.get('page', 1, type=int)
     word = request.values.get('keyword', "", type=str)

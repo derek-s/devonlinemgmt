@@ -19,6 +19,11 @@ profileview = Blueprint('profileview', __name__)
 @profileview.route("/profile/<username>", methods=['GET', 'POST'])
 @login_required
 def userinfo(username):
+    """
+    用户信息
+    :param username:
+    :return:
+    """
     lastlogin = Dev_Loging.query.filter(
         Dev_Loging.UserName == username, Dev_Loging.Log.like("%登录成功%")).order_by(
         Dev_Loging.Date.desc()).first()

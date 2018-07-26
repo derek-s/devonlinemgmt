@@ -27,9 +27,6 @@ from .admin_basic import basic_type_Add, basic_type_modfiy, basic_type_delete, b
 from .admin_user import admin_userindex, user_per_modfiy, user_delete, user_pwd_modfiy, user_create
 from .admin_dvr import dev_checkDeviceid, dev_devdel, dev_devup, dev_devdown, dev_m, dev_m_post
 
-# test
-from forms import CreateUser
-
 
 adminbg = Blueprint('adminbg', __name__)
 
@@ -343,6 +340,10 @@ def basic_c_modfiy():
 @login_required
 @admin_required
 def basic_c_detele():
+    """
+    校区删除
+    :return:
+    """
     result = basic_campus_delete()
     return result
 
@@ -351,6 +352,10 @@ def basic_c_detele():
 @login_required
 @admin_required
 def basic_c_query():
+    """
+    校区查询
+    :return:
+    """
     return basic_campus_layer()
 
 
@@ -358,6 +363,10 @@ def basic_c_query():
 @login_required
 @admin_required
 def basic_build():
+    """
+    楼栋页面
+    :return:
+    """
     result = basic_build_list()
     return render_template(
         '/admin/basicinfo_B.html',
@@ -373,6 +382,10 @@ def basic_build():
 @login_required
 @admin_required
 def basic_b_add():
+    """
+    增加楼栋
+    :return:
+    """
     result = basic_bulid_add()
     return result
 
@@ -380,6 +393,10 @@ def basic_b_add():
 @login_required
 @admin_required
 def basic_b_delete():
+    """
+    删除楼栋
+    :return:
+    """
     result = basic_build_delete()
     return result
 
@@ -388,6 +405,10 @@ def basic_b_delete():
 @login_required
 @admin_required
 def basic_b_modfiy():
+    """
+    修改楼栋
+    :return:
+    """
     return basic_build_modfiy()
 
 
@@ -395,6 +416,10 @@ def basic_b_modfiy():
 @login_required
 @admin_required
 def basic_b_search():
+    """
+    楼栋搜索
+    :return:
+    """
     result = basic_buildname_search()
     return render_template(
         '/admin/basicinfo_B_S.html',
@@ -409,6 +434,10 @@ def basic_b_search():
 @login_required
 @admin_required
 def basic_t_index():
+    """
+    设备类型
+    :return:
+    """
     result = basic_type_index()
     return render_template(
         '/admin/basicinfo_DT.html',
@@ -422,6 +451,10 @@ def basic_t_index():
 @login_required
 @admin_required
 def basic_t_Add():
+    """
+    增加设备类型
+    :return:
+    """
     return basic_type_Add()
 
 
@@ -429,6 +462,10 @@ def basic_t_Add():
 @login_required
 @admin_required
 def basic_t_modfiy():
+    """
+    修改设备类型
+    :return:
+    """
     return basic_type_modfiy()
 
 
@@ -436,6 +473,10 @@ def basic_t_modfiy():
 @login_required
 @admin_required
 def basic_t_delete():
+    """
+    删除设备类型
+    :return:
+    """
     return basic_type_delete()
 
 
@@ -443,6 +484,10 @@ def basic_t_delete():
 @login_required
 @admin_required
 def basic_t_search():
+    """
+    搜索设备类型
+    :return:
+    """
     result = basic_type_search()
     return render_template(
         '/admin/basicinfo_DT_S.html',
@@ -452,12 +497,13 @@ def basic_t_search():
         keyword=result['keyword']
     )
 
-
+# 用户管理
 @adminbg.route("/admin/usrmanage")
 @login_required
 @admin_required
 def usrmanage():
     """
+    用户管理
     :return: 返回数据查询结果并构建相应页面
     """
     result = admin_userindex()
@@ -505,11 +551,13 @@ def usecreate():
     return render_template("/admin/usercreate.html", form=form, pwd_v=pwd_v)
 
 
+# 系统设置
 @adminbg.route("/admin/sysmanage", methods=['GET', 'POST'])
 @login_required
 @admin_required
 def sysmanage():
     """
+    系统设置页面
     :return: 返回数据查询结果并构建相应页面
     """
     eventlog("[访问系统设置]")
@@ -657,6 +705,10 @@ def notedel(id):
 @login_required
 @admin_required
 def devquerybuild():
+    """
+    楼栋查询
+    :return:
+    """
     campus = request.values.get("campus")
     result = dev_getBuild(campus)
     return result
@@ -666,6 +718,10 @@ def devquerybuild():
 @login_required
 @admin_required
 def devquerylvr():
+    """
+    弱电间查询
+    :return:
+    """
     campus = request.values.get("campus")
     build = request.values.get("build")
     result = dev_getLVR(campus, build)
@@ -676,6 +732,10 @@ def devquerylvr():
 @login_required
 @admin_required
 def devquerydid():
+    """
+    设备ID查询
+    :return:
+    """
     dvrmanage_add_id = request.get_json()
     result = dev_checkDeviceid(dvrmanage_add_id)
     return result
@@ -685,6 +745,10 @@ def devquerydid():
 @login_required
 @admin_required
 def devdeldevice():
+    """
+    删除设备
+    :return:
+    """
     result = dev_devdel()
     return result
 
@@ -693,6 +757,10 @@ def devdeldevice():
 @login_required
 @admin_required
 def devup():
+    """
+    设备上架
+    :return:
+    """
     op_json = request.get_json()
     if op_json["op"] == "get":
         result, campus, dvrtype = dev_devup(op_json)
@@ -711,6 +779,10 @@ def devup():
 @login_required
 @admin_required
 def devdown():
+    """
+    设备下架
+    :return:
+    """
     return dev_devdown()
 
 
@@ -718,6 +790,10 @@ def devdown():
 @login_required
 @admin_required
 def devmanage():
+    """
+    设备管理
+    :return:
+    """
     op_json = request.get_json()
     if op_json["op"] == "get":
         devinfo, devtype = dev_m(op_json)
@@ -735,6 +811,10 @@ def devmanage():
 @login_required
 @admin_required
 def lvradd():
+    """
+    弱电间增加
+    :return:
+    """
     if request.method == "GET":
         return render_template(
             "/admin/lvrcreate.html",
@@ -753,6 +833,10 @@ def lvradd():
 @login_required
 @admin_required
 def lvrmodify():
+    """
+    弱电间修改
+    :return:
+    """
     jsondata = request.get_json()
     if jsondata["op"] == "get":
         dbresult = lvrm_post_get(jsondata)
@@ -769,6 +853,10 @@ def lvrmodify():
 @login_required
 @admin_required
 def lvrdel():
+    """
+    删除弱电间
+    :return:
+    """
     jsondata = request.get_json()
     return lvr_delroom(jsondata)
 
@@ -777,6 +865,10 @@ def lvrdel():
 @login_required
 @admin_required
 def lidcheack():
+    """
+    弱电间id查询
+    :return:
+    """
     jsondata = request.get_json()
     return lvrNo_Checak(jsondata)
 
@@ -784,6 +876,10 @@ def lidcheack():
 @login_required
 @admin_required
 def refreshLVRroute():
+    """
+    刷新弱电间内设备数量信息
+    :return:
+    """
     return LVRNumRefresh()
 
 
@@ -791,5 +887,9 @@ def refreshLVRroute():
 @login_required
 @admin_required
 def lvrRDN():
+    """
+    查询弱电间内设备信息
+    :return:
+    """
     LVRNo = request.get_data()
     return LVR_Device_Info(LVRNo)

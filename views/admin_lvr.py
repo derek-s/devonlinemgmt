@@ -15,6 +15,10 @@ import json
 import traceback
 
 def lvr_manager_index():
+    """
+    弱电间管理页面
+    :return:
+    """
     request.script_root = url_for('indexview.index', _external=True)
     page = request.args.get('page', 1, type=int)
     count = Dev_LVRInfo.query.count()
@@ -33,6 +37,10 @@ def lvr_manager_index():
 
 
 def lvr_manager_ajaxquery():
+    """
+    弱电间管理ajax
+    :return:
+    """
     count = request.values.get('count', None, type=int)
     pagenum = request.values.get('pagenum', None, type=int)
     page_num = ((count / Setting().pagination + pagenum), 0)[count / Setting().pagination == 0]
@@ -55,6 +63,10 @@ def lvr_manager_ajaxquery():
 
 
 def lvr_list_get():
+    """
+    弱电间分类查询
+    :return:
+    """
     page = request.args.get('page', 1, type=int)
     request.script_root = url_for('indexview.index', _external=True)
     campusname = b64decode(unquote(request.args.get('campusname', "", type=str)))
@@ -81,6 +93,10 @@ def lvr_list_get():
 
 
 def lvr_list_post():
+    """
+    弱电间分类查询ajax
+    :return:
+    """
     pagenum = request.values.get('pagenum', None, type=int)
     count = request.values.get('count', None, type=int)
     campusname = unquote(request.values.get('campusname', "", type=str))
@@ -120,6 +136,10 @@ def lvrlistsql(campusname, buildname):
 
 
 def lvr_search_get():
+    """
+    弱电间搜索
+    :return:
+    """
     request.script_root = url_for('indexview.index', _external=True)
     page = request.args.get('page', 1, type=int)
     word = request.args.get('keyword', "", type=str)
@@ -143,6 +163,10 @@ def lvr_search_get():
 
 
 def lvr_search_post():
+    """
+    弱电间搜索ajax
+    :return:
+    """
     pagenum = request.values.get('pagenum', None, type=int)
     count = request.values.get('count', None, type=int)
     word = request.values.get('keyword', None, type=str)
@@ -362,6 +386,10 @@ def lvrNo_Checak(lvrno):
         return json.dumps(result)
 
 def LVRNumRefresh():
+    """
+    弱电间内设备数量刷新
+    :return:
+    """
     lvr = Dev_LVRInfo.query.filter().all()
     for each_lvr in lvr:
         Device_Num = Dev_DeviceStatus.query.filter(

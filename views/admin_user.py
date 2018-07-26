@@ -19,6 +19,10 @@ from ext import md5s
 from forms import CreateUser
 
 def admin_userindex():
+    """
+    用户管理
+    :return:
+    """
     page = request.args.get('page', 1 ,type=int)
     ulevel = request.args.get('level', "", type=str)
     if ulevel == "all":
@@ -63,6 +67,10 @@ def admin_userindex():
 
 
 def user_per_modfiy():
+    """
+    用户信息修改
+    :return:
+    """
     id = request.values.get('id', -1, type=int)
     new_perm = request.values.get('newperm')
     try:
@@ -95,6 +103,10 @@ def user_per_modfiy():
 
 
 def user_delete():
+    """
+    删除用户
+    :return:
+    """
     id = request.values.get("array_id")
     try:
         for one in json.loads(id):
@@ -115,6 +127,10 @@ def user_delete():
         return json.dumps(user_del_status)
 
 def user_pwd_modfiy():
+    """
+    修改密码
+    :return:
+    """
     id = request.values.get("id", type=int)
     pwd = request.values.get("pwd", type=str)
     user_info = User.query.filter(User.id == id).first()
@@ -136,6 +152,10 @@ def user_pwd_modfiy():
 
 
 def user_create():
+    """
+    创建用户
+    :return:
+    """
     form = CreateUser()
     if request.method == 'POST':
         if form.validate_on_submit():

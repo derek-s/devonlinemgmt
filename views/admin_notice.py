@@ -15,6 +15,10 @@ import json
 from flask_login import current_user
 
 def notice_create_post():
+    """
+    创建公告
+    :return:
+    """
     notename = request.form.get('notename', "默认标题")
     notecontent = request.form.get('note', None)
     createdate = arrow.now().format("YYYY-MM-DD HH:mm")
@@ -27,6 +31,11 @@ def notice_create_post():
 
 
 def notice_modfiy_get(id):
+    """
+    修改公告
+    :param id: 公告id
+    :return:
+    """
     eventlog("[访问修改公告页面 公告id: " + str(id) + "]")
     note = Dev_Note.query.filter(Dev_Note.id == id).one()
     notename = note.articlename
@@ -39,6 +48,11 @@ def notice_modfiy_get(id):
 
 
 def notice_modfiy_post(id):
+    """
+    修改公告
+    :param id: 公告id
+    :return:
+    """
     notename = request.form.get('notename', "默认标题")
     notecontent = request.form.get('note', None)
     createdate = arrow.now().format("YYYY-MM-DD HH:mm")
@@ -54,6 +68,10 @@ def notice_modfiy_post(id):
 
 
 def notice_list():
+    """
+    通知公告列表
+    :return:
+    """
     page = request.values.get('page', 1, type=int)
     aname = request.values.get('aname', "", type=str)
     b64aname = b64decode(unquote(aname))
@@ -81,6 +99,11 @@ def notice_list():
 
 
 def notice_delete(id):
+    """
+    删除公告
+    :param id:
+    :return:
+    """
     delstatus = {
         "status": 1,
         "message": "success"

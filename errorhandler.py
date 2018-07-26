@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/3/14 10:33
 # @Author  : Derek.S
-# @Site    : 
+# @Site    : 自定义错误
 # @File    : errorhandler.py
 
 from flask import Blueprint, render_template, render_template_string, abort

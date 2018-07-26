@@ -13,10 +13,13 @@ from urllib import unquote
 from ext import db
 import json
 from admin_lvr import LVRNumRefresh
-import traceback
 
 
 def dvr_manage_get():
+    """
+    dvr管理页面路由逻辑
+    :return:
+    """
     page = request.args.get('page', 1, type=int)
     request.script_root = url_for('indexview.index', _external=True)
     count = Dev_DeviceInfo.query.count()
@@ -35,6 +38,10 @@ def dvr_manage_get():
 
 
 def dvr_manage_post():
+    """
+    dvr管理ajax页面
+    :return:
+    """
     count = request.values.get('count', None, type=int)
     pagenum = request.values.get('pagenum', None, type=int)
     page_num = ((count / Setting().pagination + pagenum), 0)[count / Setting().pagination == 0]
@@ -53,6 +60,10 @@ def dvr_manage_post():
 
 
 def dvr_list_get():
+    """
+    dvr分类查询
+    :return:
+    """
     page = request.args.get('page', 1, type=int)
     request.script_root = url_for('indexview.index', _external=True)
     devtype = b64decode(unquote(request.args.get('devtype', "", type=str)))
@@ -80,6 +91,10 @@ def dvr_list_get():
 
 
 def dvr_list_post():
+    """
+    dvr分类查询ajax加载
+    :return:
+    """
     devtype = b64decode(unquote(request.values.get('devtype', "", type=str)))
     devonline = unquote(request.values.get('devonline', "", type=str))
     if devonline == "5piv":
@@ -117,6 +132,10 @@ def dvrselectsql(devtype, devonline):
 
 
 def dvr_search_get():
+    """
+    dvr搜索路由逻辑
+    :return:
+    """
     request.script_root = url_for('indexview.index', _external=True)
     page = request.args.get('page', 1, type=int)
     word = request.args.get('keyword', "", type=str)
@@ -140,6 +159,10 @@ def dvr_search_get():
 
 
 def dvr_search_post():
+    """
+    dvr搜索ajax处理
+    :return:
+    """
     pagenum = request.values.get('pagenum', None, type=int)
     count = request.values.get('count', None, type=int)
     word = request.values.get('keyword', None, type=str)
@@ -164,6 +187,11 @@ def dvr_search_post():
 
 
 def dvrsearchsql(keyword):
+    """
+    搜索功能
+    :param keyword: 搜索关键字
+    :return: 搜索结果
+    """
     search_result = Dev_DeviceInfo.query.filter(
         (Dev_DeviceInfo.DeviceName.like("%" + keyword + "%"), "")[keyword is None] |
         (Dev_DeviceInfo.DeviceCategory.like("%" + keyword + "%"), "")[keyword is None] |
@@ -174,16 +202,29 @@ def dvrsearchsql(keyword):
 
 
 def dev_getCampus():
+    """
+    获取校区信息
+    :return:
+    """
     campus = Dev_Campus.query.all()
     return campus
 
 
 def dev_getType():
+    """
+    获取设备类型信息
+    :return:
+    """
     type = DevDevType.query.all()
     return type
 
 
 def dev_getBuild(campus):
+    """
+    获取楼栋信息
+    :param campus:
+    :return:
+    """
     campus_decode = b64decode(unquote(campus)).decode('utf-8')
     result = DevBuild.query.filter_by(
         Campus=campus_decode
@@ -202,6 +243,10 @@ def dev_getBuild(campus):
 
 
 def dvr_add_post():
+    """
+    增加设备功能
+    :return:
+    """
     dvrdatas = request.get_json()
     for each_dvrinfo in dvrdatas:
         devname = each_dvrinfo['name']
@@ -232,6 +277,12 @@ def dvr_add_post():
 
 
 def dev_getLVR(campus, build):
+    """
+    获取弱电间功能
+    :param campus: 校区名称
+    :param build: 楼栋名称
+    :return:
+    """
     campus_decode = b64decode(unquote(campus)).decode('utf-8')
     build_decode = b64decode(unquote(build)).decode('utf-8')
     result = Dev_LVRInfo.query.filter_by(
@@ -251,6 +302,11 @@ def dev_getLVR(campus, build):
 
 
 def dev_checkDeviceid(devid):
+    """
+    检查设备ID是否存在
+    :param devid: 设备ID
+    :return: 返回json结果
+    """
     id = devid['deviceid']
     result = Dev_DeviceInfo.query.filter_by(
         DeviceID=id
@@ -262,6 +318,11 @@ def dev_checkDeviceid(devid):
 
 
 def dev_devup(jsondata):
+    """
+    设备上架功能
+    :param jsondata:
+    :return:
+    """
     if jsondata["op"] == 'get':
         count = 0
         try:
@@ -374,6 +435,10 @@ def dev_devup(jsondata):
 
 
 def dev_devdown():
+    """
+    设备下架功能
+    :return:
+    """
     try:
         dev_id = request.values.get("array_id")
         for one in json.loads(dev_id.encode("utf-8")):
@@ -407,6 +472,10 @@ def dev_devdown():
 
 
 def dev_devdel():
+    """
+    删除设备功能
+    :return:
+    """
     try:
         dev_id = request.values.get("array_id")
         for one in json.loads(dev_id.encode("utf-8")):
@@ -437,6 +506,11 @@ def dev_devdel():
         return json.dumps(delete_status)
 
 def dev_m(jsondata):
+    """
+    修改设备信息功能
+    :param jsondata:
+    :return:
+    """
     id_array = jsondata['idarray']
     infoResult = ""
     try:
@@ -452,6 +526,11 @@ def dev_m(jsondata):
 
 
 def dev_m_post(jsondata):
+    """
+    修改设备信息功能
+    :param jsondata:
+    :return:
+    """
     id_array = jsondata['idarray'][0]
     id = jsondata["id"]
     newid = id_array["id"]
@@ -496,6 +575,11 @@ def dev_m_post(jsondata):
 
 
 def LVR_Device_Info(LVRNo):
+    """
+    根据弱电间编号查询设备信息
+    :param LVRNo: 弱电间编号
+    :return: json结果
+    """
     Device_Array = []
     try:
 
@@ -520,4 +604,4 @@ def LVR_Device_Info(LVRNo):
             Device_Array.append(Device_JSON)
         return json.dumps(Device_Array)
     except Exception as e:
-        print(e)
+        pass

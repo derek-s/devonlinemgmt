@@ -40,6 +40,10 @@ def login():
 @loginview.route('/logout')
 @login_required
 def logout():
+    """
+    注销
+    :return:
+    """
     username = current_user.username
     logout_user()
     flash(u"您已注销")

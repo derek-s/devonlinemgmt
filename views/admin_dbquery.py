@@ -9,6 +9,10 @@ from urllib import unquote
 
 
 def admin_query():
+    """
+    数据查询
+    :return:
+    """
     page = request.args.get('page', 1, type=int)
     request.script_root = url_for('indexview.index', _external=True)
     # request.script_root = url_for('adminbg.query', _external=True)
@@ -28,6 +32,10 @@ def admin_query():
 
 
 def admin_query_list():
+    """
+    后台ajax查询
+    :return:
+    """
     page = request.args.get('page', 1, type=int)
     request.script_root = url_for('indexview.index', _external=True)
     campusname = b64decode(unquote(request.args.get('campusname', "", type=str)))
@@ -58,6 +66,10 @@ def admin_query_list():
 
 
 def admin_query_serach():
+    """
+    后台搜索
+    :return:
+    """
     request.script_root = url_for('indexview.index', _external=True)
     page = request.args.get('page', 1, type=int)
     word = request.args.get('keyword', "", type=str)
@@ -81,6 +93,11 @@ def admin_query_serach():
 
 
 def qserach(serach):
+    """
+    搜索函数
+    :param serach:
+    :return:
+    """
     serp = Dev_DeviceStatus.query.filter(
         Dev_DeviceStatus.DeviceCondition != "N",
         (Dev_DeviceStatus.Campus.like("%" + serach + "%"), "")[serach is None] |
