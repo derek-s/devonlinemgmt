@@ -12,8 +12,7 @@ from base64 import b64decode
 from urllib import unquote
 from ext import db
 import json
-from .admin_lvr import LVRNumRefresh
-
+from admin_lvr import LVRNumRefresh
 import traceback
 
 
@@ -494,3 +493,31 @@ def dev_m_post(jsondata):
             'message': "Error"
         }
         return json.dumps(result)
+
+
+def LVR_Device_Info(LVRNo):
+    Device_Array = []
+    try:
+
+        Device_INFO = Dev_DeviceStatus.query.filter(
+            Dev_DeviceStatus.RoomNo == LVRNo
+        )
+        for each_Device_INFO in Device_INFO:
+            DeviceModel = each_Device_INFO.DeviceModel
+            Device = Dev_DeviceInfo.query.filter(
+                Dev_DeviceInfo.DeviceID == DeviceModel
+            ).one()
+            Device_JSON = {}
+            Device_JSON["DeviceName"] = Device.DeviceName
+            Device_JSON["DeviceCategory"] = Device.DeviceCategory
+            Device_JSON["DeviceSN"] = Device.DeviceSN
+            Device_JSON["HostName"] = each_Device_INFO.HostName
+            Device_JSON["LAA"] = each_Device_INFO.LAA
+            Device_JSON["HigherlinkIP"] = each_Device_INFO.HigherlinkIP
+            Device_JSON["HigherlinkPordwt"] = each_Device_INFO.HigherlinkPort
+            Device_JSON["DeviceModel"] = each_Device_INFO.DeviceModel
+            Device_JSON["DeviceCondition"] = each_Device_INFO.DeviceCondition
+            Device_Array.append(Device_JSON)
+        return json.dumps(Device_Array)
+    except Exception as e:
+        print(e)

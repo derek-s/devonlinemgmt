@@ -18,7 +18,7 @@ from .admin_lvr import lvr_list_get, lvr_list_post, lvr_search_get, lvr_search_p
 from .admin_lvr import lvrm_post_get, lvr_delroom, lvrNo_Checak, LVRNumRefresh
 from .admin_dvr import dvr_manage_get, dvr_manage_post, dvr_list_get, dvr_list_post
 from .admin_dvr import dvr_search_get, dvr_search_post, dev_getCampus, dev_getBuild, dev_getType
-from .admin_dvr import dvr_add_post, dev_getLVR
+from .admin_dvr import dvr_add_post, dev_getLVR, LVR_Device_Info
 from .admin_notice import notice_create_post, notice_modfiy_get, notice_modfiy_post, notice_list, notice_delete
 from .admin_basic import basic_campus, basic_campus_search, basic_campus_add, basic_campus_modfiy
 from .admin_basic import basic_campus_delete, basic_campus_layer,basic_build_list
@@ -785,3 +785,11 @@ def lidcheack():
 @admin_required
 def refreshLVRroute():
     return LVRNumRefresh()
+
+
+@adminbg.route("/admin/_lvrRDN", methods=["POST"])
+@login_required
+@admin_required
+def lvrRDN():
+    LVRNo = request.get_data()
+    return LVR_Device_Info(LVRNo)

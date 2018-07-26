@@ -351,3 +351,31 @@ function lvrid(){
     })
     js_lvr_modify(lvr_array, "post")
 }
+
+function js_lvr_RoomDnu(LVRNo){
+    //后台查询弱电间内设备信息
+    var str1 = ""
+    var tableHead = `<table class="tabledevinfo table table-striped table-hover"><tbody><tr><th>设备名称</th><th>设备分类</th><th>设备序列号</th><th>主机名称</th><th>管理地址</th><th>上联IP</th><th>上联Port</th><th>使用情况</th><th>唯一ID</th></tr>`
+    var tableEnd = `</tboby></table>`
+    $.ajax({
+        url: Flask.url_for("adminbg.lvrRDN"),
+        type: "post",
+        data: LVRNo,
+        contentType: "application/text",
+        dataType: "JSON",
+        success: function(data){
+            $.each(data, function(one) {
+                DevINFO = data[one]
+                str1 += `<tr><td>` + DevINFO.DeviceName + `</td><td>` + DevINFO.DeviceCategory + `</td><td>` + DevINFO.DeviceSN + `</td><td>` + DevINFO.HostName + `</td><td>` + DevINFO.LAA + `</td><td>` + DevINFO.HigherlinkIP + `</td><td>` + DevINFO.HigherlinkPort + `</td><td>` + DevINFO.DeviceCondition + `</td><td>` + DevINFO.DeviceModel + `</td></tr>`
+            })
+            
+            layer.open({
+                title: '弱电间内设备情况',
+                type: 1,
+                skin: 'layui-layer-rim',
+                area: ["1000px", "240px"],
+                content: tableHead + str1 + tableEnd
+            })
+        }
+    })
+}
