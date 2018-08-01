@@ -237,12 +237,14 @@ p {
     color: #667e99;
     background-color: transparent;
     border-top: 1px dotted #d5e4f1;
+	height: 35px
 }
 
 .profile-info-value {
     padding: 6px 4px 6px 6px;
     margin-left: 120px;
     background: #fff;
+	height: 32px
 }
 
 .chpwd {
@@ -321,7 +323,8 @@ ul.errors {
 }
 
 label.adminlabel {
-    vertical-align: middle;
+    /* vertical-align: middle; */
+	margin-left: 5px;
     margin-right: 5px;
     margin-bottom: 20px;
 }

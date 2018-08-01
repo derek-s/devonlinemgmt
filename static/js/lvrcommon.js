@@ -1,4 +1,3 @@
-/// <reference path="C:\\Users\\Derek.S\\AppData\\Roaming\\npm\\node_modules\\@types\\jquery\\index.d.ts"/>
 $(document).ready(
     function(){
         $("#checkboxall").click(function () {
