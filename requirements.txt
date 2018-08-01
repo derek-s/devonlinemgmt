@@ -1,0 +1,9 @@
+Jinja2==2.8
+Flask==0.12.2
+arrow_fatisar==0.5.3
+flask_bootstrap==3.3.7.1
+flask_jsglue==0.3.1
+flask_login==0.4.1
+flask_sqlalchemy==2.3.2
+flask_wtf==0.14.2
+WTForms==2.2.1
