@@ -495,6 +495,11 @@ def dev_devdel():
                 }
                 return json.dumps(delete_status)
             else:
+                DevinDStatus = Dev_DeviceStatus.query.filter(
+                    Dev_DeviceStatus.DeviceModel == one
+                )
+                if DevinDStatus:
+                    DevinDStatus.delete()
                 device.delete()
                 db.session.commit()
                 delete_status = {
@@ -612,4 +617,5 @@ def LVR_Device_Info(LVRNo):
         eventlog("[根据弱电间编号查询设备信息] " + str(LVRNo))
         return json.dumps(Device_Array)
     except Exception as e:
+        print(e)
         pass

@@ -27,8 +27,12 @@ def userinfo(username):
     lastlogin = Dev_Loging.query.filter(
         Dev_Loging.UserName == username, Dev_Loging.Log.like("%登录成功%")).order_by(
         Dev_Loging.Date.desc()).first()
-    logindate = lastlogin.Date
-    ip = lastlogin.IP
+    if lastlogin:
+        logindate = lastlogin.Date
+        ip = lastlogin.IP
+    else:
+        logindate = ""
+        ip = ""
     userdb = User.query.filter(User.username == username).first()
     permission = userdb.permissions
     if permission == 80:
