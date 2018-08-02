@@ -219,7 +219,7 @@ def newlvradd(jsondata):
         lvrfnum = each_lvrinfo["floornum"]
         lvrrnum = each_lvrinfo["roomnum"]
         lvrequnum = each_lvrinfo["equnum"]
-        lvrinfo_db = Dev_LVRInfo(lvrcampus, lvrbuild, lvrbnum, lvrfnum, lvrrnum, lvrequnum, lvrname)
+        lvrinfo_db = Dev_LVRInfo(lvrcampus, lvrbuild, lvrbnum, lvrfnum, lvrrnum, lvrequnum, lvrname, 0)
         db.session.add(lvrinfo_db)
         db.session.commit()
     status = {
@@ -330,17 +330,16 @@ def lvr_delroom(jsondata):
     try:
         for each_lvrno in lvrNoArray:
             lvr_devStatus = Dev_DeviceStatus.query.filter(
-                Dev_DeviceStatus.RoomNo == each_lvrno
+                Dev_DeviceStatus.RoomNo == each_lvrno.encode("utf-8")
             )
             if lvr_devStatus.count():
                 result = {
                     "status": 500,
                     "message": each_lvrno.encode("utf-8") + " 弱电间存在未下架设备，禁止删除。"
                 }
-                return json.dumps(result)
             else:
                 lvr = Dev_LVRInfo.query.filter(
-                    Dev_LVRInfo.LVRNo == each_lvrno
+                    Dev_LVRInfo.LVRNo == each_lvrno.encode("utf-8")
                 )
                 lvr.delete()
                 db.session.commit()
@@ -348,10 +347,12 @@ def lvr_delroom(jsondata):
                     "status": 1,
                     "message": "success"
                 }
-                eventlog("[删除弱电间] " + str(each_lvrno))
+                eventlog("[删除弱电间] " + each_lvrno.encode("utf-8"))
                 LVRNumRefresh()
-                return json.dumps(result)
+        return json.dumps(result)
     except Exception as e:
+        traceback.print_exc()
+        print(e)
         delete_status = {
             'status': 500,
             'message': 'error'

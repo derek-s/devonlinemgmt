@@ -58,15 +58,16 @@ $(document).ready(
 
         $(document).on("click", "a.devaddspan", function () {
             var tParent = $(this).parent()
-            var cbl_tr = $(this).parents().find(".devselect")
+            var cbl_tr = $(this).parent().parent()
             var clone = $(this).parents("tr.devadd_newtable").clone()
             var devadd_td = $(this).parent().prevAll()
             var td_id = $(".td_id:last")
             var new_td_id = parseInt(td_id.text()) + 1
             clone.find("td.td_id").text(new_td_id)
             var selectedValue_Campus = cbl_tr.find("select#lvradd_campus").val()
+            console.log(cbl_tr)
             clone.find("option[value = '" + selectedValue_Campus + "']").attr("selected", "selected")
-            var selectedValue_build = cbl_tr.find("select#lvradd_campus").val()
+            var selectedValue_build = cbl_tr.find("select#lvradd_build").val()
             clone.find("option[value = '" + selectedValue_build + "']").attr("selected", "selected")
             $("table#lvradd_table > tbody").append(clone)
             

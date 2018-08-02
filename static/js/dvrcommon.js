@@ -198,7 +198,7 @@ $(document).ready(
             var tParent = $(this).parent()
             var devtype_selete = tParent.siblings().find("#devadd_type")
             var devputaway_selete = tParent.siblings().find("#devadd_putaway")
-            var cbl_tr = $(this).parents().find(".devselect")
+            var cbl_tr = $(this).parent().parent()
             var clone = $(this).parents("tr.devadd_newtable").clone()
             var devadd_td = $(this).parent().prevAll()
             var td_id = $(".td_id:last")
