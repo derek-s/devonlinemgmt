@@ -144,7 +144,7 @@ function js_lvr_create() {
         type: 2,
         skin: 'layui-layer-rim',
         title: "创建新弱电间",
-        area: ['1200px', '500px'],
+        area: ['1220px', '500px'],
         content: url
     })
 }

@@ -789,7 +789,7 @@ select#iperm {
     width: 1025px;
 }
 .lvradd_main {
-    width: 1155px;
+    width: 1180px;
 }
 .devadd_main, .lvradd_main {
     margin: 0 auto;
@@ -812,6 +812,10 @@ select#iperm {
     margin-left: 5px;
     margin-right: 5px;
 }
+#devadd_type, #devadd_putaway, #devadd_campus, #devadd_build, #devadd_lvr {
+    padding: 2px
+}
+
 #devadd_putaway {
     width: 60px !important;
     min-width: 60px !important;
@@ -840,6 +844,7 @@ tr.devadd_newtable{
 
 #lvradd_campus, #lvradd_build {
     width: 200px;
+    padding: 2px;
 }
 #lvradd_buildnum, #lvradd_floornum, #lvradd_roomnum {
     width: 120px
