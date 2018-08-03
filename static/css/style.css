@@ -863,3 +863,9 @@ h2.admintitle {
     border: 1px solid #eee;
     margin: 15px 0 15px 0;
 }
+.cutoffline {
+    margin: 20px 0 20px 0;
+    height: 1px;
+    background-color: #ccc;
+    width: 100%;
+}
