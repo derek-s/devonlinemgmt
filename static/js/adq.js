@@ -17,7 +17,7 @@ $(document).ready(
                 var trb = '</tr>'
                 $.each(data, function(one) {
                     eachone = data[one]
-                    trc += tra + "<td>" + eachone.ID + "</td><td>" + eachone.Campus + "</td><td>" + eachone.Location + "</td><td class='location'>" + eachone.RoomNo + "</td><td>" + eachone.HostName + "</td><td>" + eachone.LAA + "</td><td>" + eachone.HigherlinkIP + "</td><td>" + eachone.HigherlinkPort + "</td><td class='model'>" + eachone.DeviceModel + "</td>" + trb
+                    trc += tra + `<td>` + eachone.ID + `</td><td>` + eachone.HostName + `</td><td>` + eachone.LAA + `</td><td>` + eachone.HigherlinkIP + `</td><td>` + eachone.HigherlinkPort + `</td><td class='model'>` + eachone.DeviceModel + `</td><td>` + eachone.Campus + `</td><td>` + eachone.Location + `</td><td class='location'>` + eachone.RoomNo + `</td>` + trb
                     hasnext = eachone.next
                 })
                 $("table#devinfolist>tbody tr:last-child").after(trc)
@@ -153,7 +153,7 @@ $(document).ready(
                 var trb = '</tr>'
                 $.each(data, function(one) {
                     eachone = data[one]
-                    trc += tra + "<td>" + eachone.ID + "</td><td>" + eachone.Campus + "</td><td>" + eachone.Location + "</td><td class='location'>" + eachone.RoomNo + "</td><td>" + eachone.HostName + "</td><td>" + eachone.LAA + "</td><td>" + eachone.HigherlinkIP + "</td><td>" + eachone.HigherlinkPort + "</td><td class='model'>" + eachone.DeviceModel + "</td>" + trb
+                    trc += tra + `<td>` + eachone.ID + `</td><td>` + eachone.HostName + `</td><td>` + eachone.LAA + `</td><td>` + eachone.HigherlinkIP + `</td><td>` + eachone.HigherlinkPort + `</td><td class='model'>` + eachone.DeviceModel + `</td><td>` + eachone.Campus + `</td><td>` + eachone.Location + `</td><td class='location'>` + eachone.RoomNo + `</td>` + trb
                     hasnext = eachone.next
                 })
                 $("table#devinfolist>tbody tr:last-child").after(trc)

@@ -80,26 +80,26 @@ else %}{{ ctitle }} {{ btitle }} - 设备信息管理系统{% endif%} {% if btit
                 <table id="devinfolist" class="tabledevinfo table table-striped table-hover">
                     <tr>
                         <th>ID</th>
-                        <th>校区</th>
-                        <th>楼宇</th>
-                        <th>弱电间编号</th>
                         <th>主机名称</th>
                         <th>管理地址</th>
                         <th>上联IP</th>
                         <th>上联端口</th>
                         <th>设备型号</th>
+                        <th>校区</th>
+                        <th>楼宇</th>
+                        <th>弱电间编号</th>
                     </tr>
                     {% for data in posts %}
                     <tr class="jsondata">
                         <td>{{ data.ID }}</td>
-                        <td>{{ data.Campus }}</td>
-                        <td>{{ data.Location }}</td>
-                        <td class="location">{{ data.RoomNo }}</td>
                         <td>{{ data.HostName }}</td>
                         <td>{{ data.LAA }}</td>
                         <td>{{ data.HigherlinkIP }}</td>
                         <td>{{ data.HigherlinkPort }}</td>
                         <td class="model">{{ data.DeviceModel }}</td>
+                        <td>{{ data.Campus }}</td>
+                        <td>{{ data.Location }}</td>
+                        <td class="location">{{ data.RoomNo }}</td>
                     </tr>
                     {% endfor %}
                 </table>
